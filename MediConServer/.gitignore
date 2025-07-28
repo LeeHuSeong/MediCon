@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+src/main/resources/medim-bb24e-firebase-adminsdk-fbsvc-8374d18ac3.json
+src/main/resources/*.properties

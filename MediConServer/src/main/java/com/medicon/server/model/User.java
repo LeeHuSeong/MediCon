@@ -1,46 +1,30 @@
 package com.medicon.server.model;
 
 public class User {
-    private String id;
-    private String password;
-    private String name;
-    private String role;
+    private String uid;
+    private String email;
 
-    public User() {} // Firestore 자동 역직렬화를 위한 기본 생성자
+    public User() {}
 
-    public User(String id, String password, String name, String role) {
-        this.id = id;
-        this.password = password;
-        this.name = name;
-        this.role = role;
+    public User(String uid, String email) {
+        this.uid = uid;
+        this.email = email;
     }
 
-    // getter/setter
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
+    public String getUid() {
+        return uid;
     }
 
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
+    public String getEmail() {
+        return email;
     }
 
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
-    public String getRole() {
-        return role;
-    }
-    public void setRole(String role) {
-        this.role = role;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
+

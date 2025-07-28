@@ -1,27 +1,19 @@
 package com.medicon.server.dto;
 
 public class LoginRequest {
-    private String id;
-    private String password;
+    private String idToken;
 
     public LoginRequest() {}
 
-    public LoginRequest(String id, String password) {
-        this.id = id;
-        this.password = password;
+    public LoginRequest(String idToken) {
+        this.idToken = idToken;
     }
 
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
+    public String getIdToken() {
+        return idToken;
     }
 
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
+    public void setIdToken(String idToken) {
+        this.idToken = idToken;
     }
 }
