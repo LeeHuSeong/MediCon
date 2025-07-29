@@ -9,6 +9,6 @@ module com.medicon.medicon {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
 
-    opens com.medicon.medicon to javafx.fxml;
+    opens com.medicon.medicon.controller to javafx.fxml;
     exports com.medicon.medicon;
 }

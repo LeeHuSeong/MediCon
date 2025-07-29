@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.medicon.medicon.controller.LoginController"
+            stylesheets="@../style/login.css"
+            prefWidth="400" prefHeight="350">
+
+    <!-- 설정 아이콘 버튼 (오른쪽 상단) -->
+    <Button fx:id="settingButton"
+            layoutX="360" layoutY="10"
+            style="-fx-background-color: transparent;">
+        <graphic>
+            <ImageView fx:id="settingIcon" fitWidth="20" fitHeight="20" />
+        </graphic>
+    </Button>
+
+    <!-- 로고 이미지 (중앙 상단) -->
+    <ImageView fx:id="logoImageView"
+               layoutX="150" layoutY="50"
+               fitWidth="100" fitHeight="100" />
+
+    <!-- ID 입력 -->
+    <TextField fx:id="idField" layoutX="100" layoutY="170" prefWidth="200" promptText="아이디"
+               styleClass="input-field" />
+
+    <!-- 비밀번호 입력 -->
+    <PasswordField fx:id="pwField" layoutX="100" layoutY="210" prefWidth="200" promptText="비밀번호"
+                   styleClass="input-field" />
+
+    <!-- 로그인 버튼 -->
+    <Button fx:id="loginButton" layoutX="100" layoutY="260" prefWidth="200" text="로그인"
+            styleClass="login-button" />
+
+</AnchorPane>
