@@ -48,7 +48,7 @@ public class AuthService {
             userDataService.createUserDocument(uid, email);
 
             String jwt = jwtUtil.generateToken(uid, email);
-            return new LoginResponse(true, "로그인 성공", jwt);
+            return new LoginResponse(true, "로그인 성공", jwt, uid, email);
 
         } catch (FirebaseAuthException e) {
             return new LoginResponse(false, "로그인 실패: " + e.getMessage(), null);
