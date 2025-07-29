@@ -1,10 +1,11 @@
 package com.medicon.medicon.controller;
 
+import com.medicon.medicon.service.AuthService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import com.medicon.medicon.service.AuthService;
 
 public class LoginController {
 
@@ -15,40 +16,50 @@ public class LoginController {
     @FXML private ImageView settingIcon;
     @FXML private Button settingButton;
 
-    private final AuthService authService = new AuthService();
+    private final AuthService authService = new AuthService(); // ✅ 새로 추가됨
 
     @FXML
     public void initialize() {
-        // 로그인 버튼 액션
-        loginButton.setOnAction(e -> handleLogin());
-
-        // 로고 이미지 세팅
         logoImageView.setImage(
                 new Image(getClass().getResource("/com/medicon/medicon/images/logo.png").toExternalForm())
         );
 
-        // 설정 아이콘 세팅
         settingIcon.setImage(
                 new Image(getClass().getResource("/com/medicon/medicon/images/settings.png").toExternalForm())
         );
 
-        // 설정 버튼 클릭
-        settingButton.setOnAction(e -> {
-            System.out.println("설정 버튼 클릭됨!");
-            // 설정 창 띄우거나 팝업 구현 예정
-        });
+        loginButton.setOnAction(e -> onLoginButtonClick());
+        settingButton.setOnAction(e -> System.out.println("설정 버튼 클릭됨!"));
     }
 
-    private void handleLogin() {
-        String id = idField.getText();
-        String pw = pwField.getText();
+    public void onLoginButtonClick() {
+        String email = idField.getText();
+        String password = pwField.getText();
 
-        if (authService.login(id, pw)) {
-            System.out.println("로그인 성공");
-            // → 메인 화면 전환 예정
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "아이디 또는 비밀번호가 잘못되었습니다.");
-            alert.showAndWait();
+        if (email.isEmpty() || password.isEmpty()) {
+            showError("이메일과 비밀번호를 모두 입력하세요.");
+            return;
         }
+
+        new Thread(() -> {
+            try {
+                // 핵심 로직 위임
+                String jwt = authService.loginAndGetJwt(email, password);
+
+                Platform.runLater(() -> {
+                    System.out.println("로그인 성공! JWT: " + jwt);
+                    // TODO: JWT 저장 로직
+                    // TODO: MainView.fxml 등으로 전환
+                });
+
+            } catch (Exception e) {
+                Platform.runLater(() -> showError("로그인 실패: " + e.getMessage()));
+            }
+        }).start();
+    }
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, message);
+        alert.showAndWait();
     }
 }
