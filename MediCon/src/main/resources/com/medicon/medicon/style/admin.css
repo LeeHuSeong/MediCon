@@ -1,0 +1,41 @@
+/* 전체 콘텐츠 영역 배경 */
+.content-area {
+    -fx-background-color: #F5F5F5;
+}
+
+/* 좌측 메뉴 VBox */
+.side-menu {
+    -fx-background-color: #D6E9F8; /* 연한 파란색 계열 */
+    -fx-padding: 20;
+}
+
+/* 메뉴 버튼 스타일 */
+.menu-button {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #A3C3D9;
+    -fx-border-width: 1;
+    -fx-font-size: 16px;
+    -fx-text-fill: #2E5C87;
+    -fx-pref-height: 45px;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+}
+
+/* 탭 스타일 (선택사항) */
+.tab-pane {
+    -fx-tab-min-width: 120;
+    -fx-tab-max-width: 200;
+}
+
+.tab {
+    -fx-font-size: 15px;
+    -fx-padding: 10 15 10 15;
+}
+
+.label {
+    -fx-font-size: 16px;
+}
+
+.text-field {
+    -fx-font-size: 16px;
+}
