@@ -3,10 +3,8 @@ package com.medicon.medicon.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -19,7 +17,7 @@ public class AdminMainController {
     @FXML
     public void initialize() {
         salesButton.setOnAction(e -> showSales());
-        salaryButton.setOnAction(e -> openSalaryWindow());
+        salaryButton.setOnAction(e -> showSalary());
     }
 
     @FXML
@@ -36,14 +34,16 @@ public class AdminMainController {
         }
     }
 
-    private void openSalaryWindow() {
+    @FXML
+    public void showSalary() {
         try {
-            Parent salaryRoot = FXMLLoader.load(getClass().getResource("/com/medicon/medicon/view/module/salary_view.fxml"));
-            Stage salaryStage = new Stage();
-            salaryStage.setTitle("급여 관리");
-            salaryStage.setScene(new Scene(salaryRoot, 800, 600));
-            salaryStage.show();
-        } catch (Exception e) {
+            Parent salaryView = FXMLLoader.load(getClass().getResource("/com/medicon/medicon/view/module/salary_view.fxml"));
+            contentArea.getChildren().setAll(salaryView);
+            AnchorPane.setTopAnchor(salaryView, 0.0);
+            AnchorPane.setBottomAnchor(salaryView, 0.0);
+            AnchorPane.setLeftAnchor(salaryView, 0.0);
+            AnchorPane.setRightAnchor(salaryView, 0.0);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

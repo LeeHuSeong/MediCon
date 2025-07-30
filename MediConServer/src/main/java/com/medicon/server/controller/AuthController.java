@@ -1,9 +1,13 @@
 package com.medicon.server.controller;
 
-import com.medicon.server.dto.ChangePasswordRequest;
-import com.medicon.server.dto.LoginRequest;
-import com.medicon.server.dto.LoginResponse;
-import com.medicon.server.dto.SignupRequest;
+import com.medicon.server.dto.auth.ChangePasswordRequest;
+import com.medicon.server.dto.auth.LoginRequest;
+import com.medicon.server.dto.auth.LoginResponse;
+import com.medicon.server.dto.signup.DoctorSignupRequest;
+import com.medicon.server.dto.signup.NurseSignupRequest;
+import com.medicon.server.dto.signup.PatientSignupRequest;
+import com.medicon.server.dto.auth.SignupRequest;
+import com.medicon.server.dto.signup.SignupResponse;
 import com.medicon.server.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +40,20 @@ public class AuthController {
         String jwt = bearer.replace("Bearer ", "");
         String uid = authService.getUidFromJwt(jwt);
         return ResponseEntity.ok(authService.deleteUser(uid));
+    }
+
+    @PostMapping("/signup/doctor")
+    public ResponseEntity<SignupResponse> signupDoctor(@RequestBody DoctorSignupRequest request) {
+        return ResponseEntity.ok(authService.signupDoctor(request));
+    }
+
+    @PostMapping("/signup/nurse")
+    public ResponseEntity<SignupResponse> signupNurse(@RequestBody NurseSignupRequest request) {
+        return ResponseEntity.ok(authService.signupNurse(request));
+    }
+
+    @PostMapping("/signup/patient")
+    public ResponseEntity<SignupResponse> signupPatient(@RequestBody PatientSignupRequest request) {
+        return ResponseEntity.ok(authService.signupPatient(request));
     }
 }

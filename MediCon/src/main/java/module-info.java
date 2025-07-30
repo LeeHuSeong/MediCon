@@ -12,5 +12,6 @@ module com.medicon.medicon {
 
 
     opens com.medicon.medicon.controller to javafx.fxml;
+    opens com.medicon.medicon.controller.salary;
     exports com.medicon.medicon;
 }

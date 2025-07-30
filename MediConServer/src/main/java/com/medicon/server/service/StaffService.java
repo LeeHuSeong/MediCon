@@ -3,7 +3,9 @@ package com.medicon.server.service;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
-import com.medicon.server.dto.*;
+import com.medicon.server.dto.user.DoctorDTO;
+import com.medicon.server.dto.user.NurseDTO;
+import com.medicon.server.dto.user.UserDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

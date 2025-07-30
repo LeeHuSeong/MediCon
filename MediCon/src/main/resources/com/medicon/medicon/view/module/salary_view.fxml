@@ -7,9 +7,25 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
-            prefWidth="1920" prefHeight="1080"
+            fx:controller="com.medicon.medicon.controller.salary.SalaryViewController"
+            prefWidth="1600" prefHeight="1000"
             stylesheets="@../../style/admin.css">
 
-    <Label layoutX="100" layoutY="100" text="급여 관리 창입니다"
-           style="-fx-font-size: 28px; -fx-font-weight: bold;" />
+    <!-- 상단 타이틀 -->
+    <Label layoutX="30" layoutY="30" text="급여 관리"
+           style="-fx-font-size: 32px; -fx-font-weight: bold;" />
+
+    <!-- 상단 버튼 메뉴 -->
+    <HBox spacing="20" layoutX="30" layoutY="90" alignment="CENTER_LEFT">
+        <Button fx:id="registerBtn" text="직원 등록" prefWidth="120"/>
+        <Button fx:id="queryBtn" text="직원 조회" prefWidth="120"/>
+        <Button fx:id="updateBtn" text="직원 수정" prefWidth="120"/>
+        <Button fx:id="deleteBtn" text="직원 삭제" prefWidth="120"/>
+    </HBox>
+
+    <!-- 콘텐츠 영역 -->
+    <AnchorPane fx:id="salaryContent"
+                layoutX="30" layoutY="150"
+                prefWidth="1540" prefHeight="800"
+                style="-fx-border-color: lightgray; -fx-border-width: 1; -fx-background-color: #FAFAFA;" />
 </AnchorPane>
