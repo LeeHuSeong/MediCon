@@ -11,7 +11,7 @@
 
     <!-- 설정 아이콘 버튼 (오른쪽 상단) -->
     <Button fx:id="settingButton"
-            layoutX="360" layoutY="10"
+            layoutX="360" layoutY="30"
             style="-fx-background-color: transparent;">
         <graphic>
             <ImageView fx:id="settingIcon" fitWidth="20" fitHeight="20" />
