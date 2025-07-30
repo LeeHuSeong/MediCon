@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.medicon.medicon.controller.AdminMainController"
+            prefWidth="1920" prefHeight="1080"
+            stylesheets="@../style/admin.css">
+
+    <center>
+        <TabPane tabClosingPolicy="UNAVAILABLE">
+            <Tab text="경영관리">
+                <SplitPane dividerPositions="0.2">
+                    <!-- 좌측 메뉴 (고정폭) -->
+                    <VBox fx:id="sideMenu" spacing="20" styleClass="side-menu"
+                          minWidth="200" maxWidth="250" prefWidth="220">
+                        <Button fx:id="salesButton" text="매출 조회" styleClass="menu-button" maxWidth="Infinity"/>
+                        <Button fx:id="salaryButton" text="급여 관리" styleClass="menu-button" maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- 우측 컨텐츠 영역 -->
+                    <AnchorPane fx:id="contentArea" styleClass="content-area" />
+                </SplitPane>
+            </Tab>
+
+            <Tab text="권한관리">
+                <Label text="(권한관리 기능 준비 중)" />
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane>
