@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            prefWidth="1920" prefHeight="1080"
+            stylesheets="@../style/admin.css">
+
+    <VBox spacing="40" layoutX="100" layoutY="100">
+        <Label text="매출 조회" style="-fx-font-size: 28px; -fx-font-weight: bold;" />
+
+        <GridPane hgap="20" vgap="20">
+            <Label text="월별 진료 수입" />
+            <TextField prefWidth="300" GridPane.columnIndex="1" />
+
+            <Label text="일별 진료 수입" GridPane.rowIndex="1" />
+            <TextField prefWidth="300" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        </GridPane>
+    </VBox>
+</AnchorPane>

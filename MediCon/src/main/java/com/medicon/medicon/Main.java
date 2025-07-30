@@ -12,6 +12,7 @@ public class Main extends Application {
         Scene scene = new Scene(loader.load());
         stage.setTitle("MediCon 로그인");
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
 

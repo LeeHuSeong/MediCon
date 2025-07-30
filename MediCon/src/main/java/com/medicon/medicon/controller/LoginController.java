@@ -3,9 +3,15 @@ package com.medicon.medicon.controller;
 import com.medicon.medicon.service.AuthService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class LoginController {
 
@@ -16,7 +22,7 @@ public class LoginController {
     @FXML private ImageView settingIcon;
     @FXML private Button settingButton;
 
-    private final AuthService authService = new AuthService(); // ✅ 새로 추가됨
+    private final AuthService authService = new AuthService();
 
     @FXML
     public void initialize() {
@@ -29,7 +35,22 @@ public class LoginController {
         );
 
         loginButton.setOnAction(e -> onLoginButtonClick());
-        settingButton.setOnAction(e -> System.out.println("설정 버튼 클릭됨!"));
+        settingButton.setOnAction(e -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/admin_pw_check.fxml"));
+                Parent root = loader.load();
+
+                Stage popupStage = new Stage();
+                popupStage.setTitle("관리자 로그인");
+                popupStage.setScene(new Scene(root));
+                popupStage.setResizable(false);
+                popupStage.show();
+
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                showError("설정 화면 로딩 실패: " + ex.getMessage());
+            }
+        });
     }
 
     public void onLoginButtonClick() {
