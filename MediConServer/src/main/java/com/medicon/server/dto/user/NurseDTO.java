@@ -1,4 +1,4 @@
-package com.medicon.server.dto;
+package com.medicon.server.dto.user;
 
 public class NurseDTO extends UserDTO {
 

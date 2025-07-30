@@ -1,4 +1,4 @@
-package com.medicon.server.dto;
+package com.medicon.server.dto.auth;
 
 public class LoginRequest {
     private String idToken;

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.medicon.medicon.controller.salary.RegisterController"
+            prefWidth="800" prefHeight="600">
+
+    <VBox spacing="20" layoutX="50" layoutY="30">
+        <!-- 기본 정보 입력 -->
+        <VBox spacing="10">
+            <TextField fx:id="nameField" promptText="이름 입력"/>
+            <TextField fx:id="emailField" promptText="이메일 입력"/>
+            <PasswordField fx:id="passwordField" promptText="비밀번호 입력"/>
+            <TextField fx:id="phoneField" promptText="전화번호 입력"/>
+        </VBox>
+
+        <!-- 역할 선택 -->
+        <HBox spacing="10">
+            <Button fx:id="doctorButton" text="의사" onAction="#handleDoctorSelect"/>
+            <Button fx:id="nurseButton" text="간호사" onAction="#handleNurseSelect"/>
+        </HBox>
+
+        <!-- 직급 선택 -->
+        <VBox spacing="5">
+            <Label text="직급 선택:"/>
+            <TilePane fx:id="rankPane" hgap="10" vgap="10" prefColumns="3" prefHeight="100" prefWidth="400"/>
+        </VBox>
+
+        <!-- 진료과 선택 -->
+        <VBox spacing="5">
+            <Label text="진료과 선택:"/>
+            <TilePane fx:id="departmentPane" hgap="10" vgap="10" prefColumns="3" prefHeight="100" prefWidth="400"/>
+        </VBox>
+
+        <!-- 등록 버튼 -->
+        <Button text="등록" onAction="#handleRegister"/>
+    </VBox>
+</AnchorPane>
+
