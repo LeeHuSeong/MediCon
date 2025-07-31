@@ -3,13 +3,13 @@ package com.medicon.server.service;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
-import com.medicon.server.dto.*;
+import com.medicon.server.dto.salary.SalaryRecordRequest;
+import com.medicon.server.dto.user.DoctorDTO;
+import com.medicon.server.dto.user.NurseDTO;
+import com.medicon.server.dto.user.UserDTO;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class StaffService {
@@ -84,4 +84,56 @@ public class StaffService {
 
         return result;
     }
+
+    //사번 생성 메서드
+    public String generateEmployeeNumber() {
+        long timestamp = System.currentTimeMillis();
+        int random = (int)(Math.random() * 900 + 100); // 100~999
+        return "EMP" + timestamp + random;
+    }
+
+
+    public void saveSalary(String uid, String role, SalaryRecordRequest req) throws Exception {
+        Firestore db = FirestoreClient.getFirestore();
+
+        // 급여 계산
+        long basePay = req.getBasePay();
+        long bonus = req.getBonus();
+        long totalPay = basePay + bonus;
+
+        long pension = Math.round(totalPay * 0.09);           // 국민연금
+        long healthInsurance = Math.round(totalPay * 0.07);   // 건강보험
+        long employmentInsurance = Math.round(totalPay * 0.009); // 고용보험
+        long incomeTax = Math.round(totalPay * 0.03);         // 소득세
+        long localTax = Math.round(incomeTax * 0.1);          // 주민세
+
+        long totalDeductions = pension + healthInsurance + employmentInsurance + incomeTax + localTax;
+        long netPay = totalPay - totalDeductions;
+
+        // 경로
+        String collectionPath = String.format("users/%s/%s/salary", uid, role.equals("doctor") ? "doctors" : "nurses");
+        String docId = req.getYear() + "_" + String.format("%02d", req.getMonth());
+
+        Map<String, Object> deductions = Map.of(
+                "pension", pension,
+                "healthInsurance", healthInsurance,
+                "employmentInsurance", employmentInsurance,
+                "incomeTax", incomeTax,
+                "localTax", localTax
+        );
+
+        Map<String, Object> salaryDoc = new HashMap<>();
+        salaryDoc.put("year", req.getYear());
+        salaryDoc.put("month", req.getMonth());
+        salaryDoc.put("basePay", basePay);
+        salaryDoc.put("bonus", bonus);
+        salaryDoc.put("totalPay", totalPay);
+        salaryDoc.put("deductions", deductions);
+        salaryDoc.put("totalDeductions", totalDeductions);
+        salaryDoc.put("netPay", netPay);
+        salaryDoc.put("paidAt", FieldValue.serverTimestamp());
+
+        db.collection(collectionPath).document(docId).set(salaryDoc).get();
+    }
+
 }
