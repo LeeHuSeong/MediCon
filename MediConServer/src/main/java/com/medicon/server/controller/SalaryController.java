@@ -35,4 +35,61 @@ public class SalaryController {
                     .body(new ApiResponse<>(false, "급여 등록 실패: " + e.getMessage()));
         }
     }
+
+    /**
+     * 급여 조회 (단일 또는 전체)
+     * GET /api/staff/salary/{uid}?role=doctor&year=2025&month=7
+     */
+    @GetMapping("/{uid}")
+    public ResponseEntity<ApiResponse<Object>> getSalary(
+            @PathVariable String uid,
+            @RequestParam String role,
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month
+    ) {
+        try {
+            Object result;
+            if (year != null && month != null) {
+                result = salaryService.getSalaryByMonth(uid, role, year, month);
+            } else {
+                result = salaryService.getAllSalary(uid, role);
+            }
+
+            return ResponseEntity.ok(new ApiResponse<>(true, "급여 조회 성공", result));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "급여 조회 실패: " + e.getMessage()));
+        }
+    }
+
+    @PutMapping("/{uid}/{yearMonth}")
+    public ResponseEntity<ApiResponse<String>> editSalary(
+            @PathVariable String uid,
+            @PathVariable String yearMonth,
+            @RequestParam String role,
+            @RequestBody SalaryRecordRequest request
+    ) {
+        try {
+            salaryService.editSalary(uid, role, yearMonth, request);
+            return ResponseEntity.ok(new ApiResponse<>(true, "급여 수정 성공"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "급여 수정 실패: " + e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/{uid}/{yearMonth}")
+    public ResponseEntity<ApiResponse<String>> deleteSalary(
+            @PathVariable String uid,
+            @PathVariable String yearMonth,
+            @RequestParam String role
+    ) {
+        try {
+            salaryService.deleteSalary(uid, role, yearMonth);
+            return ResponseEntity.ok(new ApiResponse<>(true, "급여 삭제 성공"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "급여 삭제 실패: " + e.getMessage()));
+        }
+    }
 }

@@ -13,6 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+//급여 지급을 위한 컨트롤러
 public class SalaryRegisterController {
 
     @FXML private ComboBox<StaffUser> uidComboBox;

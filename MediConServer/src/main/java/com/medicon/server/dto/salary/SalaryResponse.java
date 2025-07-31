@@ -91,6 +91,4 @@ public class SalaryResponse {
     public void setNetPay(long netPay) {
         this.netPay = netPay;
     }
-
-    // getter/setter
 }

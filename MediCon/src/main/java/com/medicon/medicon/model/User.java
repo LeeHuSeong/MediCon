@@ -16,7 +16,7 @@ public class User {
     public String getUid() { return uid; }
     public String getName() { return name; }
     public String getRole() { return role; }
-    public String getauthority() { return authority; }
+    public int getauthority() { return authority; }
 
     @Override
     public String toString() {

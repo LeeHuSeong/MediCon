@@ -16,4 +16,5 @@ module com.medicon.medicon {
     opens com.medicon.medicon.controller.salary;
     opens com.medicon.medicon.model to com.google.gson;
     exports com.medicon.medicon;
+    opens com.medicon.medicon.controller.staff;
 }
