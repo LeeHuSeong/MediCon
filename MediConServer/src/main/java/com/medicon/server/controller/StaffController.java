@@ -74,19 +74,4 @@ public class StaffController {
         return ResponseEntity.badRequest()
                 .body(new SignupResponse(false, "지원되지 않는 역할입니다.", null));
     }
-
-    @PostMapping("/salary/{uid}")
-    public ResponseEntity<ApiResponse<String>> addSalary(
-            @PathVariable String uid,
-            @RequestParam String role, // "doctor" or "nurse"
-            @RequestBody SalaryRecordRequest request
-    ) {
-        try {
-            staffService.saveSalary(uid, role, request);
-            return ResponseEntity.ok(new ApiResponse<>(true, "급여 기록 저장 성공"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse<>(false, "저장 실패: " + e.getMessage()));
-        }
-    }
 }
