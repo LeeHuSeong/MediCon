@@ -10,20 +10,40 @@
 
     <center>
         <TabPane tabClosingPolicy="UNAVAILABLE">
+
+            <!-- 경영관리 탭 -->
             <Tab text="경영관리">
                 <SplitPane dividerPositions="0.2">
-                    <!-- 좌측 메뉴 (고정폭) -->
+                    <!-- 좌측 메뉴 -->
                     <VBox fx:id="sideMenu" spacing="20" styleClass="side-menu"
                           minWidth="200" maxWidth="250" prefWidth="220">
                         <Button fx:id="salesButton" text="매출 조회" styleClass="menu-button" maxWidth="Infinity"/>
                         <Button fx:id="salaryButton" text="급여 관리" styleClass="menu-button" maxWidth="Infinity"/>
                     </VBox>
 
-                    <!-- 우측 컨텐츠 영역 -->
+                    <!-- 우측 콘텐츠 -->
                     <AnchorPane fx:id="contentArea" styleClass="content-area" />
                 </SplitPane>
             </Tab>
 
+            <!-- 추가된 직원관리 탭 -->
+            <Tab text="직원관리">
+                <SplitPane dividerPositions="0.2">
+                    <!-- 좌측 직원 메뉴 -->
+                    <VBox fx:id="staffMenu" spacing="20" styleClass="side-menu"
+                          minWidth="200" maxWidth="250" prefWidth="220">
+                        <Button fx:id="staffRegisterButton" text="직원 등록" styleClass="menu-button" maxWidth="Infinity"/>
+                        <Button fx:id="staffListButton" text="직원 조회" styleClass="menu-button" maxWidth="Infinity"/>
+                        <Button fx:id="staffUpdateButton" text="직원 수정" styleClass="menu-button" maxWidth="Infinity"/>
+                        <Button fx:id="staffDeleteButton" text="직원 삭제" styleClass="menu-button" maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- 우측 직원 콘텐츠 -->
+                    <AnchorPane fx:id="staffContentArea" styleClass="content-area" />
+                </SplitPane>
+            </Tab>
+
+            <!-- 기존 권한관리 탭 -->
             <Tab text="권한관리">
                 <Label text="(권한관리 기능 준비 중)" />
             </Tab>

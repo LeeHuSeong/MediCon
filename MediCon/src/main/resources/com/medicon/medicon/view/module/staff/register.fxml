@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.medicon.medicon.controller.salary.RegisterController"
+            fx:controller="com.medicon.medicon.controller.staff.RegisterController"
             prefWidth="800" prefHeight="600">
 
     <VBox spacing="20" layoutX="50" layoutY="30">

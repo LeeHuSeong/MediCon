@@ -1,5 +1,8 @@
 package com.medicon.server.dto;
 
+import com.medicon.server.dto.user.DoctorDTO;
+import com.medicon.server.dto.user.PatientDTO;
+
 public class ChartDTO {
 
     private String chart_id;       // 차트 고유 ID
