@@ -9,9 +9,12 @@ module com.medicon.medicon {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.fasterxml.jackson.databind;
+    requires com.google.gson;
 
 
     opens com.medicon.medicon.controller to javafx.fxml;
     opens com.medicon.medicon.controller.salary;
+    opens com.medicon.medicon.model to com.google.gson;
     exports com.medicon.medicon;
+    opens com.medicon.medicon.controller.staff;
 }
