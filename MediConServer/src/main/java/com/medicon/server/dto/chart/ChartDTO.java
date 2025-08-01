@@ -1,4 +1,7 @@
-package com.medicon.server.dto;
+package com.medicon.server.dto.chart;
+
+import com.medicon.server.dto.user.DoctorDTO;
+import com.medicon.server.dto.user.PatientDTO;
 
 import com.medicon.server.dto.user.DoctorDTO;
 import com.medicon.server.dto.user.PatientDTO;

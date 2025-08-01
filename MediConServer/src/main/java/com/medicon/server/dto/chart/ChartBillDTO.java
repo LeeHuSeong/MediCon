@@ -1,9 +1,9 @@
-package com.medicon.server.dto;
+package com.medicon.server.dto.chart;
 
 public class ChartBillDTO { // 진로비입니다
-    private String billId;
-    private String chartId;     // 차트ID
-    private String patientUid;  // 환자ID
+    private String bill_id;
+    private String chart_id;     // 차트ID
+    private String patient_uid;  // 환자ID
     private String amount;      // 진료비
     private boolean isPaid;     // 결제 여부
     private String paidAt;      // 결제 날짜
@@ -13,28 +13,28 @@ public class ChartBillDTO { // 진로비입니다
 
     public ChartBillDTO(String billId, ChartDTO chartDTO,
                         String amount, boolean isPaid, String paidAt) {
-        this.billId = billId;
-        this.chartId = chartDTO.getChart_id();
-        this.patientUid = chartDTO.getPatient_uid();
+        this.bill_id = billId;
+        this.chart_id = chartDTO.getChart_id();
+        this.patient_uid = chartDTO.getPatient_uid();
         this.amount = amount;
         this.isPaid = isPaid;
         this.paidAt = paidAt;
     }
 
-    public String getBillId() {
-        return billId;
+    public String getBill_id() {
+        return bill_id;
     }
 
-    public void setBillId(String billId) {
-        this.billId = billId;
+    public void setBill_id(String bill_id) {
+        this.bill_id = bill_id;
     }
 
-    public String getChartId() {
-        return chartId;
+    public String getChart_id() {
+        return chart_id;
     }
 
-    public String getPatientUid() {
-        return patientUid;
+    public String getPatient_uid() {
+        return patient_uid;
     }
 
     public String getAmount() {
