@@ -54,6 +54,9 @@
     -fx-alignment: center-right;
     -fx-label-padding: 0 8 0 0; /* 오른쪽 간격 */
 }
+.check-box {
+    -fx-font-size: 15px;
+}
 
 .text-field {
     -fx-font-size: 20px;
