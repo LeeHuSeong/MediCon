@@ -38,39 +38,33 @@
                         <CheckBox text="가래  " />
                         <CheckBox text="두통  " />
                         <CheckBox text="복통  " />
+                        <CheckBox text="기타  "/>
                     </HBox>
-                    <Label styleClass="form-labelBig" text="기타 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-                    <TextArea fx:id="symytomElse" editable="false" text="현재 증상의 기타 부분" prefRowCount="2" wrapText="true"
-                              GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
 
-                    <Label styleClass="form-labelBig" text="증상시작시점 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-                    <HBox fx:id="onsetOfSymptoms" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+                    <Label styleClass="form-labelBig" text="증상시작시점 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+                    <HBox fx:id="onsetOfSymptoms" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                         <RadioButton text="오늘  " />
                         <RadioButton text="어제  " />
                         <RadioButton text="3일 전  " />
                         <RadioButton text="일주일 전  " />
                         <RadioButton text="기타  " />
                     </HBox>
-                    <Label styleClass="form-labelBig" text="기타 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
-                    <TextArea fx:id="onsetOfSymptomsElse" editable="false" text="증상시작시점의 기타 부분"  prefRowCount="2" wrapText="true"
-                              GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
+                     <Label styleClass="form-labelBig" text="알레르기 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+                    <Label fx:id="allergyLabel" styleClass="form-labelBig" text="갑각류" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
+                    <Label styleClass="form-labelBig" text="복용 중인 약 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
+                    <Label fx:id="medicationLabel" styleClass="form-labelBig" text="텐텐" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
-                     <Label styleClass="form-labelBig" text="알레르기 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
-                    <Label fx:id="allergyLabel" styleClass="form-labelBig" text="갑각류" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-
-                    <Label styleClass="form-labelBig" text="복용 중인 약 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
-                    <Label fx:id="medicationLabel" styleClass="form-labelBig" text="텐텐" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                    <Label styleClass="form-labelBig" text="기타" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.rowIndex="6" />
+                    <TextArea fx:id="symytomElse" editable="false" text="기타 부분" prefRowCount="2" wrapText="true"
+                              GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="7"  GridPane.columnSpan="2" />
 
                     <VBox.margin>
                         <Insets left="20.0" right="20" />
                     </VBox.margin>
-<!--                   <columnConstraints>-->
-<!--                      <ColumnConstraints maxWidth="185" minWidth="165" prefWidth="172" />-->
-<!--                      <ColumnConstraints maxWidth="525" minWidth="505" prefWidth="517" />-->
-<!--                   </columnConstraints>-->
                 </GridPane>
             </children>
+            <Button fx:id="addQuestionnaireButton" styleClass="button-blue" text="추가 문진 작성"/>
         </VBox>
         <!-- 오른쪽 패널: 과거 문진 내역 -->
         <VBox minWidth="300" prefWidth="800" spacing="10" >
