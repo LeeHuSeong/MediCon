@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import com.medicon.medicon.config.AppConfig;
 
 import java.io.IOException;
 
@@ -14,13 +15,11 @@ public class AdminPasswordController {
     @FXML private PasswordField adminPwField;
     @FXML private Button confirmButton;
 
-    private final String adminPassword = "admin1234"; // 실제 비밀번호
-
     @FXML
     public void initialize() {
         confirmButton.setOnAction(event -> {
             String inputPw = adminPwField.getText();
-            if (inputPw.equals(adminPassword)) {
+            if (inputPw.equals(AppConfig.adminPassword)) {
                 moveToAdminMain();
             } else {
                 showAlert("비밀번호가 올바르지 않습니다.");
