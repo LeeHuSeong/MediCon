@@ -13,4 +13,8 @@ public class AppConfig {
 
     // JWT 저장
     public static final String JWT_FILE_PATH = "jwt.json";
+
+    //관리자 비밀번호
+    public static final String adminPassword = "123"; // 실제 비밀번호
+
 }

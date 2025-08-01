@@ -1,10 +1,10 @@
-package com.medicon.server.dto;
+package com.medicon.server.dto.chart;
 
 public class TestRequestFormDTO { // 검사의뢰서..
-    private String requestId;     // 의뢰서 ID
-    private String chartId;       // 차트 ID
-    private String doctorUid;     // 의사 UID
-    private String patientUid;    // 환자 UID
+    private String request_id;     // 의뢰서 ID
+    private String chart_id;       // 차트 ID
+    private String doctor_uid;     // 의사 UID
+    private String patient_uid;    // 환자 UID
     private String note;          // 비고/특이사항
     private String priority;      // 우선순위 (예: 긴급/일반)
     private String testDetail;    // 검사 상세명
@@ -15,10 +15,10 @@ public class TestRequestFormDTO { // 검사의뢰서..
 
     public TestRequestFormDTO(String requestId, ChartDTO chartDTO, String note, String priority,
                               String testDetail, String testType) {
-        this.requestId = requestId;
-        this.chartId = chartDTO.getChart_id();
-        this.doctorUid = chartDTO.getDoctor_uid();
-        this.patientUid = chartDTO.getPatient_uid();
+        this.request_id = requestId;
+        this.chart_id = chartDTO.getChart_id();
+        this.doctor_uid = chartDTO.getDoctor_uid();
+        this.patient_uid = chartDTO.getPatient_uid();
         this.note = note;
         this.priority = priority;
         this.testDetail = testDetail;
@@ -26,14 +26,14 @@ public class TestRequestFormDTO { // 검사의뢰서..
         this.visitDate = chartDTO.getVisit_date();
     }
 
-    public String getRequestId() { return requestId; }
-    public void setRequestId(String requestId) { this.requestId = requestId; }
+    public String getRequest_id() { return request_id; }
+    public void setRequest_id(String request_id) { this.request_id = request_id; }
 
-    public String getChartId() { return chartId; }
+    public String getChart_id() { return chart_id; }
 
-    public String getDoctorUid() { return doctorUid; }
+    public String getDoctor_uid() { return doctor_uid; }
 
-    public String getPatientUid() { return patientUid; }
+    public String getPatient_uid() { return patient_uid; }
 
     public String getNote() { return note; }
     public void setNote(String note) { this.note = note; }

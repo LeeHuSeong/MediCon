@@ -49,7 +49,7 @@ public class StaffService {
                 createdAt = ((Number) createdAtObj).longValue();
             }
 
-            String subCollection = (authority == 2) ? "doctors" : "nurse";
+            String subCollection = (authority == 2) ? "doctors" : "nurses";
 
             // 2. 하위 컬렉션 조회
             CollectionReference subCol = db.collection("users").document(uid).collection(subCollection);
