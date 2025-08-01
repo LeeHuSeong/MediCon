@@ -9,7 +9,7 @@
       fx:controller="com.medicon.medicon.controller.TopBarController"
       styleClass="hbox" stylesheets="@TopBar.css">
     <ImageView fx:id="logoImg" fitHeight="34" fitWidth="34"/>
-    <Button fx:id="patientBtn" text="환자관리" />
+    <Button fx:id="patientBtn" text="환자관리" styleClass="selected"/>
     <Button fx:id="questionBtn" text="문진관리"/>
     <Button fx:id="treatmentBtn" text="진료관리"/>
 </HBox>
