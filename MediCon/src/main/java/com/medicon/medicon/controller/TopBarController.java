@@ -17,29 +17,49 @@ public class TopBarController implements Initializable {
     @FXML private Button questionBtn;
     @FXML private Button treatmentBtn;
 
+    private MainController mainController;
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // 이미지 로딩
+
         logoImg.setImage(new Image(Objects.requireNonNull(getClass().getResource(
                 "/com/medicon/medicon/images/onlyIcon_logo.png"
         )).toExternalForm()));
         logoImg.setFitWidth(100);
         logoImg.setFitHeight(80);
-        // 버튼 클릭 이벤트 연결
+
         patientBtn.setOnAction(e -> {
-            // 버튼 클릭시 실행할 코드
             System.out.println("환자관리 버튼 클릭!");
             selectTab(patientBtn);
+            if (mainController != null) {
+                mainController.setCenter("/com/medicon/medicon/view/medic/medic_main/PatientManagement.fxml");
+            }
         });
+
         questionBtn.setOnAction(e -> {
             System.out.println("문진관리 버튼 클릭!");
             selectTab(questionBtn);
+            if (mainController != null) {
+                mainController.setCenter("/com/medicon/medicon/view/medic/medic_main/QuestionnaireManagement.fxml");
+            }
         });
+
         treatmentBtn.setOnAction(e -> {
             System.out.println("진료관리 버튼 클릭!");
             selectTab(treatmentBtn);
+            if (mainController != null) {
+                mainController.setCenter("/com/medicon/medicon/view/medic/medic_main/TreatmentManagement.fxml");
+            }
         });
+
+        // ✅ 초기 탭 기본 선택
+        selectTab(patientBtn);
     }
+
 
     private void selectTab(Button selected) {
         patientBtn.getStyleClass().remove("selected");
