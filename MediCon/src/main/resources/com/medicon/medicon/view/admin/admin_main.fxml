@@ -6,7 +6,7 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.medicon.medicon.controller.AdminMainController"
             prefWidth="1920" prefHeight="1080"
-            stylesheets="@../style/admin.css">
+            stylesheets="@../../style/admin.css">
 
     <center>
         <TabPane tabClosingPolicy="UNAVAILABLE">
@@ -33,9 +33,7 @@
                     <VBox fx:id="staffMenu" spacing="20" styleClass="side-menu"
                           minWidth="200" maxWidth="250" prefWidth="220">
                         <Button fx:id="staffRegisterButton" text="직원 등록" styleClass="menu-button" maxWidth="Infinity"/>
-                        <Button fx:id="staffListButton" text="직원 조회" styleClass="menu-button" maxWidth="Infinity"/>
-                        <Button fx:id="staffUpdateButton" text="직원 수정" styleClass="menu-button" maxWidth="Infinity"/>
-                        <Button fx:id="staffDeleteButton" text="직원 삭제" styleClass="menu-button" maxWidth="Infinity"/>
+                        <Button fx:id="staffManageButton" text="직원 관리 " styleClass="menu-button" maxWidth="Infinity"/>
                     </VBox>
 
                     <!-- 우측 직원 콘텐츠 -->

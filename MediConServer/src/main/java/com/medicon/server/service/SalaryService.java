@@ -1,6 +1,5 @@
 package com.medicon.server.service;
 
-import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import com.medicon.server.dto.salary.SalaryRecordRequest;
@@ -13,10 +12,13 @@ public class SalaryService {
 
     private static final String COLLECTION_DOCTORS = "doctors";
     private static final String COLLECTION_NURSES = "nurses";
-    private static final String COLLECTION_SALARY = "salary";
+    private static final String SALARY_DOC = "salary";
+    private static final String SALARY_LIST = "salaryList";
 
     public void saveSalary(String uid, String role, SalaryRecordRequest req) throws Exception {
         Firestore db = FirestoreClient.getFirestore();
+        String roleCollection = getRoleCollection(role);
+        String docId = String.format("%04d-%02d", req.getYear(), req.getMonth());
 
         long basePay = req.getBasePay();
         long bonus = req.getBonus();
@@ -31,16 +33,6 @@ public class SalaryService {
         long totalDeductions = pension + healthInsurance + employmentInsurance + incomeTax + localTax;
         long netPay = totalPay - totalDeductions;
 
-        // doctor + nurse 모두 대응
-        String roleCollection = role.equalsIgnoreCase("doctor") ? COLLECTION_DOCTORS :
-                role.equalsIgnoreCase("nurse")  ? COLLECTION_NURSES  : null;
-
-        if (roleCollection == null) {
-            throw new IllegalArgumentException("Invalid role: " + role);
-        }
-
-        String docId = String.format("%04d-%02d", req.getYear(), req.getMonth());
-
         Map<String, Object> deductions = Map.of(
                 "pension", pension,
                 "healthInsurance", healthInsurance,
@@ -49,44 +41,46 @@ public class SalaryService {
                 "localTax", localTax
         );
 
-        Map<String, Object> salaryDoc = new HashMap<>();
-        salaryDoc.put("year", req.getYear());
-        salaryDoc.put("month", req.getMonth());
-        salaryDoc.put("basePay", basePay);
-        salaryDoc.put("bonus", bonus);
-        salaryDoc.put("totalPay", totalPay);
-        salaryDoc.put("deductions", deductions);
-        salaryDoc.put("totalDeductions", totalDeductions);
-        salaryDoc.put("netPay", netPay);
-        salaryDoc.put("paidAt", FieldValue.serverTimestamp());
+        Map<String, Object> salaryData = new HashMap<>();
+        salaryData.put("year", req.getYear());
+        salaryData.put("month", req.getMonth());
+        salaryData.put("basePay", basePay);
+        salaryData.put("bonus", bonus);
+        salaryData.put("totalPay", totalPay);
+        salaryData.put("deductions", deductions);
+        salaryData.put("totalDeductions", totalDeductions);
+        salaryData.put("netPay", netPay);
+        salaryData.put("paidAt", FieldValue.serverTimestamp());
 
-        // Firestore 경로: users/{uid}/{roleCollection}/salary/{YYYY-MM}
-        db.collection("users")
+        DocumentReference salaryDocRef = db.collection("users")
                 .document(uid)
                 .collection(roleCollection)
-                .document("salary") // 잘못된 중간 document 생성을 방지하기 위해 생략
-                .collection(COLLECTION_SALARY)
+                .document(SALARY_DOC);
+
+        // 강제로 salary 문서 존재시킴
+        salaryDocRef.set(new HashMap<>()).get();
+
+        salaryDocRef.collection(SALARY_LIST)
                 .document(docId)
-                .set(salaryDoc)
+                .set(salaryData)
                 .get();
     }
 
     public Map<String, Object> getSalaryByMonth(String uid, String role, int year, int month) throws Exception {
         Firestore db = FirestoreClient.getFirestore();
-
         String roleCollection = getRoleCollection(role);
         String docId = String.format("%04d-%02d", year, month);
 
         DocumentReference docRef = db.collection("users")
                 .document(uid)
                 .collection(roleCollection)
-                .document("salary")
-                .collection(COLLECTION_SALARY)
+                .document(SALARY_DOC)
+                .collection(SALARY_LIST)
                 .document(docId);
 
         DocumentSnapshot snapshot = docRef.get().get();
         if (!snapshot.exists()) {
-            throw new NoSuchElementException("해당 월의 급여 정보가 존재하지 않습니다.");
+            throw new NoSuchElementException("해당 월의 급여 기록이 존재하지 않습니다.");
         }
 
         return snapshot.getData();
@@ -94,35 +88,29 @@ public class SalaryService {
 
     public List<Map<String, Object>> getAllSalary(String uid, String role) throws Exception {
         Firestore db = FirestoreClient.getFirestore();
-
         String roleCollection = getRoleCollection(role);
 
-        CollectionReference colRef = db.collection("users")
+        CollectionReference salaryListRef = db.collection("users")
                 .document(uid)
                 .collection(roleCollection)
-                .document("salary")
-                .collection(COLLECTION_SALARY);
+                .document(SALARY_DOC)
+                .collection(SALARY_LIST);
 
-        List<QueryDocumentSnapshot> docs = colRef.get().get().getDocuments();
+        List<QueryDocumentSnapshot> docs = salaryListRef.get().get().getDocuments();
         List<Map<String, Object>> result = new ArrayList<>();
 
         for (QueryDocumentSnapshot doc : docs) {
             Map<String, Object> data = doc.getData();
-            data.put("id", doc.getId());  // 문서 ID(예: 2025-07) 추가
+            data.put("id", doc.getId());
             result.add(data);
         }
 
         return result;
     }
 
-    private String getRoleCollection(String role) {
-        if ("doctor".equalsIgnoreCase(role)) return COLLECTION_DOCTORS;
-        if ("nurse".equalsIgnoreCase(role)) return COLLECTION_NURSES;
-        throw new IllegalArgumentException("Invalid role: " + role);
-    }
-
     public void editSalary(String uid, String role, String yearMonth, SalaryRecordRequest req) throws Exception {
         Firestore db = FirestoreClient.getFirestore();
+        String roleCollection = getRoleCollection(role);
 
         long basePay = req.getBasePay();
         long bonus = req.getBonus();
@@ -137,8 +125,6 @@ public class SalaryService {
         long totalDeductions = pension + healthInsurance + employmentInsurance + incomeTax + localTax;
         long netPay = totalPay - totalDeductions;
 
-        String roleCollection = getRoleCollection(role);
-
         Map<String, Object> deductions = Map.of(
                 "pension", pension,
                 "healthInsurance", healthInsurance,
@@ -147,39 +133,49 @@ public class SalaryService {
                 "localTax", localTax
         );
 
-        Map<String, Object> updatedDoc = new HashMap<>();
-        updatedDoc.put("year", req.getYear());
-        updatedDoc.put("month", req.getMonth());
-        updatedDoc.put("basePay", basePay);
-        updatedDoc.put("bonus", bonus);
-        updatedDoc.put("totalPay", totalPay);
-        updatedDoc.put("deductions", deductions);
-        updatedDoc.put("totalDeductions", totalDeductions);
-        updatedDoc.put("netPay", netPay);
-        updatedDoc.put("paidAt", FieldValue.serverTimestamp());
+        Map<String, Object> salaryData = new HashMap<>();
+        salaryData.put("year", req.getYear());
+        salaryData.put("month", req.getMonth());
+        salaryData.put("basePay", basePay);
+        salaryData.put("bonus", bonus);
+        salaryData.put("totalPay", totalPay);
+        salaryData.put("deductions", deductions);
+        salaryData.put("totalDeductions", totalDeductions);
+        salaryData.put("netPay", netPay);
+        salaryData.put("paidAt", FieldValue.serverTimestamp());
 
-        db.collection("users")
+        DocumentReference salaryDocRef = db.collection("users")
                 .document(uid)
                 .collection(roleCollection)
-                .document("salary")
-                .collection(COLLECTION_SALARY)
+                .document(SALARY_DOC);
+
+        salaryDocRef.set(new HashMap<>()).get(); // salary 문서 생성
+
+        salaryDocRef.collection(SALARY_LIST)
                 .document(yearMonth)
-                .set(updatedDoc)
+                .set(salaryData)
                 .get();
     }
 
     public void deleteSalary(String uid, String role, String yearMonth) throws Exception {
         Firestore db = FirestoreClient.getFirestore();
-
         String roleCollection = getRoleCollection(role);
 
         DocumentReference docRef = db.collection("users")
                 .document(uid)
                 .collection(roleCollection)
-                .document("salary")
-                .collection(COLLECTION_SALARY)
+                .document(SALARY_DOC)
+                .collection(SALARY_LIST)
                 .document(yearMonth);
 
-        docRef.delete().get();  // 삭제 실행
+        docRef.delete().get();
+    }
+
+    private String getRoleCollection(String role) {
+        return switch (role.toLowerCase()) {
+            case "doctor" -> COLLECTION_DOCTORS;
+            case "nurse" -> COLLECTION_NURSES;
+            default -> throw new IllegalArgumentException("Unknown role: " + role);
+        };
     }
 }

@@ -5,8 +5,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.medicon.medicon.config.AppConfig;
 import com.medicon.medicon.model.SalaryResponse;
-import com.medicon.medicon.model.StaffUser;
 import com.medicon.medicon.model.SalaryRecordRequest;
+import com.medicon.medicon.model.StaffUser;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -30,6 +30,14 @@ public class SalaryManageController {
 
     @FXML private TextField basePayField;
     @FXML private TextField bonusField;
+
+    @FXML private Label totalPayLabel;
+    @FXML private Label pensionLabel;
+    @FXML private Label healthLabel;
+    @FXML private Label employmentLabel;
+    @FXML private Label incomeLabel;
+    @FXML private Label localTaxLabel;
+    @FXML private Label netPayLabel;
 
     private List<StaffUser> fullUserList;
     private String selectedUid;
@@ -80,7 +88,26 @@ public class SalaryManageController {
         if (salary != null) {
             basePayField.setText(String.valueOf(salary.getBasePay()));
             bonusField.setText(String.valueOf(salary.getBonus()));
+            updateCalculation(salary);
         }
+    }
+
+    private void updateCalculation(SalaryResponse salary) {
+        long totalPay = salary.getBasePay() + salary.getBonus();
+        long pension = Math.round(totalPay * 0.09);
+        long health = Math.round(totalPay * 0.07);
+        long employment = Math.round(totalPay * 0.009);
+        long income = Math.round(totalPay * 0.03);
+        long localTax = Math.round(income * 0.1);
+        long net = totalPay - (pension + health + employment + income + localTax);
+
+        totalPayLabel.setText(totalPay + "원");
+        pensionLabel.setText(pension + "원");
+        healthLabel.setText(health + "원");
+        employmentLabel.setText(employment + "원");
+        incomeLabel.setText(income + "원");
+        localTaxLabel.setText(localTax + "원");
+        netPayLabel.setText(net + "원");
     }
 
     @FXML
@@ -94,10 +121,11 @@ public class SalaryManageController {
             long basePay = Long.parseLong(basePayField.getText());
             long bonus = Long.parseLong(bonusField.getText());
 
-            String[] ym = selectedYearMonth.split("-");
             SalaryRecordRequest req = new SalaryRecordRequest(
-                    Integer.parseInt(ym[0]), Integer.parseInt(ym[1]),
-                    basePay, bonus
+                    Integer.parseInt(selectedYearMonth.split("-")[0]),
+                    Integer.parseInt(selectedYearMonth.split("-")[1]),
+                    basePay,
+                    bonus
             );
 
             String urlStr = String.format("%s/api/staff/salary/%s?role=%s&yearMonth=%s",
@@ -116,7 +144,7 @@ public class SalaryManageController {
 
             if (conn.getResponseCode() == 200) {
                 showAlert("수정 성공", Alert.AlertType.INFORMATION);
-                loadMonthList(selectedUid, selectedRole);
+                onMonthSelected(null);
             } else {
                 showAlert("수정 실패: " + conn.getResponseCode(), Alert.AlertType.ERROR);
             }
@@ -144,6 +172,13 @@ public class SalaryManageController {
                 showAlert("삭제 성공", Alert.AlertType.INFORMATION);
                 basePayField.clear();
                 bonusField.clear();
+                totalPayLabel.setText("");
+                pensionLabel.setText("");
+                healthLabel.setText("");
+                employmentLabel.setText("");
+                incomeLabel.setText("");
+                localTaxLabel.setText("");
+                netPayLabel.setText("");
                 loadMonthList(selectedUid, selectedRole);
             } else {
                 showAlert("삭제 실패: " + conn.getResponseCode(), Alert.AlertType.ERROR);
