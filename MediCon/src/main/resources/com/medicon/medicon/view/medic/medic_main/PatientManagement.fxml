@@ -19,8 +19,8 @@
 
             <ListView fx:id="patientListView" prefHeight="445.0" prefWidth="274.0" VBox.vgrow="ALWAYS" />
         </VBox>
-        <!-- 중앙 정보 -->
-        <VBox prefHeight="1000.0" prefWidth="420.0" minWidth="350" spacing="10" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="20.0">
+        <!-- 중앙 패널 -->
+        <VBox prefHeight="1000.0" prefWidth="600.0" minWidth="350" spacing="10" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="20.0">
         <Label maxWidth="Infinity" styleClass="section-title" text="환자 정보">
             </Label>
             <GridPane hgap="10" prefHeight="941.0" prefWidth="353.0" vgap="10">
@@ -59,7 +59,8 @@
              </children>
           </HBox>
         </VBox>
-        <VBox>
+        <!-- 오른쪽 패널들 -->
+        <VBox prefWidth="1000">
             <HBox spacing="20"  prefHeight="450.0"  prefWidth="920.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                 <!-- 오른쪽 패널: 문진 기록 -->
                 <VBox spacing="10" minWidth="300">
