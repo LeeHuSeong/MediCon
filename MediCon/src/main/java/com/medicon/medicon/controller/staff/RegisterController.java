@@ -1,4 +1,4 @@
-package com.medicon.medicon.controller.salary;
+package com.medicon.medicon.controller.staff;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+//직원 추가를 위한 컨트롤러
 public class RegisterController {
 
     @FXML private TextField nameField;

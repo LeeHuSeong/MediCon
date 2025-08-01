@@ -10,39 +10,45 @@ import java.io.IOException;
 
 public class AdminMainController {
 
+    // FXML 경로 상수
+    private static final String SALES_FXML_BASE = "/com/medicon/medicon/view/";
+    private static final String SALARY_FXML_BASE = "/com/medicon/medicon/view/module/salary/";
+    private static final String STAFF_FXML_BASE = "/com/medicon/medicon/view/module/staff/";
+
+    // 경영관리 탭
     @FXML private AnchorPane contentArea;
     @FXML private Button salesButton;
     @FXML private Button salaryButton;
 
+    // 직원관리 탭
+    @FXML private AnchorPane staffContentArea;
+    @FXML private Button staffRegisterButton;
+    @FXML private Button staffListButton;
+    @FXML private Button staffUpdateButton;
+    @FXML private Button staffDeleteButton;
+
     @FXML
     public void initialize() {
-        salesButton.setOnAction(e -> showSales());
-        salaryButton.setOnAction(e -> showSalary());
+        // 경영관리
+        salesButton.setOnAction(e -> loadContent(contentArea, SALES_FXML_BASE, "sales_view.fxml"));
+        salaryButton.setOnAction(e -> loadContent(contentArea, SALARY_FXML_BASE, "salary_manage.fxml"));
+
+        // 직원관리
+        staffRegisterButton.setOnAction(e -> loadContent(staffContentArea, STAFF_FXML_BASE, "register.fxml"));
+        staffListButton.setOnAction(e -> loadContent(staffContentArea, STAFF_FXML_BASE, "list.fxml"));
+        staffUpdateButton.setOnAction(e -> loadContent(staffContentArea, STAFF_FXML_BASE, "update.fxml"));
+        staffDeleteButton.setOnAction(e -> loadContent(staffContentArea, STAFF_FXML_BASE, "delete.fxml"));
     }
 
-    @FXML
-    public void showSales() {
+    /** 공통 AnchorPane FXML 로더 */
+    private void loadContent(AnchorPane targetPane, String basePath, String fileName) {
         try {
-            Parent salesView = FXMLLoader.load(getClass().getResource("/com/medicon/medicon/view/sales_view.fxml"));
-            contentArea.getChildren().setAll(salesView);
-            AnchorPane.setTopAnchor(salesView, 0.0);
-            AnchorPane.setBottomAnchor(salesView, 0.0);
-            AnchorPane.setLeftAnchor(salesView, 0.0);
-            AnchorPane.setRightAnchor(salesView, 0.0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void showSalary() {
-        try {
-            Parent salaryView = FXMLLoader.load(getClass().getResource("/com/medicon/medicon/view/module/salary_view.fxml"));
-            contentArea.getChildren().setAll(salaryView);
-            AnchorPane.setTopAnchor(salaryView, 0.0);
-            AnchorPane.setBottomAnchor(salaryView, 0.0);
-            AnchorPane.setLeftAnchor(salaryView, 0.0);
-            AnchorPane.setRightAnchor(salaryView, 0.0);
+            Parent view = FXMLLoader.load(getClass().getResource(basePath + fileName));
+            targetPane.getChildren().setAll(view);
+            AnchorPane.setTopAnchor(view, 0.0);
+            AnchorPane.setBottomAnchor(view, 0.0);
+            AnchorPane.setLeftAnchor(view, 0.0);
+            AnchorPane.setRightAnchor(view, 0.0);
         } catch (IOException e) {
             e.printStackTrace();
         }

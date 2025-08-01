@@ -5,7 +5,7 @@ public class PatientDTO extends UserDTO {
     private String patient_id;
     private String gender;
     private String address;
-    private String run;
+    private String rnn;
 
     public PatientDTO() {}
 
@@ -15,7 +15,7 @@ public class PatientDTO extends UserDTO {
         this.patient_id = patient_id;
         this.gender = gender;
         this.address = address;
-        this.run = run;
+        this.rnn = run;
     }
 
     public String getPatient_id() { return patient_id; }
@@ -27,6 +27,6 @@ public class PatientDTO extends UserDTO {
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
-    public String getRun() { return run; }
-    public void setRun(String run) { this.run = run; }
+    public String getRnn() { return rnn; }
+    public void setRnn(String rnn) { this.rnn = rnn; }
 }

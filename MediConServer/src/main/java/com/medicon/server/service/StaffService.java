@@ -92,48 +92,4 @@ public class StaffService {
         return "EMP" + timestamp + random;
     }
 
-
-    public void saveSalary(String uid, String role, SalaryRecordRequest req) throws Exception {
-        Firestore db = FirestoreClient.getFirestore();
-
-        // 급여 계산
-        long basePay = req.getBasePay();
-        long bonus = req.getBonus();
-        long totalPay = basePay + bonus;
-
-        long pension = Math.round(totalPay * 0.09);           // 국민연금
-        long healthInsurance = Math.round(totalPay * 0.07);   // 건강보험
-        long employmentInsurance = Math.round(totalPay * 0.009); // 고용보험
-        long incomeTax = Math.round(totalPay * 0.03);         // 소득세
-        long localTax = Math.round(incomeTax * 0.1);          // 주민세
-
-        long totalDeductions = pension + healthInsurance + employmentInsurance + incomeTax + localTax;
-        long netPay = totalPay - totalDeductions;
-
-        // 경로
-        String collectionPath = String.format("users/%s/%s/salary", uid, role.equals("doctor") ? "doctors" : "nurses");
-        String docId = req.getYear() + "_" + String.format("%02d", req.getMonth());
-
-        Map<String, Object> deductions = Map.of(
-                "pension", pension,
-                "healthInsurance", healthInsurance,
-                "employmentInsurance", employmentInsurance,
-                "incomeTax", incomeTax,
-                "localTax", localTax
-        );
-
-        Map<String, Object> salaryDoc = new HashMap<>();
-        salaryDoc.put("year", req.getYear());
-        salaryDoc.put("month", req.getMonth());
-        salaryDoc.put("basePay", basePay);
-        salaryDoc.put("bonus", bonus);
-        salaryDoc.put("totalPay", totalPay);
-        salaryDoc.put("deductions", deductions);
-        salaryDoc.put("totalDeductions", totalDeductions);
-        salaryDoc.put("netPay", netPay);
-        salaryDoc.put("paidAt", FieldValue.serverTimestamp());
-
-        db.collection(collectionPath).document(docId).set(salaryDoc).get();
-    }
-
 }

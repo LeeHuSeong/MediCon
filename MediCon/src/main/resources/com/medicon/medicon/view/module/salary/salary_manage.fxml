@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.medicon.medicon.controller.salary.SalaryManageController"
+      spacing="20">
+
+    <!-- ToggleGroup 정의 -->
+    <fx:define>
+        <ToggleGroup fx:id="roleToggleGroup"/>
+    </fx:define>
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- 1단계: 역할 선택 -->
+    <VBox spacing="10">
+        <Label text="직책 선택"/>
+        <RadioButton fx:id="doctorRadio" text="의사" toggleGroup="$roleToggleGroup" userData="doctor"/>
+        <RadioButton fx:id="nurseRadio" text="간호사" toggleGroup="$roleToggleGroup" userData="nurse"/>
+    </VBox>
+
+    <!-- 2단계: 사용자 검색 -->
+    <VBox spacing="10">
+        <Label text="사용자 검색"/>
+        <HBox spacing="5">
+            <TextField fx:id="searchField" promptText="이름 입력"/>
+            <Button text="검색" onAction="#onSearch"/>
+        </HBox>
+        <ListView fx:id="userListView" prefWidth="180" prefHeight="250"/>
+    </VBox>
+
+    <!-- 3단계: 급여 연/월 선택 -->
+    <VBox spacing="10">
+        <Label text="급여 연/월"/>
+        <ListView fx:id="monthListView" prefWidth="100" prefHeight="250"/>
+    </VBox>
+
+    <!-- 4단계: 급여 입력 및 수정/삭제 -->
+    <VBox spacing="10">
+        <Label text="급여 정보 입력"/>
+        <HBox spacing="5">
+            <Label text="기본급:"/>
+            <TextField fx:id="basePayField" prefWidth="100"/>
+        </HBox>
+        <HBox spacing="5">
+            <Label text="수당:"/>
+            <TextField fx:id="bonusField" prefWidth="100"/>
+        </HBox>
+        <HBox spacing="10">
+            <Button text="수정" onAction="#onSave"/>
+            <Button text="삭제" onAction="#onDelete"/>
+        </HBox>
+    </VBox>
+
+</HBox>

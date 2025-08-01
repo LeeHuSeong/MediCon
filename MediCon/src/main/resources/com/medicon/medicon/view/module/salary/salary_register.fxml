@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.medicon.medicon.controller.salary.SalaryRegisterController"
+            prefWidth="600" prefHeight="450">
+
+    <VBox spacing="15" alignment="CENTER" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="20">
+        <Label text="급여 등록" style="-fx-font-size: 20;" />
+
+        <HBox spacing="10">
+            <Label text="직원 UID:" />
+            <ComboBox fx:id="uidComboBox" prefWidth="200"/>
+        </HBox>
+
+        <HBox spacing="10">
+            <Label text="직원 역할:" />
+            <ComboBox fx:id="roleComboBox" prefWidth="200"/>
+        </HBox>
+
+        <HBox spacing="10">
+            <Label text="지급 연도:" />
+            <TextField fx:id="yearField" promptText="예: 2025" />
+        </HBox>
+
+        <HBox spacing="10">
+            <Label text="지급 월:" />
+            <TextField fx:id="monthField" promptText="예: 7" />
+        </HBox>
+
+        <HBox spacing="10">
+            <Label text="기본급:" />
+            <TextField fx:id="basePayField" promptText="예: 3000000" />
+        </HBox>
+
+        <HBox spacing="10">
+            <Label text="성과 수당:" />
+            <TextField fx:id="bonusField" promptText="예: 500000" />
+        </HBox>
+
+        <Button text="저장" onAction="#handleRegisterSalary" />
+    </VBox>
+</AnchorPane>
