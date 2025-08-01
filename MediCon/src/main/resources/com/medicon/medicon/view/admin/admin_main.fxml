@@ -41,10 +41,6 @@
                 </SplitPane>
             </Tab>
 
-            <!-- 기존 권한관리 탭 -->
-            <Tab text="권한관리">
-                <Label text="(권한관리 기능 준비 중)" />
-            </Tab>
         </TabPane>
     </center>
 </BorderPane>

@@ -18,10 +18,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class StaffManageController {
-
-    @FXML private RadioButton allRadio;
-    @FXML private RadioButton doctorRadio;
-    @FXML private RadioButton nurseRadio;
     @FXML private ToggleGroup roleToggleGroup;
 
     @FXML private TextField searchField;
@@ -30,13 +26,7 @@ public class StaffManageController {
     @FXML private TextField nameField;
     @FXML private TextField emailField;
     @FXML private TextField phoneField;
-    @FXML private TextField departmentField;
-    @FXML private TextField rankField;
-    @FXML private ComboBox<String> authorityComboBox;
-
-    @FXML private Button updateButton;
-    @FXML private Button deleteButton;
-    @FXML private Button resetButton;
+    @FXML private ComboBox<String> authorityComboBox;  // 권한 콤보박스
 
     @FXML private TilePane departmentPane;
     @FXML private TilePane rankPane;
@@ -47,10 +37,10 @@ public class StaffManageController {
 
     @FXML
     public void initialize() {
-        // 권한 선택 초기화
-        authorityComboBox.setItems(FXCollections.observableArrayList("읽기", "쓰기", "관리자"));
+        // 권한 콤보박스 초기화 (환자, 간호사, 의사)
+        authorityComboBox.setItems(FXCollections.observableArrayList("환자", "간호사", "의사"));
 
-        // 리스트 초기화
+        // 직원 목록 보기 설정
         userListView.setItems(staffList);
         userListView.setCellFactory(param -> new ListCell<>() {
             @Override
@@ -60,38 +50,47 @@ public class StaffManageController {
             }
         });
 
-        // 리스트 선택 시 상세 정보 표시
+        // 직원 선택 시 해당 정보 채우기
         userListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 nameField.setText(newVal.getName());
                 emailField.setText(newVal.getEmail());
                 phoneField.setText(newVal.getPhone());
-                departmentField.setText(newVal.getDepartment());
-                rankField.setText(newVal.getRank());
-                authorityComboBox.setValue(mapAuthorityToString(newVal.getAuthority()));
+                authorityComboBox.setValue(mapAuthorityToString(newVal.getAuthority())); // 권한 설정 (수정 불가)
+
+                // 역할에 따라 부서 및 직급 버튼 초기화
+                initializeDepartmentButtons(newVal.getRole());
+                initializeRankButtons(newVal.getRole());
+
+                // 선택된 부서 및 직급 저장
+                selectedDepartment = newVal.getDepartment();
+                selectedRank = newVal.getRank();
             }
         });
 
-        // 역할 선택 시 해당 진료과와 직급 버튼 생성
+        // 역할 선택 시 직원 목록 불러오기 및 직급, 부서 버튼 초기화
         roleToggleGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             if (newToggle != null) {
-                String selectedRole = (String) newToggle.getUserData(); // "all", "doctor", "nurse"
-                fetchStaffList(selectedRole);
-                initializeRankButtons(selectedRole);
+                String selectedRole = (String) newToggle.getUserData();
+                fetchStaffList(selectedRole);  // 선택된 역할로 직원 목록 불러오기
+                initializeRankButtons(selectedRole); // 직급 버튼 초기화
+                initializeDepartmentButtons(selectedRole); // 부서 버튼 초기화
             }
         });
 
-        initializeDepartmentButtons();
+        // 기본적으로 "전체" 역할 선택하고 직원 목록 불러오기
         fetchStaffList("all");
     }
 
+    // 검색 기능
     @FXML
     private void onSearch() {
         String keyword = searchField.getText().trim();
         String role = (String) roleToggleGroup.getSelectedToggle().getUserData();
-        fetchStaffList(role, keyword);
+        fetchStaffList(role, keyword);  // 선택된 역할과 키워드로 직원 목록 검색
     }
 
+    // 수정 버튼 클릭 시
     @FXML
     private void onUpdateUser() {
         StaffUser selected = userListView.getSelectionModel().getSelectedItem();
@@ -103,8 +102,8 @@ public class StaffManageController {
         // 수정할 값 가져오기
         String name = nameField.getText().trim();
         String phone = phoneField.getText().trim();
-        String department = departmentField.getText().trim();  // 부서
-        String rank = rankField.getText().trim();  // 직급
+        String department = selectedDepartment;  // 클릭한 부서
+        String rank = selectedRank;  // 클릭한 직급
         String role = selected.getRole();  // 직원 역할 (의사/간호사 등)
 
         long basePay = SalaryBaseTable.getBasePay(role, rank);  // 직급에 따른 기본급
@@ -121,8 +120,8 @@ public class StaffManageController {
             Map<String, Object> requestMap = new HashMap<>();
             requestMap.put("name", name);
             requestMap.put("phone", phone);
-            requestMap.put("department", department);  // 부서
-            requestMap.put("rank", rank);  // 직급
+            requestMap.put("department", department);  // 선택된 부서
+            requestMap.put("rank", rank);  // 선택된 직급
             requestMap.put("basePay", basePay);  // 기본급
 
             // JSON으로 변환하여 서버로 보내기
@@ -135,7 +134,8 @@ public class StaffManageController {
             int responseCode = conn.getResponseCode();
             if (responseCode == 200) {
                 showAlert("수정 완료", "직원 정보가 성공적으로 수정되었습니다.");
-                fetchStaffList(role);  // 수정 후 직원 목록 갱신
+                String currentRole = (String) roleToggleGroup.getSelectedToggle().getUserData(); // Get the currently selected role
+                fetchStaffList(currentRole);  // Fetch staff list for the selected role
             } else {
                 showAlert("수정 실패", "서버 응답 오류: " + responseCode);
             }
@@ -144,6 +144,7 @@ public class StaffManageController {
         }
     }
 
+    // Delete selected employee
     @FXML
     private void onDeleteUser() {
         StaffUser selected = userListView.getSelectionModel().getSelectedItem();
@@ -161,7 +162,6 @@ public class StaffManageController {
         String role = selected.getRole();
 
         try {
-            // 서버에서 직원 삭제 요청
             URL url = new URL(AppConfig.SERVER_BASE_URL + "/api/staff/delete/" + uid + "?role=" + role);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("DELETE");
@@ -169,7 +169,7 @@ public class StaffManageController {
             int responseCode = conn.getResponseCode();
             if (responseCode == 200) {
                 showAlert("삭제 완료", "직원이 성공적으로 삭제되었습니다.");
-                fetchStaffList(role);  // 삭제 후 직원 목록 갱신
+                fetchStaffList(role);  // Fetch staff list for the current role after deletion
             } else {
                 showAlert("삭제 실패", "서버 응답 오류: " + responseCode);
             }
@@ -178,23 +178,26 @@ public class StaffManageController {
         }
     }
 
+    // Reset the fields and selection
     @FXML
     private void onReset() {
         userListView.getSelectionModel().clearSelection();
         nameField.clear();
         emailField.clear();
         phoneField.clear();
-        departmentField.clear();
-        rankField.clear();
         authorityComboBox.getSelectionModel().clearSelection();
+        // Reset selected department and rank as well
+        selectedDepartment = null;
+        selectedRank = null;
     }
 
+    // Fetch staff list from server based on role and search keyword
     private void fetchStaffList(String role) {
         fetchStaffList(role, "");
     }
 
     private void fetchStaffList(String role, String keyword) {
-        staffList.clear();  // 기존 직원 리스트 초기화
+        staffList.clear();  // Clear existing list
 
         try {
             String urlStr = AppConfig.SERVER_BASE_URL + "/api/staff/list?role=" + role;
@@ -213,12 +216,12 @@ public class StaffManageController {
                     String line;
                     while ((line = br.readLine()) != null) sb.append(line);
 
-                    // Parse JSON response and update staffList
+                    // Parse response and update staff list
                     Map<String, Object> response = new Gson().fromJson(sb.toString(), Map.class);
                     List<Map<String, Object>> data = (List<Map<String, Object>>) response.get("data");
                     for (Map<String, Object> entry : data) {
                         StaffUser user = new Gson().fromJson(new Gson().toJson(entry), StaffUser.class);
-                        staffList.add(user);  // 직원 리스트에 추가
+                        staffList.add(user);  // Add to staff list
                     }
                 }
             } else {
@@ -229,6 +232,7 @@ public class StaffManageController {
         }
     }
 
+    // Show alert dialog
     private void showAlert(String title, String message) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -239,58 +243,72 @@ public class StaffManageController {
         });
     }
 
+    // Map authority code to string (환자, 간호사, 의사)
     private String mapAuthorityToString(int code) {
         switch (code) {
-            case 0: return "읽기";
-            case 1: return "쓰기";
-            case 2: return "관리자";
+            case 0: return "환자";
+            case 1: return "간호사";
+            case 2: return "의사";
             default: return "알 수 없음";
         }
     }
 
+    // Reverse map authority string to code
+    private int mapAuthorityToStringReverse(String authority) {
+        switch (authority) {
+            case "환자": return 0;
+            case "간호사": return 1;
+            case "의사": return 2;
+            default: return -1; // Invalid authority
+        }
+    }
+
+    // Initialize rank buttons based on selected role
     private void initializeRankButtons(String role) {
-        List<String> ranks;
+        List<String> ranks = new ArrayList<>();
+
         if ("doctor".equalsIgnoreCase(role)) {
             ranks = Arrays.asList("인턴", "레지던트", "전임의", "조교수", "부교수", "교수");
         } else if ("nurse".equalsIgnoreCase(role)) {
             ranks = Arrays.asList("간호사", "수간호사", "책임간호사", "수석간호사");
-        } else {
-            ranks = new ArrayList<>();
         }
 
+        rankPane.getChildren().clear();  // 기존 버튼 초기화
         ToggleGroup rankGroup = new ToggleGroup();
-        rankPane.getChildren().clear();  // 기존 버튼 제거
 
+        // 직급 버튼을 TilePane에 추가
         for (String rank : ranks) {
             ToggleButton btn = new ToggleButton(rank);
             btn.setToggleGroup(rankGroup);
             rankPane.getChildren().add(btn);
         }
 
+        // 버튼 클릭 시 직급 선택 저장
         rankGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             if (newToggle != null) {
-                selectedRank = ((ToggleButton) newToggle).getText();
-                rankField.setText(selectedRank);
+                selectedRank = ((ToggleButton) newToggle).getText();  // 선택된 직급 저장
             }
         });
     }
 
-    private void initializeDepartmentButtons() {
+    // Initialize department buttons based on selected role
+    private void initializeDepartmentButtons(String role) {
         List<String> departments = Arrays.asList("내과", "외과", "소아과", "산부인과", "정형외과", "응급의학과");
         ToggleGroup deptGroup = new ToggleGroup();
 
-        departmentPane.getChildren().clear();  // 기존 버튼 제거
+        departmentPane.getChildren().clear();  // 기존 버튼 초기화
 
+        // 부서 버튼을 TilePane에 추가
         for (String dept : departments) {
             ToggleButton btn = new ToggleButton(dept);
             btn.setToggleGroup(deptGroup);
             departmentPane.getChildren().add(btn);
         }
 
+        // 버튼 클릭 시 부서 선택 저장
         deptGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-                selectedDepartment = ((ToggleButton) newVal).getText();
-                departmentField.setText(selectedDepartment);
+                selectedDepartment = ((ToggleButton) newVal).getText();  // 선택된 부서 저장
             }
         });
     }
