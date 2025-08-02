@@ -14,6 +14,7 @@ import javafx.scene.layout.TilePane;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -82,13 +83,38 @@ public class StaffManageController {
         fetchStaffList("all");
     }
 
-    // 검색 기능
     @FXML
     private void onSearch() {
-        String keyword = searchField.getText().trim();
-        String role = (String) roleToggleGroup.getSelectedToggle().getUserData();
-        fetchStaffList(role, keyword);  // 선택된 역할과 키워드로 직원 목록 검색
+        String keyword = searchField.getText().trim();  // 입력된 검색어
+        String role = (String) roleToggleGroup.getSelectedToggle().getUserData();  // 선택된 역할
+
+        // 역할에 따른 값 설정 (전체, 의사, 간호사)
+        if (role.equals("전체")) {
+            role = "all";
+        } else if (role.equals("의사")) {
+            role = "doctor";
+        } else if (role.equals("간호사")) {
+            role = "nurse";
+        }
+
+        // 빈 검색어 입력을 막고, 검색어가 있을 때만 요청 보내기
+        if (keyword.isEmpty()) {
+            keyword = null;
+            showAlert("검색 오류", "검색어를 입력해 주세요.");
+            return;
+        }
+
+        try {
+            String encodedKeyword = URLEncoder.encode(keyword, "UTF-8");
+            fetchStaffList(role, encodedKeyword);  // 역할과 검색어에 맞춰 직원 목록 가져오기
+        } catch (UnsupportedEncodingException e) {
+            showAlert("검색 오류", "검색어 인코딩에 실패했습니다.");
+            e.printStackTrace();
+        }
     }
+
+
+
 
     // 수정 버튼 클릭 시
     @FXML
@@ -196,32 +222,43 @@ public class StaffManageController {
         fetchStaffList(role, "");
     }
 
+    // 직원 목록 가져오는 메서드
     private void fetchStaffList(String role, String keyword) {
-        staffList.clear();  // Clear existing list
+        staffList.clear();  // 기존 리스트 초기화
 
         try {
-            String urlStr = AppConfig.SERVER_BASE_URL + "/api/staff/list?role=" + role;
-            if (!keyword.isEmpty()) {
-                urlStr += "&keyword=" + keyword;
-            }
+            // URL 문자열을 잘 확인하면서 보내기
+            String urlStr = AppConfig.SERVER_BASE_URL + "/api/staff/list?role=" + role + "&keyword=" + keyword;
 
+            // 서버로 요청 보내기
             URL url = new URL(urlStr);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
 
             int responseCode = conn.getResponseCode();
+            //System.out.println("응답 코드: " + responseCode);  // 응답 코드 로그
+
             if (responseCode == 200) {
                 try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
                     StringBuilder sb = new StringBuilder();
                     String line;
                     while ((line = br.readLine()) != null) sb.append(line);
 
-                    // Parse response and update staff list
+                    // 서버 응답을 JSON으로 파싱
                     Map<String, Object> response = new Gson().fromJson(sb.toString(), Map.class);
                     List<Map<String, Object>> data = (List<Map<String, Object>>) response.get("data");
-                    for (Map<String, Object> entry : data) {
-                        StaffUser user = new Gson().fromJson(new Gson().toJson(entry), StaffUser.class);
-                        staffList.add(user);  // Add to staff list
+
+                    // 로그: 응답 데이터 확인
+                    //System.out.println("응답 데이터: " + data);
+
+                    // 데이터가 존재하는 경우 리스트에 추가
+                    if (data != null && !data.isEmpty()) {
+                        for (Map<String, Object> entry : data) {
+                            StaffUser user = new Gson().fromJson(new Gson().toJson(entry), StaffUser.class);
+                            staffList.add(user);  // 리스트에 추가
+                        }
+                    } else {
+                        showAlert("검색 결과 없음", "검색 조건에 맞는 직원이 없습니다.");
                     }
                 }
             } else {
@@ -230,7 +267,13 @@ public class StaffManageController {
         } catch (Exception e) {
             showAlert("네트워크 오류", "에러: " + e.getMessage());
         }
+
+        // UI 업데이트
+        Platform.runLater(() -> {
+            userListView.setItems(staffList);  // ObservableList를 ListView에 설정
+        });
     }
+
 
     // Show alert dialog
     private void showAlert(String title, String message) {
