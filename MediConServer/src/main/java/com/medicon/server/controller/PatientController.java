@@ -3,51 +3,136 @@ package com.medicon.server.controller;
 import com.medicon.server.dao.patient.PatientDAO;
 import com.medicon.server.dao.patient.PatientDAOImpl;
 import com.medicon.server.dto.user.PatientDTO;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/patient")
+@RequestMapping(value = "/api/patient", produces = "application/json; charset=UTF-8")
 public class PatientController {
     private final PatientDAO patientDAO = new PatientDAOImpl();
 
     // 전체 환자 목록 조회
-    @GetMapping("/all")
-    public List<PatientDTO> getAllPatients() {
-        return patientDAO.findAllPatients();
+    @GetMapping(value = "/all", produces = "application/json; charset=UTF-8")
+    public ResponseEntity<List<PatientDTO>> getAllPatients() {
+        try {
+            List<PatientDTO> patients = patientDAO.findAllPatients();
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body(patients);
+        } catch (Exception e) {
+            System.err.println("❌ 전체 환자 조회 실패: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
 
     // 이름으로 환자 목록 조회 (동명이인 모두)
-    @GetMapping("/by-name/{name}")
-    public List<PatientDTO> getPatientsByName(@PathVariable String name) {
-        return patientDAO.findPatientByName(name);
+    @GetMapping(value = "/by-name/{name}", produces = "application/json; charset=UTF-8")
+    public ResponseEntity<List<PatientDTO>> getPatientsByName(@PathVariable String name) {
+        try {
+            System.out.println("🔍 환자 이름 검색: " + name);
+            List<PatientDTO> patients = patientDAO.findPatientByName(name);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body(patients);
+        } catch (Exception e) {
+            System.err.println("❌ 환자 이름 검색 실패: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
 
     // UID로 환자 단건 조회
-    @GetMapping("/{uid}")
-    public PatientDTO getPatientByUid(@PathVariable String uid) {
-        return patientDAO.findPatientByUid(uid);
+    @GetMapping(value = "/{uid}", produces = "application/json; charset=UTF-8")
+    public ResponseEntity<PatientDTO> getPatientByUid(@PathVariable String uid) {
+        try {
+            PatientDTO patient = patientDAO.findPatientByUid(uid);
+            if (patient != null) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .body(patient);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            System.err.println("❌ 환자 단건 조회 실패: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
 
     // 신규 환자 등록
-    @PostMapping("/save")
-    public String savePatient(@RequestBody PatientDTO patient) {
-        patientDAO.savePatient(patient);
-        return "ok";
+    @PostMapping(value = "/save",
+            consumes = "application/json; charset=UTF-8",
+            produces = "application/json; charset=UTF-8")
+    public ResponseEntity<String> savePatient(@RequestBody PatientDTO patient) {
+        try {
+            System.out.println("💾 환자 등록 요청: " + patient.getName());
+            patientDAO.savePatient(patient);
+            System.out.println("✅ 환자 등록 완료: " + patient.getName());
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body("ok");
+        } catch (Exception e) {
+            System.err.println("❌ 환자 등록 실패: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500)
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body("error: " + e.getMessage());
+        }
     }
 
-    // 환자 정보 수정
-    @PutMapping("/update")
-    public String updatePatient(@RequestBody PatientDTO patient) {
-        patientDAO.updatePatient(patient);
-        return "ok";
+    // ✅ 환자 정보 수정 - 가장 중요한 부분!
+    @PutMapping(value = "/update",
+            consumes = "application/json; charset=UTF-8",
+            produces = "application/json; charset=UTF-8")
+    public ResponseEntity<String> updatePatient(@RequestBody PatientDTO patient) {
+        try {
+            System.out.println("📝 환자 정보 수정 요청: " + patient.getName() + " (ID: " + patient.getPatient_id() + ")");
+
+            // 수정 전 환자 정보 로그
+            PatientDTO existingPatient = patientDAO.findPatientByUid(patient.getPatient_id());
+            if (existingPatient != null) {
+                System.out.println("📋 기존 정보: " + existingPatient.getName());
+            }
+
+            // 실제 수정 실행
+            patientDAO.updatePatient(patient);
+
+            System.out.println("✅ 환자 정보 수정 완료: " + patient.getName());
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body("ok");
+
+        } catch (Exception e) {
+            System.err.println("❌ 환자 정보 수정 실패: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500)
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body("error: " + e.getMessage());
+        }
     }
 
     // 환자 삭제
-    @DeleteMapping("/delete/{uid}")
-    public String deletePatient(@PathVariable String uid) {
-        patientDAO.deletePatient(uid);
-        return "ok";
+    @DeleteMapping(value = "/delete/{uid}", produces = "application/json; charset=UTF-8")
+    public ResponseEntity<String> deletePatient(@PathVariable String uid) {
+        try {
+            System.out.println("🗑️ 환자 삭제 요청: " + uid);
+            patientDAO.deletePatient(uid);
+            System.out.println("✅ 환자 삭제 완료: " + uid);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body("ok");
+        } catch (Exception e) {
+            System.err.println("❌ 환자 삭제 실패: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500)
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body("error: " + e.getMessage());
+        }
     }
 }
