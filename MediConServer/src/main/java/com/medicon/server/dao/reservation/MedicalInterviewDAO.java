@@ -1,6 +1,7 @@
 package com.medicon.server.dao.reservation;
 
 import com.medicon.server.dto.reservation.MedicalInterviewDTO;
+import org.springframework.stereotype.Repository;
 import java.util.List;
 
 public interface MedicalInterviewDAO {
