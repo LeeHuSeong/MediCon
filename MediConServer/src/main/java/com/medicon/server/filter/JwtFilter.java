@@ -27,6 +27,14 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        String requestURI = request.getRequestURI();
+
+        // permitAll 경로들은 JWT 검증 없이 통과
+        if (isPermitAllPath(requestURI)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         final String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
@@ -43,5 +51,17 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+
+    }
+
+    // permitAll 경로 확인 메서드
+    private boolean isPermitAllPath(String requestURI) {
+        return requestURI.startsWith("/auth/") ||
+                requestURI.startsWith("/api/user/") ||
+                requestURI.startsWith("/api/staff/") ||
+                requestURI.startsWith("/api/chart/") ||
+                requestURI.startsWith("/api/patient/") ||
+                requestURI.startsWith("/api/reservation/") ||
+                requestURI.startsWith("/api/interview/");
     }
 }
