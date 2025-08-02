@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.medicon.medicon.controller.staff.StaffManageController"
+            prefWidth="1000" prefHeight="600">
+
+    <!-- Left side for role selection and search -->
+    <left>
+        <VBox spacing="20" prefWidth="250" style="-fx-padding: 20;">
+            <fx:define>
+                <ToggleGroup fx:id="roleToggleGroup"/>
+            </fx:define>
+
+            <!-- Role selection (전체, 의사, 간호사) -->
+            <Label text="직책 선택"/>
+            <RadioButton fx:id="allRadio" text="전체" toggleGroup="$roleToggleGroup" userData="all" selected="true"/>
+            <RadioButton fx:id="doctorRadio" text="의사" toggleGroup="$roleToggleGroup" userData="doctor"/>
+            <RadioButton fx:id="nurseRadio" text="간호사" toggleGroup="$roleToggleGroup" userData="nurse"/>
+
+            <!-- Employee search -->
+            <Label text="직원 검색"/>
+            <HBox spacing="5">
+                <TextField fx:id="searchField" promptText="이름 또는 이메일" prefWidth="180"/>
+                <Button text="검색" onAction="#onSearch" maxWidth="Infinity"/>
+            </HBox>
+
+            <!-- List of employees -->
+            <ListView fx:id="userListView" prefHeight="400"/>
+        </VBox>
+    </left>
+
+    <!-- Right side for detailed employee info -->
+    <center>
+        <VBox spacing="20" alignment="TOP_LEFT" style="-fx-padding: 30;">
+            <Label text="직원 정보" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <!-- Employee Info Form -->
+            <GridPane hgap="10" vgap="10">
+                <Label text="이름:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="nameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="이메일:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="emailField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="전화번호:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="phoneField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Label text="권한:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="authorityComboBox" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            </GridPane>
+
+            <!-- Department and Rank Selection based on role -->
+            <VBox spacing="10">
+                <Label text="진료과 선택" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                <TilePane fx:id="departmentPane" hgap="10" vgap="10" prefColumns="3" maxWidth="600"/>
+
+                <Label text="직급 선택" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                <TilePane fx:id="rankPane" hgap="10" vgap="10" prefColumns="3" maxWidth="600"/>
+            </VBox>
+
+            <!-- Action Buttons -->
+            <HBox spacing="20" alignment="CENTER_LEFT" style="-fx-padding: 10;">
+                <Button fx:id="updateButton" text="수정" onAction="#onUpdateUser" maxWidth="Infinity"/>
+                <Button fx:id="deleteButton" text="삭제" onAction="#onDeleteUser" maxWidth="Infinity"/>
+                <Button fx:id="resetButton" text="초기화" onAction="#onReset" maxWidth="Infinity"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

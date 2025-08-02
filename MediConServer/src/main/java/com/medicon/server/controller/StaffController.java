@@ -30,9 +30,11 @@ public class StaffController {
      * 의사, 간호사, 전체 직원 목록을 가져오는 통합 API
      */
     @GetMapping("/list")
-    public ResponseEntity<ApiResponse<List<UserDTO>>> getStaffList(@RequestParam(defaultValue = "all") String role) {
+    public ResponseEntity<ApiResponse<List<UserDTO>>> getStaffList(
+            @RequestParam(defaultValue = "all") String role,
+            @RequestParam(defaultValue = "") String keyword) {
         try {
-            List<UserDTO> result = staffService.getStaffList(role);
+            List<UserDTO> result = staffService.getStaffList(role, keyword);  // keyword 전달
             return ResponseEntity.ok(new ApiResponse<>(true, "직원 목록 조회 성공", result));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -74,4 +76,35 @@ public class StaffController {
         return ResponseEntity.badRequest()
                 .body(new SignupResponse(false, "지원되지 않는 역할입니다.", null));
     }
+
+    @PutMapping("/update/{uid}")
+    public ResponseEntity<ApiResponse<String>> updateStaff(
+            @PathVariable String uid,
+            @RequestParam String role,
+            @RequestBody Map<String, String> payload
+    ) {
+        try {
+            staffService.updateStaffInfo(uid, role, payload);
+            return ResponseEntity.ok(new ApiResponse<>(true, "직원 정보 수정 완료"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "직원 정보 수정 실패: " + e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/delete/{uid}")
+    public ResponseEntity<ApiResponse<String>> deleteStaff(
+            @PathVariable String uid,
+            @RequestParam String role
+    ) {
+        try {
+            staffService.deleteStaff(uid, role);
+            return ResponseEntity.ok(new ApiResponse<>(true, "직원 삭제 완료"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "직원 삭제 실패: " + e.getMessage()));
+        }
+    }
+
+
 }

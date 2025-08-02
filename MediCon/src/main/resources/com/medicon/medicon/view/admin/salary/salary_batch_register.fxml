@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.medicon.medicon.controller.salary.SalaryBatchRegisterController"
+            prefWidth="1000" prefHeight="600">
+
+    <!-- 상단: 제목 + 지급월 + 버튼 -->
+    <top>
+        <HBox spacing="20">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <Label text="급여 일괄 지급" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+            <Label text="지급 월:" />
+            <ComboBox fx:id="monthSelector" prefWidth="120"/>
+            <Button fx:id="payAllButton" text="지급 실행" />
+        </HBox>
+    </top>
+
+    <!-- 중앙: 테이블 -->
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <TableView fx:id="salaryTable" prefWidth="950" prefHeight="500">
+                <columns>
+                    <TableColumn fx:id="nameColumn" text="이름" prefWidth="120"/>
+                    <TableColumn fx:id="rankColumn" text="직급" prefWidth="120"/>
+                    <TableColumn fx:id="roleColumn" text="역할" prefWidth="100"/>
+                    <TableColumn fx:id="basePayColumn" text="기본급" prefWidth="150"/>
+                    <TableColumn fx:id="bonusColumn" text="보너스" prefWidth="150"/>
+                    <TableColumn fx:id="statusColumn" text="지급 상태" prefWidth="180"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+</BorderPane>

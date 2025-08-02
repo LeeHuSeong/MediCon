@@ -62,10 +62,10 @@ public class SalaryController {
         }
     }
 
-    @PutMapping("/{uid}/{yearMonth}")
+    @PutMapping("/{uid}")
     public ResponseEntity<ApiResponse<String>> editSalary(
             @PathVariable String uid,
-            @PathVariable String yearMonth,
+            @RequestParam String yearMonth,
             @RequestParam String role,
             @RequestBody SalaryRecordRequest request
     ) {
@@ -78,10 +78,10 @@ public class SalaryController {
         }
     }
 
-    @DeleteMapping("/{uid}/{yearMonth}")
+    @DeleteMapping("/{uid}")
     public ResponseEntity<ApiResponse<String>> deleteSalary(
             @PathVariable String uid,
-            @PathVariable String yearMonth,
+            @RequestParam String yearMonth,
             @RequestParam String role
     ) {
         try {
