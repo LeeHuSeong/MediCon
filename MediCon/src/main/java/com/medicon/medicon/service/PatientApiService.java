@@ -167,21 +167,30 @@ public class PatientApiService {
                 URL url = new URL(BASE_URL + "/update");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("PUT");
-                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8"); // ✅ charset 추가
+                conn.setRequestProperty("Accept-Charset", "UTF-8");
                 conn.setDoOutput(true);
-                
+
                 String jsonInputString = objectMapper.writeValueAsString(patient);
-                
+                System.out.println("📤 전송할 JSON: " + jsonInputString); // ✅ 디버깅 로그
+
                 try (OutputStream os = conn.getOutputStream()) {
-                    byte[] input = jsonInputString.getBytes("utf-8");
+                    byte[] input = jsonInputString.getBytes(java.nio.charset.StandardCharsets.UTF_8); // ✅ StandardCharsets 사용
                     os.write(input, 0, input.length);
                 }
-                
+
                 int responseCode = conn.getResponseCode();
+                System.out.println("📥 응답 코드: " + responseCode);
+
                 if (responseCode == 200) {
                     System.out.println("✅ 환자 정보 수정 성공: " + patient.getName());
                     return true;
                 } else {
+                    // ✅ 에러 응답 내용도 확인
+                    try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
+                        String errorResponse = br.lines().collect(java.util.stream.Collectors.joining("\n"));
+                        System.err.println("❌ 서버 에러 응답: " + errorResponse);
+                    }
                     System.err.println("❌ 환자 정보 수정 실패: " + responseCode);
                     return false;
                 }

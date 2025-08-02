@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane styleClass="background" stylesheets="@ComponentStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.medicon.medicon.controller.medic.PatientManagementController">
+<AnchorPane styleClass="background" stylesheets="@ComponentStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.medicon.medicon.controller.PatientManagementController">
 
     <HBox spacing="20" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" AnchorPane.rightAnchor="20">
         <!-- 좌측 패널 -->
@@ -20,7 +20,7 @@
             <ListView fx:id="patientListView" prefHeight="445.0" prefWidth="274.0" VBox.vgrow="ALWAYS" />
         </VBox>
         <!-- 중앙 패널 -->
-        <VBox prefHeight="1000.0" prefWidth="500.0" minWidth="350" spacing="10" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="20.0">
+        <VBox prefHeight="1000.0" prefWidth="600.0" minWidth="350" spacing="10" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="20.0">
         <Label maxWidth="Infinity" styleClass="section-title" text="환자 정보">
             </Label>
             <GridPane hgap="10" prefHeight="941.0" prefWidth="353.0" vgap="10">
@@ -60,7 +60,7 @@
           </HBox>
         </VBox>
         <!-- 오른쪽 패널들 -->
-        <VBox prefWidth="900">
+        <VBox prefWidth="1000">
             <HBox spacing="20"  prefHeight="450.0"  prefWidth="920.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                 <!-- 오른쪽 패널: 문진 기록 -->
                 <VBox spacing="10" minWidth="300">
@@ -100,6 +100,16 @@
 
                         <Label styleClass="form-labelBig" text="진료과 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
                         <Label fx:id="departmentLabel" text="흉부외과"  styleClass="form-labelBig" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                        <columnConstraints>
+                            <ColumnConstraints />
+                            <ColumnConstraints />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints />
+                            <RowConstraints />
+                            <RowConstraints />
+                        </rowConstraints>
                         <VBox.margin>
                             <Insets left="20.0" right="20"/>
                         </VBox.margin>

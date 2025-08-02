@@ -1,4 +1,4 @@
-package com.medicon.medicon.controller.medic;
+package com.medicon.medicon.controller;
 
 import com.medicon.medicon.model.PatientDTO;
 import com.medicon.medicon.model.ReservationDTO;
@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class PatientManagementController implements Initializable {
