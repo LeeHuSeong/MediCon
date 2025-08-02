@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane minHeight="800" minWidth="1141.0" prefHeight="800.0" prefWidth="1141.0" style="-fx-background-color: white; -fx-padding: 20;" stylesheets="@ComponentStyle.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.medicon.medicon.controller.AddQuestionnaireFormController">
+
+    <VBox prefHeight="800.0" prefWidth="1141.0" spacing="10">
+        <Label maxWidth="Infinity" styleClass="section-title" text="추가 문진 작성" />
+        <GridPane hgap="10" maxWidth="Infinity" prefHeight="359.0" prefWidth="1071.0" vgap="10" VBox.vgrow="ALWAYS">
+            <Label styleClass="form-labelBig" text="오늘 날짜 받아오기" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
+            <TextField fx:id="addtitleField" promptText="문진 제목" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
+
+            <Label styleClass="form-labelBig" text="과거 병력 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+            <TextField fx:id="addhistoryLabel" styleClass="form-labelBig" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+            <Label styleClass="form-labelBig" text="현재 증상 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+            <HBox GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                <CheckBox fx:id="addcolloc" text="기침  " />
+                <CheckBox fx:id="addaddeugua" text="발열  " />
+                <CheckBox fx:id="addcaacTwet" text="가래  " />
+                <CheckBox fx:id="addheadache" text="두통  " />
+                <CheckBox fx:id="addstomachache" text="복통  " />
+                <CheckBox fx:id="addguitar" text="기타  " />
+            </HBox>
+
+            <Label styleClass="form-labelBig" text="증상시작시점 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+            <HBox GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                <RadioButton fx:id="addRadio1" text="오늘  " />
+                <RadioButton fx:id="addRadio2" text="어제  " />
+                <RadioButton fx:id="addRadio3" text="3일 전  " />
+                <RadioButton fx:id="addRadio4" text="일주일 전  " />
+                <RadioButton fx:id="addRadio5" text="기타  " />
+            </HBox>
+            <Label styleClass="form-labelBig" text="알레르기 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+            <TextArea fx:id="addallergyLabel" styleClass="form-labelBig" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+            <Label styleClass="form-labelBig" text="복용 중인 약 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
+            <TextArea fx:id="addmedication" prefHeight="73.0" prefWidth="865.0" styleClass="form-labelBig" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+            <Label styleClass="form-labelBig" text="기타" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.rowIndex="6" />
+            <TextArea fx:id="addElse" prefHeight="195.0" prefRowCount="2" prefWidth="1096.0" wrapText="true" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
+
+            <VBox.margin>
+                <Insets left="20.0" right="20" />
+            </VBox.margin>
+         <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints maxHeight="254.66668701171875" minHeight="44.66667175292969" prefHeight="91.33334350585938" />
+            <RowConstraints maxHeight="308.6666615804036" minHeight="93.00003051757807" prefHeight="131.99996948242188" />
+            <RowConstraints maxHeight="213.33336385091144" minHeight="34.00002034505212" prefHeight="51.33331298828119" />
+            <RowConstraints maxHeight="232.66668701171875" minHeight="86.66668701171875" prefHeight="232.66668701171875" />
+         </rowConstraints>
+        </GridPane>
+        <HBox alignment="BOTTOM_RIGHT" prefHeight="96.0" prefWidth="1200.0" spacing="10">
+            <Button onAction="#handleSave" styleClass="button-blue" text="저장" />
+            <Button onAction="#handleClose" styleClass="button-gray" text="닫기" />
+         <padding>
+            <Insets bottom="10.0" right="10.0" />
+         </padding>
+        </HBox>
+    </VBox>
+</AnchorPane>
