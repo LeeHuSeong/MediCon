@@ -22,6 +22,8 @@ public class LoginController {
     @FXML private ImageView settingIcon;
     @FXML private Button settingButton;
 
+    private Stage popupStage;
+
     private final AuthService authService = new AuthService();
 
     @FXML
@@ -37,13 +39,23 @@ public class LoginController {
         loginButton.setOnAction(e -> onLoginButtonClick());
         settingButton.setOnAction(e -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/admin_pw_check.fxml"));
+                // 이미 열려 있으면 포커스만 줌
+                if (popupStage != null && popupStage.isShowing()) {
+                    popupStage.requestFocus();
+                    return;
+                }
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/admin/admin_pw_check.fxml"));
                 Parent root = loader.load();
 
-                Stage popupStage = new Stage();
+                popupStage = new Stage();
                 popupStage.setTitle("관리자 로그인");
                 popupStage.setScene(new Scene(root));
                 popupStage.setResizable(false);
+
+                // 창이 닫히면 popupStage를 null로 초기화
+                popupStage.setOnHidden(ev -> popupStage = null);
+
                 popupStage.show();
 
             } catch (IOException ex) {
@@ -51,6 +63,7 @@ public class LoginController {
                 showError("설정 화면 로딩 실패: " + ex.getMessage());
             }
         });
+
     }
 
     public void onLoginButtonClick() {
