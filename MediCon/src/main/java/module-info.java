@@ -19,4 +19,5 @@ module com.medicon.medicon {
     opens com.medicon.medicon.controller.staff;
 
     exports com.medicon.medicon.model to com.fasterxml.jackson.databind;
+    opens com.medicon.medicon.controller.medic to javafx.fxml;
 }

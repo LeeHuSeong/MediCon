@@ -1,13 +1,14 @@
 /* TopBar.css */
 
 /* 전체 TopBar HBox 배경 */
-.hbox {
+.top-bar {
     -fx-background-color: #9DD0FF;
     -fx-padding: 6 6 0 6;
     -fx-spacing: 0;
     -fx-alignment: center-left;
     -fx-pref-height: 80px;
-    -fx-effect: dropshadow(gaussian, #888888, 5, 0.5, 2, 2);
+    -fx-border-color: #d0d0d0;
+    -fx-border-width: 0 0 1 0;
 }
 
 /* 공통 버튼 스타일 */
@@ -33,15 +34,11 @@
     -fx-background-color: #206EB4;
     -fx-border-color: #206EB4;
     -fx-opacity: 1;
-    -fx-effect: dropshadow(three-pass-box, #24669c55, 2, 0, 0, 1);
 }
 
 /* 클릭(Pressed) 효과: 약간 진해지고, 그림자 강조 */
 .button:pressed {
     -fx-background-color: #174980;
-    -fx-effect: dropshadow(three-pass-box, #333333aa, 12, 0, 0, 2);
-    -fx-translate-y: 1; /* 아래로 살짝 내려감 */
-    -fx-opacity: 1;
 }
 
 /* 버튼 hover 효과 */
