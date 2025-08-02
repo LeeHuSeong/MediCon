@@ -1,7 +1,9 @@
 package com.medicon.medicon.util;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SalaryBaseTable {
 
@@ -35,5 +37,15 @@ public class SalaryBaseTable {
             default:
                 return 0L;
         }
+    }
+
+    // 의사 직급 목록 반환
+    public static List<String> getDoctorRanks() {
+        return doctorBasePayMap.keySet().stream().collect(Collectors.toList());
+    }
+
+    // 간호사 직급 목록 반환
+    public static List<String> getNurseRanks() {
+        return nurseBasePayMap.keySet().stream().collect(Collectors.toList());
     }
 }

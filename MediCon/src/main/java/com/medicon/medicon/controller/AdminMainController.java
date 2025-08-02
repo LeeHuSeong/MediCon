@@ -12,8 +12,8 @@ public class AdminMainController {
 
     // FXML 경로 상수
     private static final String SALES_FXML_BASE = "/com/medicon/medicon/view/";
-    private static final String SALARY_FXML_BASE = "/com/medicon/medicon/view/module/salary/";
-    private static final String STAFF_FXML_BASE = "/com/medicon/medicon/view/module/staff/";
+    private static final String SALARY_FXML_BASE = "/com/medicon/medicon/view/admin/salary/";
+    private static final String STAFF_FXML_BASE = "/com/medicon/medicon/view/admin/staff/";
 
     // 경영관리 탭
     @FXML private AnchorPane contentArea;
@@ -23,21 +23,17 @@ public class AdminMainController {
     // 직원관리 탭
     @FXML private AnchorPane staffContentArea;
     @FXML private Button staffRegisterButton;
-    @FXML private Button staffListButton;
-    @FXML private Button staffUpdateButton;
-    @FXML private Button staffDeleteButton;
+    @FXML private Button staffManageButton;
 
     @FXML
     public void initialize() {
         // 경영관리
         salesButton.setOnAction(e -> loadContent(contentArea, SALES_FXML_BASE, "sales_view.fxml"));
-        salaryButton.setOnAction(e -> loadContent(contentArea, SALARY_FXML_BASE, "salary_manage.fxml"));
+        salaryButton.setOnAction(e -> loadContent(contentArea, SALARY_FXML_BASE, "salary_container.fxml"));
 
         // 직원관리
-        staffRegisterButton.setOnAction(e -> loadContent(staffContentArea, STAFF_FXML_BASE, "register.fxml"));
-        staffListButton.setOnAction(e -> loadContent(staffContentArea, STAFF_FXML_BASE, "list.fxml"));
-        staffUpdateButton.setOnAction(e -> loadContent(staffContentArea, STAFF_FXML_BASE, "update.fxml"));
-        staffDeleteButton.setOnAction(e -> loadContent(staffContentArea, STAFF_FXML_BASE, "delete.fxml"));
+        staffRegisterButton.setOnAction(e -> loadContent(staffContentArea, STAFF_FXML_BASE, "staff_register.fxml"));
+        staffManageButton.setOnAction(e -> loadContent(staffContentArea, STAFF_FXML_BASE, "staff_manage.fxml"));
     }
 
     /** 공통 AnchorPane FXML 로더 */

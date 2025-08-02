@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.medicon.medicon.controller.salary.SalaryManageController"
+            prefWidth="1000" prefHeight="600">
+
+    <left>
+        <VBox spacing="20" prefWidth="250">
+            <padding><Insets top="20" left="20" right="10" bottom="20"/></padding>
+
+            <!-- ToggleGroup 정의 -->
+            <fx:define>
+                <ToggleGroup fx:id="roleToggleGroup"/>
+            </fx:define>
+
+            <!-- 1단계: 역할 선택 -->
+            <Label text="직책 선택"/>
+            <RadioButton fx:id="doctorRadio" text="의사" toggleGroup="$roleToggleGroup" userData="doctor"/>
+            <RadioButton fx:id="nurseRadio" text="간호사" toggleGroup="$roleToggleGroup" userData="nurse"/>
+
+            <!-- 2단계: 사용자 검색 -->
+            <Label text="사용자 검색"/>
+            <HBox spacing="5">
+                <TextField fx:id="searchField" promptText="이름 입력" prefWidth="120"/>
+                <Button text="검색" onAction="#onSearch"/>
+            </HBox>
+            <ListView fx:id="userListView" prefHeight="200" prefWidth="200"/>
+
+            <!-- 3단계: 급여 연/월 선택 -->
+            <Label text="급여 연/월"/>
+            <ListView fx:id="monthListView" prefHeight="150" prefWidth="200"/>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="20" alignment="TOP_LEFT">
+            <padding><Insets top="30" left="30" right="30" bottom="30"/></padding>
+
+            <Label text="급여 정보" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <!-- 급여 입력 -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="기본급:"/>
+                <TextField fx:id="basePayField" editable="false" prefWidth="120"/>
+                <Label text="수당:"/>
+                <TextField fx:id="bonusField" prefWidth="120"/>
+            </HBox>
+
+            <!-- 급여 계산 결과 -->
+            <GridPane hgap="10" vgap="8">
+                <Label text="세전 총액:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <Label fx:id="totalPayLabel" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="국민연금:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <Label fx:id="pensionLabel" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="건강보험:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <Label fx:id="healthLabel" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Label text="고용보험:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <Label fx:id="employmentLabel" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                <Label text="소득세:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <Label fx:id="incomeLabel" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                <Label text="주민세:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                <Label fx:id="localTaxLabel" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+                <Label text="실수령액:" style="-fx-font-weight: bold;" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                <Label fx:id="netPayLabel" style="-fx-font-weight: bold;" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+            </GridPane>
+
+            <!-- 수정/삭제 버튼 -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Button text="수정" onAction="#onSave"/>
+                <Button text="삭제" onAction="#onDelete"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

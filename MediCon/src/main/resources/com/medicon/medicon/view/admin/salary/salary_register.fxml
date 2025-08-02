@@ -18,20 +18,17 @@
             <ComboBox fx:id="uidComboBox" prefWidth="200"/>
         </HBox>
 
+        <!-- 직급(Label) 추가 -->
         <HBox spacing="10">
-            <Label text="직원 역할:" />
-            <ComboBox fx:id="roleComboBox" prefWidth="200"/>
+            <Label text="직급:" />
+            <Label fx:id="rankLabel" text="-" />
         </HBox>
 
         <HBox spacing="10">
-            <Label text="지급 연도:" />
-            <TextField fx:id="yearField" promptText="예: 2025" />
+            <Label text="지급 연도/월:" />
+            <ComboBox fx:id="payMonthComboBox" prefWidth="200" />
         </HBox>
 
-        <HBox spacing="10">
-            <Label text="지급 월:" />
-            <TextField fx:id="monthField" promptText="예: 7" />
-        </HBox>
 
         <HBox spacing="10">
             <Label text="기본급:" />
