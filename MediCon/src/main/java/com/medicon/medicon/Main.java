@@ -10,7 +10,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         //Main_view
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "/com/medicon/medicon/view/medic/medic_main/Main.fxml"
+                "/com/medicon/medicon/view/medic/medic_main/MedicMain.fxml"
         ));
         //login_view
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource(

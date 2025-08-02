@@ -1,11 +1,12 @@
-package com.medicon.medicon.controller;
+package com.medicon.medicon.controller.medic;
 
+import com.medicon.medicon.controller.TopBarController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 
-public class MainController {
+public class MedicMainController {
 
     @FXML private BorderPane mainBorderPane;
 

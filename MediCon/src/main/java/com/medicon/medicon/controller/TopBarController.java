@@ -1,5 +1,6 @@
 package com.medicon.medicon.controller;
 
+import com.medicon.medicon.controller.medic.MedicMainController;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,10 +18,10 @@ public class TopBarController implements Initializable {
     @FXML private Button questionBtn;
     @FXML private Button treatmentBtn;
 
-    private MainController mainController;
+    private MedicMainController mainController;
 
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
+    public void setMainController(MedicMainController medicMainController) {
+        this.mainController = medicMainController;
     }
 
     @Override
