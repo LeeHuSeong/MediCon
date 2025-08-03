@@ -32,6 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/patient/**").permitAll()
                         .requestMatchers("/api/reservation/**").permitAll()
                         .requestMatchers("/api/interview/**").permitAll()
+                        .requestMatchers("/api/patient/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

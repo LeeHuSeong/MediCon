@@ -20,9 +20,7 @@ public class ReservationController {
 
     @GetMapping("/by-patient")
     public List<ReservationDTO> getReservationsByPatientId(@RequestParam String patientId) {
-        System.out.println("📥 예약 조회 요청 - patientId: " + patientId);
         List<ReservationDTO> reservations = reservationDAO.findReservationByPatientId(patientId);
-        System.out.println("✅ 예약 조회 결과: " + reservations.size() + "건");
         return reservations;
     }
 }

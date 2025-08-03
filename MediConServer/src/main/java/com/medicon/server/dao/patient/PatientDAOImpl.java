@@ -4,48 +4,40 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import com.medicon.server.dto.user.PatientDTO;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+@Repository
 public class PatientDAOImpl implements PatientDAO {
-    private static final String USERS_COLLECTION = "users";
-    private static final String PATIENTS_COLLECTION = "patients";
+
+    private final Firestore db = FirestoreClient.getFirestore();
 
     @Override
     public List<PatientDTO> findAllPatients() {
         List<PatientDTO> patients = new ArrayList<>();
-        Firestore db = FirestoreClient.getFirestore();
         try {
-            // 모든 유저 중 "환자"만 찾기
-            ApiFuture<QuerySnapshot> userFuture = db.collection("users")
-                    .whereEqualTo("role", "환자").get();
-            List<QueryDocumentSnapshot> userDocs = userFuture.get().getDocuments();
+            System.out.println("전체 환자 조회 시작");
 
-            for (QueryDocumentSnapshot userDoc : userDocs) {
-                String uid = userDoc.getString("uid");
-                if (uid == null) continue;
-                // 해당 유저의 patients 서브컬렉션 순회
-                ApiFuture<QuerySnapshot> patFuture = db.collection("users").document(uid)
-                        .collection("patients").get();
-                List<QueryDocumentSnapshot> patDocs = patFuture.get().getDocuments();
-                for (QueryDocumentSnapshot patDoc : patDocs) {
-                    PatientDTO p = patDoc.toObject(PatientDTO.class);
-                    // 상위 users 정보 덮어쓰기
-                    p.setUid(uid);
-                    p.setName(userDoc.getString("name"));
-                    p.setPhone(userDoc.getString("phone"));
-                    p.setEmail(userDoc.getString("email"));
-                    p.setRole(userDoc.getString("role"));
-                    p.setAuthority(userDoc.getLong("authority") != null ? userDoc.getLong("authority").intValue() : 0);
-                    p.setCreateAt(userDoc.getLong("createAt") != null ? userDoc.getLong("createAt") : 0L);
-                    patients.add(p);
+            // 새로운 구조: patients 컬렉션에서 직접 조회
+            ApiFuture<QuerySnapshot> future = db.collection("patients").get();
+            List<QueryDocumentSnapshot> docs = future.get().getDocuments();
+
+            for (QueryDocumentSnapshot doc : docs) {
+                PatientDTO patient = doc.toObject(PatientDTO.class);
+                // 문서 ID를 patient_id 또는 uid로 설정 (데이터 구조에 따라)
+                if (patient.getPatient_id() == null) {
+                    patient.setPatient_id(doc.getId());
                 }
+                patients.add(patient);
             }
+
+            System.out.println("전체 환자 조회 완료 - " + patients.size() + "명");
+
         } catch (Exception e) {
-            System.err.println("[findAllPatients] Firestore error: " + e.getMessage());
+            System.err.println("전체 환자 조회 실패: " + e.getMessage());
+            e.printStackTrace();
         }
         return patients;
     }
@@ -53,112 +45,154 @@ public class PatientDAOImpl implements PatientDAO {
     @Override
     public List<PatientDTO> findPatientByName(String name) {
         List<PatientDTO> patients = new ArrayList<>();
-        Firestore db = FirestoreClient.getFirestore();
         try {
-            // 이름으로 유저 찾기
-            ApiFuture<QuerySnapshot> userFuture = db.collection("users")
-                    .whereEqualTo("name", name).get();
-            List<QueryDocumentSnapshot> userDocs = userFuture.get().getDocuments();
+            System.out.println("환자 이름 검색 시작 - name: " + name);
 
-            for (QueryDocumentSnapshot userDoc : userDocs) {
-                String uid = userDoc.getString("uid");
-                if (uid == null) continue;
-                ApiFuture<QuerySnapshot> patFuture = db.collection("users").document(uid)
-                        .collection("patients").get();
-                List<QueryDocumentSnapshot> patDocs = patFuture.get().getDocuments();
-                for (QueryDocumentSnapshot patDoc : patDocs) {
-                    PatientDTO p = patDoc.toObject(PatientDTO.class);
-                    // 상위 유저정보 병합
-                    p.setUid(uid);
-                    p.setName(userDoc.getString("name"));
-                    p.setPhone(userDoc.getString("phone"));
-                    p.setEmail(userDoc.getString("email"));
-                    p.setRole(userDoc.getString("role"));
-                    p.setAuthority(userDoc.getLong("authority") != null ? userDoc.getLong("authority").intValue() : 0);
-                    p.setCreateAt(userDoc.getLong("createAt") != null ? userDoc.getLong("createAt") : 0L);
-                    patients.add(p);
+            // 새로운 구조: patients 컬렉션에서 이름으로 검색
+            ApiFuture<QuerySnapshot> future = db.collection("patients")
+                    .whereEqualTo("name", name)
+                    .get();
+            List<QueryDocumentSnapshot> docs = future.get().getDocuments();
+
+            for (QueryDocumentSnapshot doc : docs) {
+                PatientDTO patient = doc.toObject(PatientDTO.class);
+                if (patient.getPatient_id() == null) {
+                    patient.setPatient_id(doc.getId());
                 }
+                patients.add(patient);
             }
+
+            System.out.println("환자 이름 검색 완료 - " + patients.size() + "명");
+
         } catch (Exception e) {
-            System.err.println("[findPatientByName] Firestore error: " + e.getMessage());
+            System.err.println("환자 이름 검색 실패: " + e.getMessage());
+            e.printStackTrace();
         }
         return patients;
     }
 
     @Override
     public PatientDTO findPatientByUid(String uid) {
-        Firestore db = FirestoreClient.getFirestore();
         try {
-            // 상위 유저 문서 조회
-            DocumentReference userRef = db.collection("users").document(uid);
-            DocumentSnapshot userDoc = userRef.get().get();
-            if (!userDoc.exists()) return null;
+            System.out.println("환자 단건 조회 시작 - uid: " + uid);
 
-            // patients 서브컬렉션 중 첫 번째 환자(혹은 patient_id로 따로 지정 가능)만 반환
-            ApiFuture<QuerySnapshot> patFuture = userRef.collection("patients").get();
-            List<QueryDocumentSnapshot> patDocs = patFuture.get().getDocuments();
-            if (!patDocs.isEmpty()) {
-                PatientDTO p = patDocs.get(0).toObject(PatientDTO.class);
-                p.setUid(uid);
-                p.setName(userDoc.getString("name"));
-                p.setPhone(userDoc.getString("phone"));
-                p.setEmail(userDoc.getString("email"));
-                p.setRole(userDoc.getString("role"));
-                p.setAuthority(userDoc.getLong("authority") != null ? userDoc.getLong("authority").intValue() : 0);
-                p.setCreateAt(userDoc.getLong("createAt") != null ? userDoc.getLong("createAt") : 0L);
-                return p;
+            // 새로운 구조: patients 컬렉션에서 문서 ID로 조회
+            DocumentReference docRef = db.collection("patients").document(uid);
+            ApiFuture<DocumentSnapshot> future = docRef.get();
+            DocumentSnapshot doc = future.get();
+
+            if (doc.exists()) {
+                PatientDTO patient = doc.toObject(PatientDTO.class);
+                if (patient.getPatient_id() == null) {
+                    patient.setPatient_id(doc.getId());
+                }
+                System.out.println("환자 단건 조회 완료 - " + patient.getName());
+                return patient;
+            } else {
+                System.out.println("환자를 찾을 수 없음: " + uid);
+                return null;
             }
+
         } catch (Exception e) {
-            System.err.println("[findPatientByUid] Firestore error: " + e.getMessage());
+            System.err.println("환자 단건 조회 실패: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     @Override
     public void savePatient(PatientDTO patient) {
-        Firestore db = FirestoreClient.getFirestore();
         try {
-            // patient_id를 문서ID로 활용 (신규 저장/수정 동일하게 동작)
+            System.out.println("환자 저장 시작 - " + patient.getName());
+
+            // 새로운 구조: patients 컬렉션에 직접 저장
+            String docId = patient.getPatient_id();
+            if (docId == null || docId.trim().isEmpty()) {
+                // patient_id가 없으면 자동 생성
+                docId = db.collection("patients").document().getId();
+                patient.setPatient_id(docId);
+            }
+
             db.collection("patients")
-                    .document(patient.getPatient_id())
-                    .set(patient);
+                    .document(docId)
+                    .set(patient)
+                    .get();
+
+            System.out.println("환자 저장 완료 - " + patient.getName());
+
         } catch (Exception e) {
-            System.err.println("[savePatient] Firestore error: " + e.getMessage());
+            System.err.println("환자 저장 실패: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @Override
     public void updatePatient(PatientDTO patient) {
-        Firestore db = FirestoreClient.getFirestore();
         try {
-            // patient_id를 문서ID로 활용 (예: "3"이라는 문서에 덮어쓰기)
-            db.collection("patients")
-                    .document(patient.getPatient_id()) // ← patient_id 기준!
-                    .set(patient); // set은 있으면 수정, 없으면 생성
+            System.out.println("✏환자 정보 수정 시작 - " + patient.getName());
+
+            // 새로운 구조: patients 컬렉션에서 직접 업데이트
+            String docId = patient.getPatient_id();
+            if (docId != null && !docId.trim().isEmpty()) {
+                db.collection("patients")
+                        .document(docId)
+                        .set(patient)
+                        .get();
+
+                System.out.println("환자 정보 수정 완료 - " + patient.getName());
+            } else {
+                System.err.println("patient_id가 없어서 수정할 수 없음");
+            }
+
         } catch (Exception e) {
-            System.err.println("[updatePatient] Firestore error: " + e.getMessage());
+            System.err.println("환자 정보 수정 실패: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @Override
     public void deletePatient(String uid) {
-        Firestore db = FirestoreClient.getFirestore();
         try {
-            // 모든 users 문서를 조회해서 해당 uid와 일치하는 환자를 삭제
-            ApiFuture<QuerySnapshot> usersFuture = db.collection(USERS_COLLECTION).get();
-            List<QueryDocumentSnapshot> userDocs = usersFuture.get().getDocuments();
+            System.out.println("환자 삭제 시작 - uid: " + uid);
 
-            for (QueryDocumentSnapshot userDoc : userDocs) {
-                CollectionReference patientsRef = userDoc.getReference().collection(PATIENTS_COLLECTION);
-                ApiFuture<QuerySnapshot> patientsFuture = patientsRef.whereEqualTo("uid", uid).get();
-                List<QueryDocumentSnapshot> patientDocs = patientsFuture.get().getDocuments();
+            // 새로운 구조: patients 컬렉션에서 직접 삭제
+            db.collection("patients")
+                    .document(uid)
+                    .delete()
+                    .get();
 
-                for (QueryDocumentSnapshot patientDoc : patientDocs) {
-                    patientDoc.getReference().delete();
-                }
-            }
+            System.out.println("환자 삭제 완료 - uid: " + uid);
+
         } catch (Exception e) {
-            System.err.println("[deletePatient] Firestore error: " + e.getMessage());
+            System.err.println("환자 삭제 실패: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    // patient_id로 환자 조회 (예약/문진에서 사용)
+    public PatientDTO findPatientByPatientId(String patientId) {
+        try {
+            System.out.println("patient_id로 환자 조회 - patient_id: " + patientId);
+
+            // patient_id 필드로 검색
+            ApiFuture<QuerySnapshot> future = db.collection("patients")
+                    .whereEqualTo("patient_id", patientId)
+                    .get();
+            List<QueryDocumentSnapshot> docs = future.get().getDocuments();
+
+            if (!docs.isEmpty()) {
+                PatientDTO patient = docs.get(0).toObject(PatientDTO.class);
+                System.out.println("patient_id로 환자 조회 완료 - " + patient.getName());
+                return patient;
+            } else {
+                System.out.println("해당 patient_id의 환자를 찾을 수 없음: " + patientId);
+                return null;
+            }
+
+        } catch (Exception e) {
+            System.err.println("patient_id로 환자 조회 실패: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
     }
 }
