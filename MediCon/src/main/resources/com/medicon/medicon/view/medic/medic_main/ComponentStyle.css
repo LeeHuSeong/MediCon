@@ -18,6 +18,22 @@
 .button-blue:pressed {
     -fx-background-color: #154C87;
 }
+.button-blue-small {
+    -fx-background-color: #206EB4;
+    -fx-text-fill: white;
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 8 20 8 20;
+}
+.button-blue-small:hover {
+    -fx-background-color: #1A5DA3;
+}
+.button-blue-small:pressed {
+    -fx-background-color: #154C87;
+}
+
 /*하늘색 버튼*/
 .button-lightblue {
     -fx-background-color: #A6D6FF;
@@ -59,8 +75,6 @@
     -fx-font-weight: bold;
     -fx-font-size: 30px;
     -fx-padding: 4 8 4 8;
-    -fx-border-color: #CCCCCC;
-    -fx-border-width: 0 0 1 0;
     -fx-alignment: center;
 }
 /* 라벨 공통 스타일 */
@@ -108,4 +122,8 @@
 .radio-button .radio{
     /*-fx-shape: "M0,5 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0";*/
     -fx-background-color: #ffffff, #A6D6FF;
+}
+
+.section-title-bar {
+    -fx-background-color: #A6D6FF;
 }

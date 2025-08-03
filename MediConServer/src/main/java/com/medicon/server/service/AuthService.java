@@ -99,19 +99,17 @@ public class AuthService {
         }
     }
 
-    // 추후 간호사 등록
-    public SignupResponse signupNurse(NurseSignupRequest request) {
+    //간호사 등록
+    public SignupResponse signupNurse(NurseSignupRequest req) {
         try {
             UserRecord userRecord = FirebaseAuth.getInstance()
                     .createUser(new UserRecord.CreateRequest()
-                            .setEmail(request.getEmail())
-                            .setPassword(request.getPassword()));
+                            .setEmail(req.getEmail())
+                            .setPassword(req.getPassword()));
 
             String uid = userRecord.getUid();
-            nurseService.registerNurse(uid, request);
+            return nurseService.registerNurse(uid, req);
 
-            String token = jwtUtil.generateToken(uid, request.getEmail());
-            return new SignupResponse(true, "간호사 등록 성공", token);
         } catch (Exception e) {
             return new SignupResponse(false, "간호사 등록 실패: " + e.getMessage(), null);
         }

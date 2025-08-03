@@ -29,7 +29,7 @@ public class AdminPasswordController {
 
     private void moveToAdminMain() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/admin_main.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/admin/admin_main.fxml"));
             Parent root = loader.load();
 
             Stage adminStage = new Stage();
