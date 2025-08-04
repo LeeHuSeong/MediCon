@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.medicon.medicon.controller.patient.InpectionController"
+<AnchorPane  xmlns="http://javafx.com/javafx/21"
+             xmlns:fx="http://javafx.com/fxml/1"
+             stylesheets="@../../../style/ComponentStyle.css"
+            fx:controller="com.medicon.medicon.controller.patient.InspectionController"
             prefHeight="400.0" prefWidth="600.0">
-
+    <VBox spacing="10" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0"
+          AnchorPane.topAnchor="20.0" AnchorPane.rightAnchor="20" alignment="TOP_CENTER">
+        <Label text="검사 기록" maxWidth="Infinity" styleClass="section-title"/>
+        <TableView fx:id="recordTable" prefHeight="400" >
+            <columns >
+                <TableColumn text="검사일자" fx:id="dateColumn" styleClass="table-label" prefWidth="200"/>
+                <TableColumn text="검사명" fx:id="departmentColumn" styleClass="table-label" prefWidth="100"/>
+                <TableColumn text="결과요약" fx:id="doctorColumn" styleClass="table-label" prefWidth="100"/>
+                <TableColumn text="판독의" fx:id="diagnosisColumn" styleClass="table-label" prefWidth="200"/>
+                <TableColumn text="상세보기" fx:id="detailColumn" styleClass="table-label" prefWidth="500"/>
+            </columns>
+        </TableView>
+    </VBox>
 </AnchorPane>
