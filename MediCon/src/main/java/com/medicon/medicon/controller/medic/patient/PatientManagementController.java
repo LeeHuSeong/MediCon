@@ -1,10 +1,6 @@
-package com.medicon.medicon.controller.patient;
+package com.medicon.medicon.controller.medic.patient;
 
 import com.medicon.medicon.model.PatientDTO;
-import com.medicon.medicon.controller.patient.PatientUIManager;
-import com.medicon.medicon.controller.patient.PatientDataManager;
-import com.medicon.medicon.controller.patient.PatientEventHandler;
-import com.medicon.medicon.controller.patient.PatientValidator;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -51,4 +51,9 @@ public class PatientDTO {
 
     public String getRnn() { return rnn; }
     public void setRnn(String rnn) { this.rnn = rnn; }
+
+    @Override
+    public String toString() {
+        return name + " (" + gender + ")";
+    }
 }
