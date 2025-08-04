@@ -10,6 +10,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.net.URL;
 import java.util.List;
@@ -31,11 +33,16 @@ public class QuestionnaireManagementController implements Initializable {
     private final PatientApiService patientApiService = new PatientApiService();
     private final ReservationApiService reservationApiService = new ReservationApiService();
     private final MedicalInterviewApiService interviewApiService = new MedicalInterviewApiService();
+    private final PatientDataManager dataManager = new PatientDataManager();
+    private final ObservableList<PatientDTO> patientData = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // ListView와 ObservableList 연결
+        patientListView.setItems(patientData);
+        
         registerPatientButton.setOnAction(e -> loadAllPatients());
-        todayPatientButton.setOnAction(e -> loadTodayPatients()); // TODO: 실제로 날짜 조건 필터링
+        todayPatientButton.setOnAction(e -> loadTodayPatients());
         searchButton.setOnAction(e -> handleSearch());
 
         patientListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
@@ -48,17 +55,24 @@ public class QuestionnaireManagementController implements Initializable {
     private void loadAllPatients() {
         patientApiService.getAllPatientsAsync().thenAccept(patients -> {
             Platform.runLater(() -> {
-                patientListView.getItems().clear();
-                patientListView.getItems().addAll(patients);
+                patientData.clear();
+                patientData.addAll(patients);
             });
         });
     }
 
     private void loadTodayPatients() {
-        // TODO: '오늘 날짜' 기준으로 필터링된 환자 예약 조회 구현
-        showInfo("오늘 문진 환자 목록 불러오기 (추후 구현)");
+        dataManager.loadTodayPatients(patientData, 
+            errorMsg -> showInfo("금일 환자 조회 실패: " + errorMsg),
+            () -> {
+                if (patientData.isEmpty()) {
+                    showInfo("오늘 예약된 환자가 없습니다.");
+                }
+            }
+        );
     }
 
+    @FXML
     private void handleSearch() {
         String keyword = searchField.getText().trim();
         if (keyword.isEmpty()) {
@@ -67,8 +81,8 @@ public class QuestionnaireManagementController implements Initializable {
         }
         patientApiService.getPatientsByNameAsync(keyword).thenAccept(patients -> {
             Platform.runLater(() -> {
-                patientListView.getItems().clear();
-                patientListView.getItems().addAll(patients);
+                patientData.clear();
+                patientData.addAll(patients);
             });
         });
     }
@@ -121,5 +135,22 @@ public class QuestionnaireManagementController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(msg);
         alert.showAndWait();
+    }
+
+    // FXML에서 참조하는 메서드들
+    @FXML
+    private void handleRegisterPatient() {
+        loadAllPatients();
+    }
+
+    @FXML
+    private void handleTodayPatients() {
+        loadTodayPatients();
+    }
+
+    @FXML
+    private void handleAddQuestionnaire() {
+        // 문진 추가 기능 (추후 구현)
+        showInfo("문진 추가 기능은 추후 구현 예정입니다.");
     }
 }
