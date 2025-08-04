@@ -49,7 +49,7 @@
                     <RadioButton text="일주일 전  " fx:id="Radio4"/>
                     <RadioButton text="기타  " fx:id="Radio5"/>
                 </HBox>
-                 <Label styleClass="form-labelBig" text="알레르기 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+                <Label styleClass="form-labelBig" text="알레르기 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
                 <Label fx:id="allergyLabel" styleClass="form-labelBig" text="갑각류" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
                 <Label styleClass="form-labelBig" text="복용 중인 약 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
