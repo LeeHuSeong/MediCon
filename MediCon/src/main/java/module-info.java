@@ -10,6 +10,7 @@ module com.medicon.medicon {
     requires eu.hansolo.tilesfx;
     requires com.fasterxml.jackson.databind;
     requires com.google.gson;
+    requires java.desktop;
 
 
     opens com.medicon.medicon.controller to javafx.fxml;
