@@ -4,100 +4,177 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import com.medicon.server.dto.reservation.ReservationDTO;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class ReservationDAOImpl implements ReservationDAO {
 
-    private static final String RESERVATIONS_COLLECTION = "reservations";
-    private final Firestore db;
+    private final Firestore db = FirestoreClient.getFirestore();
 
-    public ReservationDAOImpl() {
-        this.db = FirestoreClient.getFirestore();
-    }
-
-    // 예약 등록
     @Override
     public void saveReservation(ReservationDTO reservation) {
         try {
-            db.collection(RESERVATIONS_COLLECTION)
-              .document(reservation.getReservation_id())
-              .set(reservation)
-              .get(); // 동기화 처리
+            System.out.println("예약 저장 시작 - patient_id: " + reservation.getPatient_id());
+
+            db.collection("patients")
+                    .document(reservation.getPatient_id())
+                    .collection("reservations")
+                    .document(reservation.getReservation_id())
+                    .set(reservation)
+                    .get();
+
+            System.out.println("예약 저장 완료");
         } catch (Exception e) {
-            System.err.println("[saveReservation] Firestore error: " + e.getMessage());
+            System.err.println("예약 저장 실패: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    // 예약 ID로 단건 조회
     @Override
     public ReservationDTO findReservationById(String reservationId) {
         try {
-            DocumentReference docRef = db.collection(RESERVATIONS_COLLECTION).document(reservationId);
-            ApiFuture<DocumentSnapshot> future = docRef.get();
-            DocumentSnapshot doc = future.get();
-            if (doc.exists()) {
-                return doc.toObject(ReservationDTO.class);
+            System.out.println("예약 단건 조회 - reservation_id: " + reservationId);
+
+            // 모든 환자의 예약에서 해당 ID 찾기
+            ApiFuture<QuerySnapshot> patientsFuture = db.collection("patients").get();
+            List<QueryDocumentSnapshot> patientDocs = patientsFuture.get().getDocuments();
+
+            for (QueryDocumentSnapshot patientDoc : patientDocs) {
+                String patientId = patientDoc.getId();
+
+                DocumentReference reservationRef = db.collection("patients")
+                        .document(patientId)
+                        .collection("reservations")
+                        .document(reservationId);
+
+                ApiFuture<DocumentSnapshot> reservationFuture = reservationRef.get();
+                DocumentSnapshot reservationDoc = reservationFuture.get();
+
+                if (reservationDoc.exists()) {
+                    ReservationDTO reservation = reservationDoc.toObject(ReservationDTO.class);
+                    reservation.setReservation_id(reservationDoc.getId());
+                    System.out.println("예약 단건 조회 완료");
+                    return reservation;
+                }
             }
+
+            System.out.println("예약을 찾을 수 없음: " + reservationId);
+            return null;
         } catch (Exception e) {
-            System.err.println("[findReservationById] Firestore error: " + e.getMessage());
+            System.err.println("예약 단건 조회 실패: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
-    // 환자ID로 예약 목록 조회
     @Override
     public List<ReservationDTO> findReservationByPatientId(String patientId) {
         List<ReservationDTO> reservations = new ArrayList<>();
         try {
-            ApiFuture<QuerySnapshot> future = db.collection(RESERVATIONS_COLLECTION)
-                                                .whereEqualTo("patientId", patientId)
-                                                .get();
-            List<QueryDocumentSnapshot> docs = future.get().getDocuments();
-            for (QueryDocumentSnapshot doc : docs) {
-                reservations.add(doc.toObject(ReservationDTO.class));
+            // 모든 환자 문서에서 patient_id 필드로 검색
+            ApiFuture<QuerySnapshot> patientsFuture = db.collection("patients").get();
+            List<QueryDocumentSnapshot> patientDocs = patientsFuture.get().getDocuments();
+
+            for (QueryDocumentSnapshot patientDoc : patientDocs) {
+                String actualPatientId = patientDoc.getString("patient_id");
+
+                // patient_id 필드가 일치하는 환자 찾기
+                if (patientId.equals(actualPatientId)) {
+                    String patientDocId = patientDoc.getId();
+
+                    // 해당 환자의 예약 조회
+                    ApiFuture<QuerySnapshot> reservationsFuture = db.collection("patients")
+                            .document(patientDocId)
+                            .collection("reservations")
+                            .get();
+                    List<QueryDocumentSnapshot> reservationDocs = reservationsFuture.get().getDocuments();
+
+                    for (QueryDocumentSnapshot reservationDoc : reservationDocs) {
+                        ReservationDTO reservation = reservationDoc.toObject(ReservationDTO.class);
+                        reservation.setReservation_id(reservationDoc.getId());
+                        reservations.add(reservation);
+                    }
+                    break;
+                }
             }
+
+            // 결과만 간단히 로그
+            if (reservations.size() > 0) {
+                System.out.println("[" + patientId + "] 예약 " + reservations.size() + "건 조회");
+            }
+
         } catch (Exception e) {
-            System.err.println("[findReservationByPatientId] Firestore error: " + e.getMessage());
+            System.err.println("[" + patientId + "] 예약 조회 실패: " + e.getMessage());
         }
         return reservations;
     }
 
-    // 날짜로 예약 목록 조회
     @Override
     public List<ReservationDTO> findReservationByDate(String date) {
         List<ReservationDTO> reservations = new ArrayList<>();
         try {
-            ApiFuture<QuerySnapshot> future = db.collection(RESERVATIONS_COLLECTION)
-                                                .whereEqualTo("date", date)
-                                                .get();
-            List<QueryDocumentSnapshot> docs = future.get().getDocuments();
-            for (QueryDocumentSnapshot doc : docs) {
-                reservations.add(doc.toObject(ReservationDTO.class));
+            System.out.println("날짜별 예약 조회 시작 - date: " + date);
+
+            // 모든 환자의 예약에서 해당 날짜 찾기
+            ApiFuture<QuerySnapshot> patientsFuture = db.collection("patients").get();
+            List<QueryDocumentSnapshot> patientDocs = patientsFuture.get().getDocuments();
+
+            for (QueryDocumentSnapshot patientDoc : patientDocs) {
+                String patientId = patientDoc.getId();
+
+                ApiFuture<QuerySnapshot> reservationsFuture = db.collection("patients")
+                        .document(patientId)
+                        .collection("reservations")
+                        .whereEqualTo("date", date)
+                        .get();
+                List<QueryDocumentSnapshot> reservationDocs = reservationsFuture.get().getDocuments();
+
+                for (QueryDocumentSnapshot reservationDoc : reservationDocs) {
+                    ReservationDTO reservation = reservationDoc.toObject(ReservationDTO.class);
+                    reservation.setReservation_id(reservationDoc.getId());
+                    reservations.add(reservation);
+                }
             }
+
+            System.out.println("날짜별 예약 조회 완료 - " + reservations.size() + "개 발견");
+
         } catch (Exception e) {
-            System.err.println("[findReservationByDate] Firestore error: " + e.getMessage());
+            System.err.println("날짜별 예약 조회 실패: " + e.getMessage());
+            e.printStackTrace();
         }
         return reservations;
     }
 
-    // 예약 수정 (Firestore의 set은 upsert임)
     @Override
     public void updateReservation(ReservationDTO reservation) {
-        saveReservation(reservation);
+        saveReservation(reservation); // Firestore의 set은 upsert
     }
 
-    // 예약 삭제
     @Override
     public void deleteReservation(String reservationId) {
         try {
-            db.collection(RESERVATIONS_COLLECTION)
-              .document(reservationId)
-              .delete()
-              .get();
+            System.out.println("예약 삭제 시작 - reservation_id: " + reservationId);
+
+            // 해당 예약이 어느 환자 것인지 찾기
+            ReservationDTO reservation = findReservationById(reservationId);
+            if (reservation != null) {
+                db.collection("patients")
+                        .document(reservation.getPatient_id())
+                        .collection("reservations")
+                        .document(reservationId)
+                        .delete()
+                        .get();
+
+                System.out.println("예약 삭제 완료");
+            } else {
+                System.err.println("삭제할 예약을 찾을 수 없음");
+            }
         } catch (Exception e) {
-            System.err.println("[deleteReservation] Firestore error: " + e.getMessage());
+            System.err.println("예약 삭제 실패: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
