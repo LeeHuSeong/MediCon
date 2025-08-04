@@ -1,13 +1,14 @@
-package com.medicon.medicon.controller.medic;
+package com.medicon.medicon.controller.patient;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 
-public class MedicMainController {
+public class PatientMainController {
 
-    @FXML private BorderPane mainBorderPane;
+    @FXML
+    private BorderPane mainBorderPane;
 
     public void setCenter(String fxmlPath) {
         try {
@@ -22,10 +23,10 @@ public class MedicMainController {
     @FXML
     public void initialize() {
         try {
-            FXMLLoader topBarLoader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_header/MedicTopBar.fxml"));
+            FXMLLoader topBarLoader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/patient/patient_header/PatientTopBar.fxml"));
             Node topBar = topBarLoader.load();
 
-            MedicTopBarController controller = topBarLoader.getController();
+            PatientTopBarController controller = topBarLoader.getController();
             controller.setMainController(this); // 🔗 MainController 연결
 
             mainBorderPane.setTop(topBar);
