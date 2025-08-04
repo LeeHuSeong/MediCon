@@ -20,7 +20,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class PatientManagementController implements Initializable {
 
@@ -215,10 +219,29 @@ public class PatientManagementController implements Initializable {
                 .thenAccept(reservations -> {
                     Platform.runLater(() -> {
                         if (reservations != null && !reservations.isEmpty()) {
-                            // 예약 날짜순으로 정렬 (최신순)
-                            reservations.sort((r1, r2) -> r2.getDate().compareTo(r1.getDate()));
+                            // 오늘 날짜 기준으로 과거 예약만 필터링
+                            LocalDate today = LocalDate.now();
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                            
+                            List<ReservationDTO> pastReservations = reservations.stream()
+                                    .filter(reservation -> {
+                                        try {
+                                            LocalDate reservationDate = LocalDate.parse(reservation.getDate(), formatter);
+                                            return !reservationDate.isAfter(today); // 오늘 이후는 제외
+                                        } catch (Exception e) {
+                                            System.err.println("날짜 파싱 실패: " + reservation.getDate());
+                                            return false;
+                                        }
+                                    })
+                                    .sorted((r1, r2) -> r2.getDate().compareTo(r1.getDate())) // 최신순 정렬
+                                    .collect(Collectors.toList());
 
-                            for (ReservationDTO reservation : reservations) {
+                            if (pastReservations.isEmpty()) {
+                                historyData.add("방문 이력이 없습니다.");
+                                return;
+                            }
+
+                            for (ReservationDTO reservation : pastReservations) {
                                 //실제 department 값 사용
                                 String department = reservation.getDepartment();
                                 if (department == null || department.trim().isEmpty()) {
@@ -315,6 +338,10 @@ public class PatientManagementController implements Initializable {
             stage.setTitle("환자 등록");
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL); // 현재 창을 잠그는 모달창 (선택)
+            
+            // 창이 닫힐 때 환자 목록 새로고침
+            stage.setOnHidden(event -> loadAllPatients());
+            
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -323,8 +350,39 @@ public class PatientManagementController implements Initializable {
 
     @FXML
     private void handleTodayPatients() {
-        loadAllPatients();
-        showInfo("금일 환자 목록을 로드했습니다.");
+        // 오늘 날짜의 예약된 환자만 조회
+        LocalDate today = LocalDate.now();
+        String todayStr = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        
+        reservationApiService.getReservationsByDate(todayStr).thenAccept(reservations -> {
+            Platform.runLater(() -> {
+                patientData.clear();
+                if (reservations == null || reservations.isEmpty()) {
+                    showInfo("오늘 예약된 환자가 없습니다.");
+                    return;
+                }
+                
+                // 예약된 환자들의 정보를 가져와서 리스트에 표시
+                for (ReservationDTO reservation : reservations) {
+                    patientApiService.getPatientByPatientIdAsync(reservation.getPatient_id()).thenAccept(patient -> {
+                        if (patient != null) {
+                            Platform.runLater(() -> {
+                                if (!patientData.contains(patient)) {
+                                    patientData.add(patient);
+                                }
+                            });
+                        }
+                    });
+                }
+                
+                showInfo("금일 환자 목록을 로드했습니다. (" + reservations.size() + "명)");
+            });
+        }).exceptionally(throwable -> {
+            Platform.runLater(() -> {
+                showError("금일 환자 조회 중 오류가 발생했습니다: " + throwable.getMessage());
+            });
+            return null;
+        });
     }
 
     @FXML

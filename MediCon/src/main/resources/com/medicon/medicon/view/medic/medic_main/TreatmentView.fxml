@@ -9,11 +9,11 @@
         <HBox spacing="20" VBox.vgrow="ALWAYS">
             <!-- 맨 왼쪽 패널 -->
             <VBox minWidth="210" prefWidth="300.0" spacing="10">
-                <Button fx:id="registerPatientButton" prefHeight="53.0" prefWidth="275.0" styleClass="button-blue" text="예약 환자 조회" /> <!-- onAction="#handleRegisterPatient" -->
+                <Button fx:id="registerPatientButton" prefHeight="53.0" prefWidth="275.0" styleClass="button-blue" text="예약 환자 조회" />
 
                 <HBox spacing="5">
                     <TextField fx:id="searchField" prefHeight="47.0" prefWidth="182.0" promptText="환자 이름" styleClass="text-field" HBox.hgrow="ALWAYS" />
-                    <Button fx:id="searchButton" minWidth="90.0" prefHeight="31.0" prefWidth="93.0" styleClass="button-blue" text="검색" /> <!-- onAction="#handleSearch" -->
+                    <Button fx:id="searchButton" minWidth="90.0" prefHeight="31.0" prefWidth="93.0" styleClass="button-blue" text="검색" />
                 </HBox>
 
                 <ListView fx:id="patientListView" prefHeight="445.0" prefWidth="274.0" VBox.vgrow="ALWAYS" />
@@ -37,22 +37,22 @@
                     <!--                    이름-->
                     <HBox HBox.hgrow="ALWAYS">
                         <Label styleClass="form-labelBig" text="이름 :" />
-                        <Label styleClass="form-labelBig" text="빵빵이" />
+                        <Label fx:id="patientNameLabel" styleClass="form-labelBig" text="" />
                     </HBox>
                     <!--                    성별-->
                     <HBox HBox.hgrow="ALWAYS">
                         <Label styleClass="form-labelBig" text="성별 :" />
-                        <Label styleClass="form-labelBig" text="엘리베이터" />
+                        <Label fx:id="patientGenderLabel" styleClass="form-labelBig" text="" />
                     </HBox>
                     <!--                    나이-->
                     <HBox HBox.hgrow="ALWAYS">
                         <Label styleClass="form-labelBig" text="나이 :" />
-                        <Label styleClass="form-labelBig" text="20" />
+                        <Label fx:id="patientAgeLabel" styleClass="form-labelBig" text="" />
                     </HBox>
                     <!--                    휴대전화-->
                     <HBox HBox.hgrow="ALWAYS">
                         <Label styleClass="form-labelBig" text="휴대전화 :" />
-                        <Label styleClass="form-labelBig" text="010-1234-5678" />
+                        <Label fx:id="patientPhoneLabel" styleClass="form-labelBig" text="" />
                     </HBox>
                     <!--                    과거 진료이력버튼-->
                     <Button styleClass="button-blue-small" text="과거진료이력" HBox.hgrow="ALWAYS" />
@@ -62,11 +62,11 @@
                     <VBox minWidth="300" prefWidth="700" spacing="10">
                         <Label maxWidth="Infinity" styleClass="section-title" text="최근 문진" />
                         <GridPane hgap="10" maxWidth="Infinity" prefHeight="578.0" vgap="10" VBox.vgrow="ALWAYS">
-                            <Label styleClass="form-labelBig" text="2025.07.29" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
-                            <Label fx:id="symptomLabel" styleClass="form-labelBig" text="감기인가 코로나인가" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                            <Label fx:id="interviewDateLabel" styleClass="form-labelBig" text="" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
+                            <Label fx:id="symptomLabel" styleClass="form-labelBig" text="" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                             <Label styleClass="form-labelBig" text="과거 병력 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-                            <Label fx:id="historyLabel" styleClass="form-labelBig" text="코로나" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            <Label fx:id="historyLabel" styleClass="form-labelBig" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                             <Label styleClass="form-labelBig" text="현재 증상 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
                             <HBox fx:id="symptoms" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
@@ -87,10 +87,10 @@
                                 <RadioButton fx:id="Radio5" text="기타  " />
                             </HBox>
                             <Label styleClass="form-labelBig" text="알레르기 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-                            <Label fx:id="allergyLabel" styleClass="form-labelBig" text="갑각류" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                            <Label fx:id="allergyLabel" styleClass="form-labelBig" text="" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
                             <Label styleClass="form-labelBig" text="복용 중인 약 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
-                            <Label fx:id="medicationLabel" styleClass="form-labelBig" text="텐텐" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                            <Label fx:id="medicationLabel" styleClass="form-labelBig" text="" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
                             <Label styleClass="form-labelBig" text="기타" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.rowIndex="6" />
                             <TextArea fx:id="symytomElse" prefRowCount="2" wrapText="true" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
