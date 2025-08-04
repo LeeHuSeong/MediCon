@@ -57,10 +57,11 @@
             <TextField fx:id="nameField" styleClass = "text-field" prefHeight="35.0" prefWidth="219.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
             <Label styleClass="form-label" text="성별" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-            <HBox fx:id="genderField" spacing="10" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
-                <RadioButton text="남자" styleClass="form-label" fx:id="Radio1" />
-                <RadioButton text="여자" styleClass="form-label" fx:id="Radio2"/>
+            <HBox fx:id="genderBox" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <RadioButton fx:id="btn_male" text="남자" />
+                <RadioButton fx:id="btn_female" text="여자" />
             </HBox>
+
             <Label styleClass="form-label" text="생년월일" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
             <TextField fx:id="birthField" styleClass = "text-field" prefHeight="35.0" prefWidth="220.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
