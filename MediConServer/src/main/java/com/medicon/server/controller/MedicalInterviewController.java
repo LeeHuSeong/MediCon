@@ -18,7 +18,8 @@ public class MedicalInterviewController {
         this.interviewService = interviewService;
     }
 
-
+    //예약 ID 기준 문진 조회
+    //GET /api/interview/by-reservation?reservationId=xxx
     @GetMapping("/by-reservation")
     public List<MedicalInterviewDTO> getInterviewByReservation(
             @RequestParam String reservationId
@@ -27,6 +28,8 @@ public class MedicalInterviewController {
     }
 
 
+    //환자 ID기준 모든 문진 조회
+    //GET /api/interview/by-patient?patientId=xxx
     @GetMapping("/by-patient")
     public List<MedicalInterviewDTO> getInterviewByPatient(
             @RequestParam String patientId

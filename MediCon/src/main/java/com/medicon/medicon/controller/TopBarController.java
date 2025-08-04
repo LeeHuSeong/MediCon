@@ -57,7 +57,7 @@ public class TopBarController implements Initializable {
             }
         });
 
-        // ✅ 초기 탭 기본 선택
+        // 초기 탭 기본 선택
         selectTab(patientBtn);
     }
 

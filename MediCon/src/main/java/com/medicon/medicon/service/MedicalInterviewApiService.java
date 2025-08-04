@@ -2,6 +2,7 @@ package com.medicon.medicon.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.medicon.medicon.config.AppConfig;
 import com.medicon.medicon.model.MedicalInterviewDTO;
 
 import java.io.BufferedReader;
@@ -14,14 +15,14 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class MedicalInterviewApiService {
-    
-    private static final String BASE_URL = "http://localhost:8080/api/interview";
+
+    private static final String BASE_URL = AppConfig.SERVER_BASE_URL + "/api/interview"; // 수정됨
     private final ObjectMapper objectMapper;
-    
+
     public MedicalInterviewApiService() {
         this.objectMapper = new ObjectMapper();
     }
-    
+
     // 예약ID로 문진 조회 - GET /api/interview/by-reservation?uid=xxx&patientId=xxx&reservationId=xxx
     public CompletableFuture<List<MedicalInterviewDTO>> getInterviewByReservationAsync(String uid, String patientId, String reservationId) {
         return CompletableFuture.supplyAsync(() -> {
@@ -30,12 +31,12 @@ public class MedicalInterviewApiService {
                         "?uid=" + URLEncoder.encode(uid, "UTF-8") +
                         "&patientId=" + URLEncoder.encode(patientId, "UTF-8") +
                         "&reservationId=" + URLEncoder.encode(reservationId, "UTF-8");
-                
+
                 URL url = new URL(urlString);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Content-Type", "application/json");
-                
+
                 int responseCode = conn.getResponseCode();
                 if (responseCode == 200) {
                     BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -45,22 +46,22 @@ public class MedicalInterviewApiService {
                         response.append(inputLine);
                     }
                     in.close();
-                    
+
                     List<MedicalInterviewDTO> interviews = objectMapper.readValue(response.toString(), new TypeReference<List<MedicalInterviewDTO>>() {});
-                    System.out.println("✅ 문진 기록 조회 성공: " + interviews.size() + "개");
+                    System.out.println("문진 기록 조회 성공: " + interviews.size() + "개");
                     return interviews;
                 } else {
-                    System.err.println("❌ 문진 기록 조회 실패: " + responseCode);
+                    System.err.println("문진 기록 조회 실패: " + responseCode);
                     return new ArrayList<>();
                 }
             } catch (Exception e) {
-                System.err.println("❌ 문진 기록 조회 오류: " + e.getMessage());
+                System.err.println("문진 기록 조회 오류: " + e.getMessage());
                 e.printStackTrace();
                 return new ArrayList<>();
             }
         });
     }
-    
+
     // 환자ID로 모든 문진 조회 - GET /api/interview/by-patient?uid=xxx&patientId=xxx
     public CompletableFuture<List<MedicalInterviewDTO>> getInterviewByPatientAsync(String uid, String patientId) {
         return CompletableFuture.supplyAsync(() -> {
@@ -68,12 +69,12 @@ public class MedicalInterviewApiService {
                 String urlString = BASE_URL + "/by-patient" +
                         "?uid=" + URLEncoder.encode(uid, "UTF-8") +
                         "&patientId=" + URLEncoder.encode(patientId, "UTF-8");
-                
+
                 URL url = new URL(urlString);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Content-Type", "application/json");
-                
+
                 int responseCode = conn.getResponseCode();
                 if (responseCode == 200) {
                     BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -83,16 +84,16 @@ public class MedicalInterviewApiService {
                         response.append(inputLine);
                     }
                     in.close();
-                    
+
                     List<MedicalInterviewDTO> interviews = objectMapper.readValue(response.toString(), new TypeReference<List<MedicalInterviewDTO>>() {});
-                    System.out.println("✅ 환자 문진 기록 조회 성공: " + interviews.size() + "개");
+                    System.out.println("환자 문진 기록 조회 성공: " + interviews.size() + "개");
                     return interviews;
                 } else {
-                    System.err.println("❌ 환자 문진 기록 조회 실패: " + responseCode);
+                    System.err.println("환자 문진 기록 조회 실패: " + responseCode);
                     return new ArrayList<>();
                 }
             } catch (Exception e) {
-                System.err.println("❌ 환자 문진 기록 조회 오류: " + e.getMessage());
+                System.err.println("환자 문진 기록 조회 오류: " + e.getMessage());
                 e.printStackTrace();
                 return new ArrayList<>();
             }

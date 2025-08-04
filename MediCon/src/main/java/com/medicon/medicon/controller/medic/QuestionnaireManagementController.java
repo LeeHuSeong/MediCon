@@ -65,7 +65,5 @@ public class QuestionnaireManagementController implements Initializable {
             e.printStackTrace();
         }
     }
-
-
 }
 

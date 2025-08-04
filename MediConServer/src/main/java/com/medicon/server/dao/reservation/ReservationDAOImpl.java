@@ -148,6 +148,7 @@ public class ReservationDAOImpl implements ReservationDAO {
         return reservations;
     }
 
+    //덮어쓰기 -> 중복저장 방식
     @Override
     public void updateReservation(ReservationDTO reservation) {
         saveReservation(reservation); // Firestore의 set은 upsert
