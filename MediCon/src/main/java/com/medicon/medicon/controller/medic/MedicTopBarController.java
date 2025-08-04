@@ -1,6 +1,5 @@
-package com.medicon.medicon.controller;
+package com.medicon.medicon.controller.medic;
 
-import com.medicon.medicon.controller.medic.MedicMainController;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,7 +10,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
-public class TopBarController implements Initializable {
+public class MedicTopBarController implements Initializable {
 
     @FXML private ImageView logoImg;
     @FXML private Button patientBtn;
@@ -37,7 +36,7 @@ public class TopBarController implements Initializable {
             System.out.println("환자관리 버튼 클릭!");
             selectTab(patientBtn);
             if (mainController != null) {
-                mainController.setCenter("/com/medicon/medicon/view/medic/medic_main/PatientManagement.fxml");
+                mainController.setCenter("/com/medicon/medicon/view/medic/medic_main/PatientView.fxml");
             }
         });
 
@@ -45,7 +44,7 @@ public class TopBarController implements Initializable {
             System.out.println("문진관리 버튼 클릭!");
             selectTab(questionBtn);
             if (mainController != null) {
-                mainController.setCenter("/com/medicon/medicon/view/medic/medic_main/QuestionnaireManagement.fxml");
+                mainController.setCenter("/com/medicon/medicon/view/medic/medic_main/QuestionnaireView.fxml");
             }
         });
 
@@ -53,7 +52,7 @@ public class TopBarController implements Initializable {
             System.out.println("진료관리 버튼 클릭!");
             selectTab(treatmentBtn);
             if (mainController != null) {
-                mainController.setCenter("/com/medicon/medicon/view/medic/medic_main/TreatmentManagement.fxml");
+                mainController.setCenter("/com/medicon/medicon/view/medic/medic_main/TreatmentView.fxml");
             }
         });
 
