@@ -1,4 +1,4 @@
-package com.medicon.medicon.controller;
+package com.medicon.medicon.controller.medic;
 
 import com.medicon.medicon.model.PatientDTO;
 import com.medicon.medicon.model.ReservationDTO;
@@ -14,7 +14,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class PatientManagementController implements Initializable {
@@ -148,7 +147,7 @@ public class PatientManagementController implements Initializable {
                             dateLabel.setText(reservation.getDate());
                             timeLabel.setText(reservation.getTime());
 
-                            // ✅ department 필드 사용하도록 수정
+                            // department 필드 사용하도록 수정
                             String department = reservation.getDepartment();
                             if (department != null && !department.trim().isEmpty()) {
                                 departmentLabel.setText(department);
@@ -202,7 +201,7 @@ public class PatientManagementController implements Initializable {
                             reservations.sort((r1, r2) -> r2.getDate().compareTo(r1.getDate()));
 
                             for (ReservationDTO reservation : reservations) {
-                                // ✅ 실제 department 값 사용
+                                //실제 department 값 사용
                                 String department = reservation.getDepartment();
                                 if (department == null || department.trim().isEmpty()) {
                                     department = "일반의학과";
@@ -224,13 +223,13 @@ public class PatientManagementController implements Initializable {
                                             // 날짜 - 진료과 (증상)
                                             historyEntry = String.format("%s - %s (%s)",
                                                     reservation.getDate(),
-                                                    finalDepartment, // ✅ 실제 department 사용
+                                                    finalDepartment, // department 사용
                                                     interview.getSymptoms() != null ? interview.getSymptoms() : "진료");
                                         } else {
                                             // 문진 정보가 없는 경우
                                             historyEntry = String.format("%s - %s (%s)",
                                                     reservation.getDate(),
-                                                    finalDepartment, // ✅ 실제 department 사용
+                                                    finalDepartment, // department 사용
                                                     "예약됨");
                                         }
 
@@ -244,7 +243,7 @@ public class PatientManagementController implements Initializable {
                                         // 문진 조회 실패 시에도 예약 정보는 표시
                                         String historyEntry = String.format("%s - %s (%s)",
                                                 reservation.getDate(),
-                                                finalDepartment, // ✅ 실제 department 사용
+                                                finalDepartment, // 실제 department 사용
                                                 "진료");
 
                                         if (!historyData.contains(historyEntry)) {
@@ -286,7 +285,7 @@ public class PatientManagementController implements Initializable {
 
     @FXML
     private void handleRegisterPatient() {
-        showInfo("🚧 신규 환자 등록 기능은 추후 구현 예정입니다.");
+        showInfo("신규 환자 등록 기능은 추후 구현 예정입니다.");
     }
 
     @FXML

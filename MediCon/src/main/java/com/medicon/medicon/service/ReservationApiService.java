@@ -3,6 +3,7 @@ package com.medicon.medicon.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.medicon.medicon.config.AppConfig;
 import com.medicon.medicon.model.ReservationDTO;
 
 import java.io.BufferedReader;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ReservationApiService {
-    private static final String BASE_URL = "http://localhost:8080/api/reservation";
+    private static final String BASE_URL = AppConfig.SERVER_BASE_URL + "/api/reservation";
     private final ObjectMapper objectMapper;
 
     public ReservationApiService() {
@@ -43,11 +44,11 @@ public class ReservationApiService {
                     in.close();
                     return objectMapper.readValue(response.toString(), new TypeReference<List<ReservationDTO>>() {});
                 } else {
-                    System.err.println("❌ 예약 조회 실패: " + responseCode);
+                    System.err.println("예약 조회 실패: " + responseCode);
                     return new ArrayList<>();
                 }
             } catch (Exception e) {
-                System.err.println("❌ 예약 조회 오류: " + e.getMessage());
+                System.err.println("예약 조회 오류: " + e.getMessage());
                 return new ArrayList<>();
             }
         });

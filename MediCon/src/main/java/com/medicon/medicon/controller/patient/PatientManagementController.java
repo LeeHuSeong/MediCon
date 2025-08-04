@@ -119,7 +119,7 @@ public class PatientManagementController implements Initializable {
         // 초기 수정 모드 비활성화
         uiManager.setEditMode(false);
         
-        System.out.println("✅ UI 초기화 완료");
+        System.out.println("UI 초기화 완료");
     }
 
     /**
@@ -140,7 +140,7 @@ public class PatientManagementController implements Initializable {
         // TextField 포커스 이벤트 설정
         eventHandler.setupTextFieldHandlers();
         
-        System.out.println("✅ 이벤트 핸들러 설정 완료");
+        System.out.println(" 이벤트 핸들러 설정 완료");
     }
 
     /**
@@ -148,7 +148,7 @@ public class PatientManagementController implements Initializable {
      */
     private void loadInitialData() {
         dataManager.loadAllPatients(patientData, this::showError, 
-            () -> System.out.println("✅ 초기 환자 목록 로드 완료"));
+            () -> System.out.println("초기 환자 목록 로드 완료"));
     }
 
     // ===============================
