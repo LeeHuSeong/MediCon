@@ -10,15 +10,21 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class PatientManagementController implements Initializable {
 
-    @FXML private Button registerPatientButton;
+    @FXML private Button addPatientButton;
     @FXML private Button todayPatientButton;
     @FXML private TextField searchField;
     @FXML private Button searchButton;
@@ -71,6 +77,8 @@ public class PatientManagementController implements Initializable {
         });
     }
 
+
+
     private void setupComponents() {
         patientListView.setItems(patientData);
         patientListView.setCellFactory(param -> new ListCell<>() {
@@ -97,7 +105,7 @@ public class PatientManagementController implements Initializable {
     private void setupEventHandlers() {
         searchButton.setOnAction(event -> handleSearch());
         searchField.setOnAction(event -> handleSearch());
-        registerPatientButton.setOnAction(event -> handleRegisterPatient());
+        addPatientButton.setOnAction(event -> handleAddPatient());
         todayPatientButton.setOnAction(event -> handleTodayPatients());
         changePatientButton.setOnAction(event -> handleChangePatient());
         updatePatientButton.setOnAction(event -> handleUpdatePatient());
@@ -296,8 +304,21 @@ public class PatientManagementController implements Initializable {
     }
 
     @FXML
-    private void handleRegisterPatient() {
-        showInfo("신규 환자 등록 기능은 추후 구현 예정입니다.");
+    private void handleAddPatient() {
+        try {
+            // FXML 로드
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/AddPatientForm.fxml"));
+            Parent root = loader.load();
+
+            // 새 Stage 생성
+            Stage stage = new Stage();
+            stage.setTitle("환자 등록");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // 현재 창을 잠그는 모달창 (선택)
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
