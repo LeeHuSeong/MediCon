@@ -14,6 +14,7 @@ public class MedicalInterviewDAOImpl implements MedicalInterviewDAO {
 
     private final Firestore db = FirestoreClient.getFirestore();
 
+    //예약ID로 문진 조회
     @Override
     public List<MedicalInterviewDTO> findInterviewByReservationId(String reservationId) {
         List<MedicalInterviewDTO> list = new ArrayList<>();
@@ -63,6 +64,8 @@ public class MedicalInterviewDAOImpl implements MedicalInterviewDAO {
         return list;
     }
 
+
+    //모든 users 문서에서 해당 patient_id를 가진 환자 찾기
     @Override
     public List<MedicalInterviewDTO> findInterviewByPatientId(String patientId) {
         List<MedicalInterviewDTO> results = new ArrayList<>();
@@ -113,6 +116,7 @@ public class MedicalInterviewDAOImpl implements MedicalInterviewDAO {
     @Override
     public void saveInterview(String reservationId, MedicalInterviewDTO interview) {
         try {
+            //로그체크
             System.out.println("문진 저장 시작 - reservation_id: " + reservationId);
 
             String patientId = interview.getPatient_id();
@@ -171,6 +175,7 @@ public class MedicalInterviewDAOImpl implements MedicalInterviewDAO {
         }
     }
 
+    //예약ID로 찾아서 삭제
     @Override
     public void deleteInterview(String reservationId, String notUsed) {
         try {
