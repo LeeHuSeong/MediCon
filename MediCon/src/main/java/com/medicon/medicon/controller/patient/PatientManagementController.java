@@ -28,7 +28,6 @@ public class PatientManagementController implements Initializable {
     @FXML private Button searchButton;
     @FXML private ListView<PatientDTO> patientListView;
     @FXML private TextField nameField;
-    @FXML private TextField genderField;
     @FXML private TextField birthField;
     @FXML private TextField phoneField;
     @FXML private TextField emailField;
@@ -44,6 +43,9 @@ public class PatientManagementController implements Initializable {
     @FXML private Label timeLabel;
     @FXML private Label departmentLabel;
     @FXML private ListView<String> historyListView;
+    @FXML private RadioButton btn_male;  // 남자
+    @FXML private RadioButton btn_female;  // 여자
+    @FXML private ToggleGroup genderToggleGroup;
 
     // 데이터
     private final ObservableList<PatientDTO> patientData;
@@ -87,7 +89,7 @@ public class PatientManagementController implements Initializable {
     private void initializeManagers() {
         // UI 관리자 초기화
         uiManager = new PatientUIManager(
-            nameField, genderField, birthField, phoneField, emailField, addressField, detailAddressField, searchField,
+            nameField, btn_male, btn_female,genderToggleGroup, birthField, phoneField, emailField, addressField, detailAddressField, searchField,
             patientListView, historyListView, patientData, historyData,
             symptomLabel, historyLabel, allergyLabel, medicationLabel, dateLabel, timeLabel, departmentLabel,
             updatePatientButton, changePatientButton, searchButton, registerPatientButton, todayPatientButton
