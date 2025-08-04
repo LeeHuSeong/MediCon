@@ -1,27 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane styleClass="background" stylesheets="@ComponentStyle.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.medicon.medicon.controller.medic.TreatmentManagementController">
+<AnchorPane styleClass="background" stylesheets="@../../../style/ComponentStyle.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.medicon.medicon.controller.medic.TreatmentManagementController">
     <VBox spacing="20" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20.0">
         <HBox spacing="20" VBox.vgrow="ALWAYS">
             <!-- 맨 왼쪽 패널 -->
-            <VBox minWidth="210" prefWidth="280.0" spacing="10">
+            <VBox minWidth="210" prefWidth="300.0" spacing="10">
                 <Button fx:id="registerPatientButton" prefHeight="53.0" prefWidth="275.0" styleClass="button-blue" text="예약 환자 조회" /> <!-- onAction="#handleRegisterPatient" -->
 
                 <HBox spacing="5">
@@ -31,9 +18,9 @@
 
                 <ListView fx:id="patientListView" prefHeight="445.0" prefWidth="274.0" VBox.vgrow="ALWAYS" />
             </VBox>
+            <!-- 오른쪽 패널 -->
             <VBox spacing="10">
                 <StackPane maxWidth="Infinity" styleClass="section-title-bar">
-
                     <!-- 가운데 중앙 제목 -->
                     <Label styleClass="section-title" text="진료 차트" StackPane.alignment="CENTER" />
                     <!-- 오른쪽 위 작성자 정보 -->

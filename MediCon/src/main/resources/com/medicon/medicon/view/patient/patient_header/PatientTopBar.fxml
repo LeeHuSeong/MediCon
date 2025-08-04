@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+
+<HBox xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/21"
+      fx:controller="com.medicon.medicon.controller.patient.PatientTopBarController"
+      styleClass="top-bar" stylesheets="@../../../style/TopBar.css">
+    <ImageView fx:id="logoImg" fitHeight="34" fitWidth="34"/>
+    <Button fx:id="perInfoBtn" text="개인정보" styleClass="selected"/>
+    <Button fx:id="reservationBtn" text="진료예약"/>
+    <Button fx:id="medicalRecordBtn" text="진료기록"/>
+    <Button fx:id="inspectionResultBtn" text="검사결과"/>
+</HBox>

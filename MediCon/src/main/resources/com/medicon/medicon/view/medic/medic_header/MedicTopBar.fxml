@@ -6,8 +6,8 @@
 
 <HBox xmlns:fx="http://javafx.com/fxml/1"
       xmlns="http://javafx.com/javafx/21"
-      fx:controller="com.medicon.medicon.controller.TopBarController"
-      styleClass="top-bar" stylesheets="@TopBar.css">
+      fx:controller="com.medicon.medicon.controller.medic.MedicTopBarController"
+      styleClass="top-bar" stylesheets="@../../../style/TopBar.css">
     <ImageView fx:id="logoImg" fitHeight="34" fitWidth="34"/>
     <Button fx:id="patientBtn" text="환자관리" styleClass="selected"/>
     <Button fx:id="questionBtn" text="문진관리"/>
