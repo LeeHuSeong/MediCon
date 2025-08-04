@@ -8,7 +8,7 @@ import javafx.scene.control.TableColumn;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MedicalRecordController implements Initializable {
+public class InspectionController implements Initializable {
 
     @FXML private TableView<?> recordTable;
     @FXML private TableColumn<?, ?> dateColumn;

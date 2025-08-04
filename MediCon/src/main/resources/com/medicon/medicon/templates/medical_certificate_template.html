@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>진료확인서</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .certificate-box {
+            background: #fff;
+            border: 1px solid #000;
+            padding: 30px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 40px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .issue-date {
+            margin-top: 10px;
+        }
+
+        .hospital-info {
+            margin-top: 30px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .bottom-center {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .actions {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 15px;
+            cursor: pointer;
+            border: none;
+            background-color: #2d89ef;
+            color: white;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+
+        @media screen and (max-width: 600px) {
+            table, th, td {
+                font-size: 13px;
+            }
+
+            .title {
+                font-size: 20px;
+            }
+
+            button {
+                font-size: 13px;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="actions">
+    <button id="printBtn">인쇄하기</button>
+    <button id="download">PDF 저장</button>
+</div>
+
+<div class="certificate-box" id="certificate">
+    <div class="title">진 &nbsp; 료 &nbsp; 확 &nbsp; 인 &nbsp; 서</div>
+
+    <table>
+        <tr><th>차트번호</th><td colspan="4">${chartNumber}</td></tr>
+        <tr>
+            <th rowspan="3">진료환자</th>
+            <th>성명</th><td>${name}</td>
+            <th>주민번호</th><td>${rrn}</td>
+        </tr>
+        <tr><th>성별</th><td>${gender}</td><th>전화번호</th><td>${phoneNum}</td></tr>
+        <tr><th>주소</th><td colspan="3">${address}</td></tr>
+        <tr>
+            <th rowspan="2">진료병원</th>
+            <th>병원명</th><td>${hospitalName}</td>
+            <th>연락처</th><td>${hospitalPhoneNum}</td>
+        </tr>
+        <tr><th>진료과</th><td>${department}</td><th>병명</th><td>${diagnosis}</td></tr>
+        <tr><th>담당의사</th><td>${doctorName}</td><th>면허번호</th><td colspan="2">${licenseNumber}</td></tr>
+        <tr><th>입원기간</th><td colspan="4">${hospitalizationPeriod}</td></tr>
+        <tr><th>퇴원일</th><td colspan="4">${dischargeDate}</td></tr>
+        <tr><th>통원기간</th><td colspan="4">${outpatientPeriod}</td></tr>
+        <tr><th>비고</th><td colspan="4">${notes}</td></tr>
+    </table>
+
+    <div class="footer">
+        상기와 같이 진료 받았음을 확인함.
+        <div class="issue-date">발행일: ${issueDate}</div>
+    </div>
+
+    <div class="hospital-info">
+        병원명: ${hospitalName}<br />
+        연락처: ${hospitalContact}<br />
+        면허번호: ${licenseNumber}<br />
+        원장: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (인)
+    </div>
+
+    <div class="bottom-center">◯◯종합병원</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script>
+    document.getElementById("download").addEventListener("click", () => {
+        const element = document.getElementById("certificate");
+        html2pdf().set({
+            margin: 0.5,
+            filename: '진료확인서.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        }).from(element).save();
+    });
+</script>
+<!-- 인쇄할 때 버튼 숨기기 -->
+<script>
+    document.getElementById("printBtn").addEventListener("click", function () {
+        // 인쇄 전에 버튼 영역 숨기기
+        const actionBar = document.querySelector('.actions');
+        actionBar.style.display = 'none';
+
+        setTimeout(() => {
+            window.print();
+
+            // 인쇄가 끝나고 다시 보여줌 (너무 빨리 복구되면 안 되니 여유 시간 줌)
+            setTimeout(() => {
+                actionBar.style.display = 'block';
+            }, 1000);
+        }, 100);
+    });
+</script>
+</body>
+</html>

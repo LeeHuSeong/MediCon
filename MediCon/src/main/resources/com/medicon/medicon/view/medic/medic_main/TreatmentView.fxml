@@ -127,7 +127,7 @@
         </HBox>
         <HBox maxHeight="150" spacing="40" VBox.vgrow="NEVER">
             <HBox spacing="10">
-                <Button styleClass="button-blue" text="진료확인서" />
+                <Button styleClass="button-blue" text="진료확인서" fx:id="medicalCertificateBtn" onAction="#handleMedicalCertificate"/>
                 <Button styleClass="button-blue" text="진단서" />
                 <Button styleClass="button-blue" text="처방전" />
                 <Button styleClass="button-blue" text="진료소견서" />

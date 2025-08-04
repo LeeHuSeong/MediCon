@@ -14,7 +14,6 @@ import java.util.ResourceBundle;
 public class PatientTopBarController implements Initializable {
 
     @FXML private ImageView logoImg;
-    @FXML private Button perInfoBtn;
     @FXML private Button reservationBtn;
     @FXML private Button medicalRecordBtn;
     @FXML private Button inspectionResultBtn;
@@ -33,14 +32,6 @@ public class PatientTopBarController implements Initializable {
         )).toExternalForm()));
         logoImg.setFitWidth(100);
         logoImg.setFitHeight(80);
-
-        perInfoBtn.setOnAction(e -> {
-            System.out.println("개인정보관리 버튼 클릭!");
-            selectTab(perInfoBtn);
-            if (mainController != null) {
-                mainController.setCenter("/com/medicon/medicon/view/patient/patient_main/PerInfoView.fxml");
-            }
-        });
 
         reservationBtn.setOnAction(e -> {
             System.out.println("진료예약 버튼 클릭!");
@@ -66,13 +57,12 @@ public class PatientTopBarController implements Initializable {
         });
 
 
-        // ✅ 초기 탭 기본 선택
-        selectTab(perInfoBtn);
+        //초기 탭 기본 선택
+        selectTab(reservationBtn);
     }
 
 
     private void selectTab(Button selected) {
-        perInfoBtn.getStyleClass().remove("selected");
         reservationBtn.getStyleClass().remove("selected");
         medicalRecordBtn.getStyleClass().remove("selected");
         inspectionResultBtn.getStyleClass().remove("selected");
