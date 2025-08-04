@@ -28,6 +28,7 @@ public class PatientManagementController implements Initializable {
     @FXML private Button searchButton;
     @FXML private ListView<PatientDTO> patientListView;
     @FXML private TextField nameField;
+    @FXML private TextField genderField;
     @FXML private TextField birthField;
     @FXML private TextField phoneField;
     @FXML private TextField emailField;
@@ -89,10 +90,10 @@ public class PatientManagementController implements Initializable {
     private void initializeManagers() {
         // UI 관리자 초기화
         uiManager = new PatientUIManager(
-                nameField, btn_male, btn_female,genderToggleGroup, birthField, phoneField, emailField, addressField, detailAddressField, searchField,
-                patientListView, historyListView, patientData, historyData,
-                symptomLabel, historyLabel, allergyLabel, medicationLabel, dateLabel, timeLabel, departmentLabel,
-                updatePatientButton, changePatientButton, searchButton, registerPatientButton, todayPatientButton
+            nameField, btn_male, btn_female,genderToggleGroup, birthField, phoneField, emailField, addressField, detailAddressField, searchField,
+            patientListView, historyListView, patientData, historyData,
+            symptomLabel, historyLabel, allergyLabel, medicationLabel, dateLabel, timeLabel, departmentLabel,
+            updatePatientButton, changePatientButton, searchButton, registerPatientButton, todayPatientButton
         );
 
         // 데이터 관리자 초기화
@@ -117,7 +118,7 @@ public class PatientManagementController implements Initializable {
 
         // 한글 입력 문제 해결을 위한 TextField 설정
         uiManager.configureTextFields();
-
+        
         // 초기 수정 모드 비활성화
         uiManager.setEditMode(false);
 

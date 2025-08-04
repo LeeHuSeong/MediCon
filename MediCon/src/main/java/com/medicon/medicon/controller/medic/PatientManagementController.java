@@ -24,7 +24,10 @@ public class PatientManagementController implements Initializable {
     @FXML private Button searchButton;
     @FXML private ListView<PatientDTO> patientListView;
     @FXML private TextField nameField;
-    @FXML private TextField genderField;
+    //성별
+    @FXML private ToggleGroup genderToggleGroup;
+    @FXML private RadioButton btn_male;
+    @FXML private RadioButton btn_female;
     @FXML private TextField birthField;
     @FXML private TextField phoneField;
     @FXML private TextField emailField;
@@ -132,12 +135,19 @@ public class PatientManagementController implements Initializable {
 
     private void displayPatientInfo(PatientDTO patient) {
         nameField.setText(patient.getName());
-        genderField.setText(patient.getGender());
         birthField.setText(patient.getRnn() != null && patient.getRnn().length() >= 6 ? patient.getRnn().substring(0, 6) : "");
         phoneField.setText(patient.getPhone());
         emailField.setText(patient.getEmail());
         addressField.setText(patient.getAddress());
         detailAddressField.setText("");
+        // 수정된 부분: 성별 설정
+        if ("남자".equals(patient.getGender())) {
+            genderToggleGroup.selectToggle(btn_male);
+        } else if ("여자".equals(patient.getGender())) {
+            genderToggleGroup.selectToggle(btn_female);
+        } else {
+            genderToggleGroup.selectToggle(null);
+        }
 
         reservationApiService.getReservationsByPatientId(patient.getPatient_id())
                 .thenAccept(reservations -> {
@@ -267,7 +277,7 @@ public class PatientManagementController implements Initializable {
     }
 
     private void clearAllFields() {
-        nameField.clear(); genderField.clear(); birthField.clear();
+        nameField.clear();  genderToggleGroup.selectToggle(null); birthField.clear();
         phoneField.clear(); emailField.clear(); addressField.clear(); detailAddressField.clear();
         clearMedicalInfo();
         dateLabel.setText("-"); timeLabel.setText("-"); departmentLabel.setText("-");
@@ -276,11 +286,13 @@ public class PatientManagementController implements Initializable {
 
     private void setEditMode(boolean editMode) {
         isEditMode = editMode;
-        nameField.setEditable(editMode); genderField.setEditable(editMode);
+        nameField.setEditable(editMode);
         birthField.setEditable(editMode); phoneField.setEditable(editMode);
         emailField.setEditable(editMode); addressField.setEditable(editMode);
         detailAddressField.setEditable(editMode);
         updatePatientButton.setVisible(editMode);
+        btn_male.setDisable(!editMode);
+        btn_female.setDisable(!editMode);
     }
 
     @FXML
@@ -311,7 +323,15 @@ public class PatientManagementController implements Initializable {
             return;
         }
         selectedPatient.setName(nameField.getText().trim());
-        selectedPatient.setGender(genderField.getText().trim());
+        // 성별 가져오기
+        Toggle selectedToggle = genderToggleGroup.getSelectedToggle();
+        if (selectedToggle != null && selectedToggle.equals(btn_male)) {
+            selectedPatient.setGender("남자");
+        } else if (selectedToggle != null && selectedToggle.equals(btn_female)) {
+            selectedPatient.setGender("여자");
+        } else {
+            selectedPatient.setGender("");
+        }
         selectedPatient.setPhone(phoneField.getText().trim());
         selectedPatient.setEmail(emailField.getText().trim());
         selectedPatient.setAddress(addressField.getText().trim());
