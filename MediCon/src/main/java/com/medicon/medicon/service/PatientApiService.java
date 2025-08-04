@@ -83,11 +83,11 @@ public class PatientApiService {
                     System.out.println(" 환자 검색 성공: " + patients.size() + "명 (검색어: " + name + ")");
                     return patients;
                 } else {
-                    System.err.println("❌ 환자 검색 실패: " + responseCode);
+                    System.err.println("환자 검색 실패: " + responseCode);
                     return new ArrayList<>();
                 }
             } catch (Exception e) {
-                System.err.println("❌ 네트워크 오류: " + e.getMessage());
+                System.err.println("네트워크 오류: " + e.getMessage());
                 e.printStackTrace();
                 return new ArrayList<>();
             }

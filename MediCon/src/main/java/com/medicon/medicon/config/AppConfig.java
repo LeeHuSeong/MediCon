@@ -7,6 +7,8 @@ public class AppConfig {
 
     // Spring 서버 주소
     public static final String SERVER_BASE_URL = "http://localhost:8080";
+    public static final String REGISTER_STAFF_ENDPOINT = "/api/staff/register";
+
 
     // 로그인 엔드포인트( 조합해서 사용)
     public static final String LOGIN_ENDPOINT = "/auth/login";

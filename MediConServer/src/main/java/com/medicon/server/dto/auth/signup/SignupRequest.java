@@ -1,4 +1,4 @@
-package com.medicon.server.dto.auth;
+package com.medicon.server.dto.auth.signup;
 
 public class SignupRequest {
     private String email;

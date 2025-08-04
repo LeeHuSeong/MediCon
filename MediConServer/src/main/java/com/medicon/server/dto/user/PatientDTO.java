@@ -14,7 +14,7 @@ public class PatientDTO {
     private String patient_id;
     private String gender;
     private String address;
-    private String rnn;
+    private String rnn;//주민번호인데, 사용X
 
     public PatientDTO() {}
 
@@ -51,4 +51,9 @@ public class PatientDTO {
 
     public String getRnn() { return rnn; }
     public void setRnn(String rnn) { this.rnn = rnn; }
+
+    @Override
+    public String toString() {
+        return name + " (" + gender + ")";
+    }
 }

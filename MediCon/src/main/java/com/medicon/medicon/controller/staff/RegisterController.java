@@ -1,5 +1,6 @@
 package com.medicon.medicon.controller.staff;
 
+import com.medicon.medicon.config.AppConfig;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.TilePane;
@@ -94,7 +95,7 @@ public class RegisterController {
         }
 
         try {
-            URL url = new URL("http://localhost:8080/api/staff/register");
+            URL url = new URL(AppConfig.SERVER_BASE_URL + AppConfig.REGISTER_STAFF_ENDPOINT);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setRequestMethod("POST");
@@ -102,16 +103,16 @@ public class RegisterController {
             conn.setDoOutput(true);
 
             String json = String.format("""
-                {
-                  "name": "%s",
-                  "email": "%s",
-                  "password": "%s",
-                  "phone": "%s",
-                  "role": "%s",
-                  "rank": "%s",
-                  "department": "%s"
-                }
-                """, name, email, password, phone, selectedRole, selectedRank, selectedDepartment);
+            {
+              "name": "%s",
+              "email": "%s",
+              "password": "%s",
+              "phone": "%s",
+              "role": "%s",
+              "rank": "%s",
+              "department": "%s"
+            }
+            """, name, email, password, phone, selectedRole, selectedRank, selectedDepartment);
 
             try (OutputStream os = conn.getOutputStream()) {
                 byte[] input = json.getBytes("utf-8");

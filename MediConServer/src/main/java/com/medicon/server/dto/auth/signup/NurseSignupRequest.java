@@ -1,6 +1,4 @@
-package com.medicon.server.dto.signup;
-
-import com.medicon.server.dto.auth.SignupRequest;
+package com.medicon.server.dto.auth.signup;
 
 public class NurseSignupRequest extends SignupRequest {
     private String rank; // 간호사, 책임간호사 등

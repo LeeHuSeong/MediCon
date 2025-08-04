@@ -1,17 +1,19 @@
-package com.medicon.server.dto.signup;
-
-import com.medicon.server.dto.auth.SignupRequest;
+package com.medicon.server.dto.auth.signup;
 
 public class PatientSignupRequest extends SignupRequest {
     private String birthdate;
     private String gender;
+    private String address;
+    private String rnn;
 
     public PatientSignupRequest() {}
 
-    public PatientSignupRequest(String email, String password, String name, String phone, String birthdate, String gender) {
+    public PatientSignupRequest(String email, String password, String name, String phone, String birthdate, String gender,String address, String rnn) {
         super(email, password, name, phone, "patient");
         this.birthdate = birthdate;
         this.gender = gender;
+        this.address = address;
+        this.rnn = rnn;
     }
 
     public String getBirthdate() {
@@ -28,5 +30,21 @@ public class PatientSignupRequest extends SignupRequest {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getRnn() {
+        return rnn;
+    }
+
+    public void setRnn(String rnn) {
+        this.rnn = rnn;
     }
 }
