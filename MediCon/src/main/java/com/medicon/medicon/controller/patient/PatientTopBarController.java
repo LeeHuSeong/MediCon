@@ -1,5 +1,6 @@
 package com.medicon.medicon.controller.patient;
 
+import com.medicon.medicon.controller.medic.patient.PatientMainController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;

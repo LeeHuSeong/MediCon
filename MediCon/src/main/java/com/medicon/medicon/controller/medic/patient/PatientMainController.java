@@ -1,5 +1,6 @@
-package com.medicon.medicon.controller.patient;
+package com.medicon.medicon.controller.medic.patient;
 
+import com.medicon.medicon.controller.patient.PatientTopBarController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;

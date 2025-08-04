@@ -1,4 +1,4 @@
-package com.medicon.medicon.controller.patient;
+package com.medicon.medicon.controller.medic.patient;
 
 import com.medicon.medicon.model.PatientDTO;
 

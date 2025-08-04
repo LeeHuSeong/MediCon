@@ -18,7 +18,7 @@ public class Main extends Application {
         ));
 
         //login_view
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource(
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource(R
 //                "/com/medicon/medicon/view/login.fxml"
 //        ));
         Scene scene = new Scene(loader.load());
