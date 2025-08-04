@@ -4,38 +4,39 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="com.medicon.medicon.controller.LoginController"
-           stylesheets="@../style/login.css"
-           prefWidth="1920" prefHeight="1080">
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.medicon.medicon.controller.LoginController"
+            stylesheets="@../style/login.css"
+            prefWidth="1920" prefHeight="1080">
 
-    <!-- 설정 버튼은 StackPane 외부에서 별도로 구성할 수 있음 -->
+    <!-- 상단 설정 버튼 -->
+    <top>
+        <AnchorPane prefHeight="60">
+            <Button fx:id="settingButton"
+                    layoutX="1850" layoutY="10"
+                    prefWidth="40" prefHeight="40"
+                    style="-fx-background-color: transparent;">
+                <graphic>
+                    <ImageView fx:id="settingIcon" fitWidth="32" fitHeight="32" />
+                </graphic>
+            </Button>
+        </AnchorPane>
+    </top>
 
-    <!-- 로그인 UI -->
-    <VBox fx:id="loginBox" spacing="20" alignment="CENTER" maxWidth="300">
-        <!-- 로고 이미지 -->
-        <ImageView fx:id="logoImageView" fitWidth="100" fitHeight="100" />
+    <!-- 로그인 UI 중앙 정렬 -->
+    <center>
+        <StackPane>
+            <VBox fx:id="loginBox" spacing="20" alignment="CENTER" maxWidth="300">
+                <ImageView fx:id="logoImageView" fitWidth="100" fitHeight="100" />
+                <TextField fx:id="idField" promptText="아이디" styleClass="input-field"/>
+                <PasswordField fx:id="pwField" promptText="비밀번호" styleClass="input-field"/>
+                <Button fx:id="loginButton"
+                        text="로그인"
+                        styleClass="login-button"
+                        maxWidth="Infinity"
+                        onAction="#onLoginButtonClick"/>
+            </VBox>
+        </StackPane>
+    </center>
 
-        <!-- ID 입력 -->
-        <TextField fx:id="idField" promptText="아이디" styleClass="input-field"/>
-
-        <!-- PW 입력 -->
-        <PasswordField fx:id="pwField" promptText="비밀번호" styleClass="input-field"/>
-
-        <!-- 로그인 버튼 -->
-        <Button fx:id="loginButton" text="로그인" styleClass="login-button"/>
-    </VBox>
-
-    <!-- 설정 아이콘 (오른쪽 상단 고정) -->
-    <AnchorPane>
-        <Button fx:id="settingButton"
-                layoutX="1850" layoutY="20"
-                prefWidth="40" prefHeight="40"
-                style="-fx-background-color: transparent;">
-            <graphic>
-                <ImageView fx:id="settingIcon" fitWidth="32" fitHeight="32" />
-            </graphic>
-        </Button>
-    </AnchorPane>
-
-</StackPane>
+</BorderPane>
