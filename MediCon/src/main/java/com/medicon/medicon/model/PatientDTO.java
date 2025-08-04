@@ -1,4 +1,4 @@
-package com.medicon.server.dto.user;
+package com.medicon.medicon.model;
 
 public class PatientDTO {
     // 기본 사용자 정보

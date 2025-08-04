@@ -1,4 +1,4 @@
-package com.medicon.server.dto.reservation;
+package com.medicon.medicon.model;
 
 public class ReservationDTO {
     private String reservation_id;
