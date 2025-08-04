@@ -5,6 +5,9 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane styleClass="background" stylesheets="@../../../style/ComponentStyle.css"  xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.medicon.medicon.controller.medic.PatientManagementController">
+    <fx:define>
+        <ToggleGroup fx:id="genderToggleGroup"/>
+    </fx:define>
 
     <HBox spacing="20" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" AnchorPane.rightAnchor="20">
         <!-- 좌측 패널 -->
@@ -28,9 +31,19 @@
                 <TextField fx:id="nameField" styleClass = "text-field" prefHeight="35.0" prefWidth="219.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                 <Label styleClass="form-label" text="성별" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-                <HBox fx:id="gender" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
-                    <RadioButton text="남자" fx:id="Radio1" />
-                    <RadioButton text="여자" fx:id="Radio2"/>
+                <HBox fx:id="gender" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" spacing="10">
+
+                    <RadioButton fx:id="btn_male" text="남자">
+                        <toggleGroup>
+                            <fx:reference source="genderToggleGroup"/>
+                        </toggleGroup>
+                    </RadioButton>
+
+                    <RadioButton fx:id="btn_female" text="여자">
+                        <toggleGroup>
+                            <fx:reference source="genderToggleGroup"/>
+                        </toggleGroup>
+                    </RadioButton>
                 </HBox>
 
                 <Label styleClass="form-label" text="생년월일" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />

@@ -235,14 +235,14 @@ public class PatientEventHandler {
 
             // 필드 값 가져오기
             String name = uiManager.getNameField().getText().trim();
-            String gender = uiManager.getGenderField().getText().trim();
+            String gender = uiManager.getSelectedGender();
             String phone = uiManager.getPhoneField().getText().trim();
             String email = uiManager.getEmailField().getText().trim();
             String address = uiManager.getAddressField().getText().trim();
             String rnn = uiManager.getBirthField().getText().trim();
 
-            System.out.println("📋 기존 정보: " + selectedPatient.getName());
-            System.out.println("📝 새 정보: " + name);
+            System.out.println("기존 정보: " + selectedPatient.getName());
+            System.out.println("새 정보: " + name);
 
             // 입력 검증
             String validationError = validator.validatePatientInfo(name, gender, phone, email, address);
@@ -305,10 +305,10 @@ public class PatientEventHandler {
                     uiManager.setUpdateButtonLoading(false);
 
                     if (success) {
-                        System.out.println("✅ 환자 정보 수정 완료: " + name);
+                        System.out.println("환자 정보 수정 완료: " + name);
 
                         if (infoHandler != null) {
-                            infoHandler.accept("✅ 환자 정보가 성공적으로 수정되었습니다.\n\n" +
+                            infoHandler.accept("환자 정보가 성공적으로 수정되었습니다.\n\n" +
                                     "수정된 환자: " + name + "\n" +
                                     "수정 시간: " + java.time.LocalDateTime.now().format(
                                     java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
@@ -326,7 +326,7 @@ public class PatientEventHandler {
 
                     } else {
                         if (errorHandler != null) {
-                            errorHandler.accept("❌ 환자 정보 수정에 실패했습니다.\n다시 시도해주세요.");
+                            errorHandler.accept("환자 정보 수정에 실패했습니다.\n다시 시도해주세요.");
                         }
 
                         // 실패 시 원래 정보로 복원
@@ -338,7 +338,7 @@ public class PatientEventHandler {
                     uiManager.setUpdateButtonLoading(false);
 
                     if (errorHandler != null) {
-                        errorHandler.accept("❌ 환자 정보 수정 중 오류가 발생했습니다.\n\n오류 내용: " + e.getMessage());
+                        errorHandler.accept("환자 정보 수정 중 오류가 발생했습니다.\n\n오류 내용: " + e.getMessage());
                     }
 
                     // 실패 시 원래 정보로 복원
@@ -348,13 +348,13 @@ public class PatientEventHandler {
             });
 
         } catch (Exception e) {
-            System.err.println("❌ 환자 정보 수정 중 예외 발생: " + e.getMessage());
+            System.err.println("환자 정보 수정 중 예외 발생: " + e.getMessage());
             e.printStackTrace();
 
             Platform.runLater(() -> {
                 uiManager.setUpdateButtonLoading(false);
                 if (errorHandler != null) {
-                    errorHandler.accept("❌ 환자 정보 수정 중 오류가 발생했습니다.\n\n오류 내용: " + e.getMessage());
+                    errorHandler.accept("환자 정보 수정 중 오류가 발생했습니다.\n\n오류 내용: " + e.getMessage());
                 }
             });
         }
@@ -367,12 +367,12 @@ public class PatientEventHandler {
                 if (patient.getPatient_id().equals(updatedPatient.getPatient_id())) {
                     // 기존 환자 정보를 업데이트된 정보로 교체
                     patientData.set(i, updatedPatient);
-                    System.out.println("🔄 목록에서 환자 정보 업데이트: " + updatedPatient.getName());
+                    System.out.println("목록에서 환자 정보 업데이트: " + updatedPatient.getName());
                     break;
                 }
             }
         } catch (Exception e) {
-            System.err.println("❌ 환자 목록 업데이트 실패: " + e.getMessage());
+            System.err.println("환자 목록 업데이트 실패: " + e.getMessage());
         }
     }
     /**
@@ -416,7 +416,7 @@ public class PatientEventHandler {
         if (patientId == null) return;
         
         try {
-            System.out.println("🔍 환자 재선택 시도: " + patientId);
+            System.out.println("환자 재선택 시도: " + patientId);
 
             if (isUpdatingSelection) {
                 Platform.runLater(() -> {
@@ -436,18 +436,18 @@ public class PatientEventHandler {
             for (PatientDTO patient : patientData) {
                 if (patient.getPatient_id().equals(patientId)) {
                     selectedPatient = patient;
-                    System.out.println("🔄 환자 재선택 성공: " + patient.getName());
+                    System.out.println("환자 재선택 성공: " + patient.getName());
                     found = true;
                     break;
                 }
             }
 
             if (!found) {
-                System.err.println("❌ 환자를 찾을 수 없음: " + patientId);
+                System.err.println("환자를 찾을 수 없음: " + patientId);
             }
 
         } catch (Exception e) {
-            System.err.println("❌ 환자 재선택 실패: " + e.getMessage());
+            System.err.println("환자 재선택 실패: " + e.getMessage());
             e.printStackTrace();
         } finally {
             Platform.runLater(() -> {

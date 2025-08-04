@@ -2,6 +2,7 @@ package com.medicon.medicon.controller.patient;
 
 import com.medicon.medicon.model.PatientDTO;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.ObservableList;
 
@@ -11,7 +12,9 @@ import javafx.collections.ObservableList;
 public class PatientUIManager {
 
     private final TextField nameField;
-    private final TextField genderField;
+    private ToggleGroup genderToggleGroup;
+    private final RadioButton btn_male;  // 남자
+    private final RadioButton btn_female;  // 여자
     private final TextField birthField;
     private final TextField phoneField;
     private final TextField emailField;
@@ -41,7 +44,7 @@ public class PatientUIManager {
 
     private boolean isEditMode = false;
 
-    public PatientUIManager(TextField nameField, TextField genderField, TextField birthField,
+    public PatientUIManager(TextField nameField, RadioButton btn_male,RadioButton btn_female,ToggleGroup genderToggleGroup, TextField birthField,
                             TextField phoneField, TextField emailField, TextField addressField,
                             TextField detailAddressField, TextField searchField,
                             ListView<PatientDTO> patientListView, ListView<String> historyListView,
@@ -52,7 +55,9 @@ public class PatientUIManager {
                             Button registerPatientButton, Button todayPatientButton) {
 
         this.nameField = nameField;
-        this.genderField = genderField;
+        this.btn_male = btn_male;
+        this.btn_female = btn_female;
+        this.genderToggleGroup = genderToggleGroup;
         this.birthField = birthField;
         this.phoneField = phoneField;
         this.emailField = emailField;
@@ -98,7 +103,7 @@ public class PatientUIManager {
      */
     public void configureTextFields() {
         TextField[] fields = {
-                nameField, genderField, phoneField, emailField, addressField, searchField, birthField, detailAddressField
+                nameField, phoneField, emailField, addressField, searchField, birthField, detailAddressField
         };
 
         for (TextField field : fields) {
@@ -108,7 +113,7 @@ public class PatientUIManager {
             });
         }
 
-        System.out.println("✅ TextField 한글 처리 설정 완료");
+        System.out.println("TextField 한글 처리 설정 완료");
     }
 
     /**
@@ -122,13 +127,20 @@ public class PatientUIManager {
 
         Platform.runLater(() -> {
             nameField.setText(patient.getName() != null ? patient.getName() : "");
-            genderField.setText(patient.getGender() != null ? patient.getGender() : "");
             birthField.setText(patient.getRnn() != null && patient.getRnn().length() >= 6 ?
                     patient.getRnn().substring(0, 6) : "");
             phoneField.setText(patient.getPhone() != null ? patient.getPhone() : "");
             emailField.setText(patient.getEmail() != null ? patient.getEmail() : "");
             addressField.setText(patient.getAddress() != null ? patient.getAddress() : "");
             detailAddressField.setText("");
+            // 성별 라디오 버튼 선택
+            if ("남자".equals(patient.getGender())) {
+                btn_male.setSelected(true);
+            } else if ("여자".equals(patient.getGender())) {
+                btn_female.setSelected(true);
+            } else {
+                genderToggleGroup.selectToggle(null);
+            }
         });
     }
 
@@ -173,7 +185,8 @@ public class PatientUIManager {
     public void clearAllFields() {
         Platform.runLater(() -> {
             nameField.clear();
-            genderField.clear();
+            btn_male.setSelected(false);
+            btn_female.setSelected(false);
             birthField.clear();
             phoneField.clear();
             emailField.clear();
@@ -184,6 +197,7 @@ public class PatientUIManager {
             timeLabel.setText("-");
             departmentLabel.setText("-");
             historyData.clear();
+            genderToggleGroup.selectToggle(null);
         });
     }
 
@@ -191,13 +205,14 @@ public class PatientUIManager {
      * 수정 모드 설정
      */
     public void setEditMode(boolean editMode) {
-        System.out.println("🔧 수정 모드 변경: " + isEditMode + " → " + editMode);
+        System.out.println("수정 모드 변경: " + isEditMode + " → " + editMode);
         this.isEditMode = editMode;
 
         Platform.runLater(() -> {
             // 입력 필드 활성화/비활성화
             nameField.setEditable(editMode);
-            genderField.setEditable(editMode);
+            btn_male.setDisable(!editMode);
+            btn_female.setDisable(!editMode);
             birthField.setEditable(editMode);
             phoneField.setEditable(editMode);
             emailField.setEditable(editMode);
@@ -211,7 +226,6 @@ public class PatientUIManager {
             // 배경색 변경
             String backgroundColor = editMode ? "-fx-background-color: #fff3cd;" : "-fx-background-color: white;";
             nameField.setStyle(backgroundColor);
-            genderField.setStyle(backgroundColor);
             birthField.setStyle(backgroundColor);
             phoneField.setStyle(backgroundColor);
             emailField.setStyle(backgroundColor);
@@ -297,11 +311,16 @@ public class PatientUIManager {
 
     // Getter 메서드들
     public TextField getNameField() { return nameField; }
-    public TextField getGenderField() { return genderField; }
     public TextField getBirthField() { return birthField; }
     public TextField getPhoneField() { return phoneField; }
     public TextField getEmailField() { return emailField; }
     public TextField getAddressField() { return addressField; }
     public TextField getSearchField() { return searchField; }
     public boolean isEditMode() { return isEditMode; }
+
+    //성별 가져오는 메서드
+    public String getSelectedGender() {
+        Toggle selected = genderToggleGroup.getSelectedToggle();
+        return (selected != null) ? ((RadioButton) selected).getText() : null;
+    }
 }
