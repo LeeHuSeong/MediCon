@@ -225,7 +225,7 @@ public class PatientEventHandler {
     private void doActualUpdate() {
         try {
             System.out.println("✏환자 정보 수정 시작 - " + (selectedPatient != null ? selectedPatient.getName() : "null"));
-            
+
             if (selectedPatient == null) {
                 if (errorHandler != null) {
                     errorHandler.accept("수정할 환자를 선택해주세요.");
@@ -306,7 +306,7 @@ public class PatientEventHandler {
 
                     if (success) {
                         System.out.println("✅ 환자 정보 수정 완료: " + name);
-                        
+
                         if (infoHandler != null) {
                             infoHandler.accept("✅ 환자 정보가 성공적으로 수정되었습니다.\n\n" +
                                     "수정된 환자: " + name + "\n" +
@@ -315,15 +315,14 @@ public class PatientEventHandler {
                         }
 
                         uiManager.setEditMode(false);
-                        
-                        // 환자 목록 새로고침
-                        dataManager.loadAllPatients(patientData, errorHandler, 
-                            () -> {
-                                // 수정된 환자 다시 선택
-                                Platform.runLater(() -> {
-                                    uiManager.selectPatientById(selectedPatient.getPatient_id());
-                                });
-                            });
+
+                        // 개별 환자 정보만 업데이트 (중복 방지)
+                        updatePatientInList(selectedPatient);
+
+                        // UI 새로고침
+                        Platform.runLater(() -> {
+                            uiManager.displayPatientInfo(selectedPatient);
+                        });
 
                     } else {
                         if (errorHandler != null) {
@@ -351,7 +350,7 @@ public class PatientEventHandler {
         } catch (Exception e) {
             System.err.println("❌ 환자 정보 수정 중 예외 발생: " + e.getMessage());
             e.printStackTrace();
-            
+
             Platform.runLater(() -> {
                 uiManager.setUpdateButtonLoading(false);
                 if (errorHandler != null) {
@@ -361,6 +360,21 @@ public class PatientEventHandler {
         }
     }
 
+    private void updatePatientInList(PatientDTO updatedPatient) {
+        try {
+            for (int i = 0; i < patientData.size(); i++) {
+                PatientDTO patient = patientData.get(i);
+                if (patient.getPatient_id().equals(updatedPatient.getPatient_id())) {
+                    // 기존 환자 정보를 업데이트된 정보로 교체
+                    patientData.set(i, updatedPatient);
+                    System.out.println("🔄 목록에서 환자 정보 업데이트: " + updatedPatient.getName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("❌ 환자 목록 업데이트 실패: " + e.getMessage());
+        }
+    }
     /**
      * 환자 정보 복원
      */
