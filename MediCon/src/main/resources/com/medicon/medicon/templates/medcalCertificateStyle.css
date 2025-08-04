@@ -1,0 +1,126 @@
+body {
+    font-family: 'Malgun Gothic', sans-serif;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.certificate-box {
+    background: #fff;
+    border: 1px solid #000;
+    padding: 30px;
+    max-width: 900px;
+    margin: auto;
+    box-sizing: border-box;
+}
+
+.title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+/* 테이블 기본 설정 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+th, td {
+    border: 1px solid #000;
+    padding: 10px;
+    text-align: left;
+    vertical-align: middle;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+}
+
+/* 제목 열 스타일 */
+th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+/* colspan 대응 - 기본 너비 유지 */
+td[colspan="3"] {
+    width: 75%;
+}
+th[rowspan] {
+    width: 15%;
+}
+
+/* 푸터 텍스트 영역 */
+.footer {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.issue-date {
+    margin-top: 10px;
+}
+
+.hospital-info {
+    margin-top: 30px;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.bottom-center {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* 버튼 영역 */
+.actions {
+    text-align: center;
+    margin: 30px 0;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    border: none;
+    background-color: #2d89ef;
+    color: white;
+    border-radius: 5px;
+    margin: 0 10px;
+    transition: background-color 0.2s ease;
+}
+button:hover {
+    background-color: #1c5fb6;
+}
+
+/* 모바일 대응 */
+@media screen and (max-width: 600px) {
+    table, th, td {
+        font-size: 13px;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+
+    button {
+        font-size: 13px;
+        padding: 8px 15px;
+    }
+}
+@media print {
+    .actions {
+        display: none !important;
+    }
+}
+
+/* 보조용 클래스: JS에서도 적용 */
+.print-mode .actions {
+    display: none !important;
+}
+

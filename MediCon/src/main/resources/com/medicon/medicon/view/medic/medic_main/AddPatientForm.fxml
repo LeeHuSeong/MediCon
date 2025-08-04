@@ -26,7 +26,7 @@
                 <RadioButton fx:id="addRadio2" text="여자  " />
             </HBox>
 
-            <Label styleClass="form-labelBig" text="생년월일" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+            <Label styleClass="form-labelBig" text="주민등록번호" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
             <TextField fx:id="birthField" styleClass="form-labelBig" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
             <Label styleClass="form-labelBig" text="휴대전화" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
