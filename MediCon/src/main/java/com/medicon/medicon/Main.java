@@ -9,13 +9,13 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         //Main_view
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "/com/medicon/medicon/view/medic/medic_main/MedicMain.fxml"
-        ));
-        //Patient_view
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource(
-//                "/com/medicon/medicon/view/patient/patient_main/PatientMainView.fxml"
+//                "/com/medicon/medicon/view/medic/medic_main/MedicMain.fxml"
 //        ));
+        //Patient_view
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                "/com/medicon/medicon/view/patient/patient_main/PatientMainView.fxml"
+        ));
 
         //login_view
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource(

@@ -10,7 +10,7 @@
     <top /> <!-- ← 헤더, 컨트롤러에서 넣었음 -->
 
     <center>
-        <fx:include source="PerInfoView.fxml" />
+        <fx:include source="ReservationView.fxml" />
     </center>
 
 </BorderPane>
