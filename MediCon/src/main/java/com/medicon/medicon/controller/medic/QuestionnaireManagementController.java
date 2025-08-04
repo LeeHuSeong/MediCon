@@ -55,7 +55,7 @@ public class QuestionnaireManagementController implements Initializable {
             Parent popupRoot = loader.load();
 
             Stage popupStage = new Stage();
-            popupStage.initModality(Modality.APPLICATION_MODAL);
+//            popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.setTitle("추가 문진 작성");
             popupStage.setScene(new Scene(popupRoot));
             popupStage.setResizable(false);
