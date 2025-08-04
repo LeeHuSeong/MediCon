@@ -1,6 +1,9 @@
 package com.medicon.medicon.controller.medic.patient;
 
 import com.medicon.medicon.model.PatientDTO;
+import com.medicon.medicon.controller.medic.patient.PatientUIManager;
+import com.medicon.medicon.controller.medic.patient.PatientDataManager;
+import com.medicon.medicon.controller.medic.patient.PatientValidator;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.animation.PauseTransition;
@@ -13,24 +16,24 @@ import java.util.function.Consumer;
  * 환자 관리 이벤트 처리를 담당하는 클래스
  */
 public class PatientEventHandler {
-    
+
     private final PatientUIManager uiManager;
     private final PatientDataManager dataManager;
     private final PatientValidator validator;
     private final ObservableList<PatientDTO> patientData;
     private final ObservableList<String> historyData;
-    
+
     private PatientDTO selectedPatient;
     private boolean isUpdatingSelection = false;
-    
+
     private Consumer<String> errorHandler;
     private Consumer<String> infoHandler;
 
-    public PatientEventHandler(PatientUIManager uiManager, 
-                             PatientDataManager dataManager,
-                             PatientValidator validator,
-                             ObservableList<PatientDTO> patientData,
-                             ObservableList<String> historyData) {
+    public PatientEventHandler(PatientUIManager uiManager,
+                               PatientDataManager dataManager,
+                               PatientValidator validator,
+                               ObservableList<PatientDTO> patientData,
+                               ObservableList<String> historyData) {
         this.uiManager = uiManager;
         this.dataManager = dataManager;
         this.validator = validator;
@@ -95,20 +98,20 @@ public class PatientEventHandler {
                 // handleSearch(); // 원하지 않으면 주석 처리
             }
         });
-        
+
         // 수정 모드의 텍스트 필드들은 포커스 잃을 때만 검증
         uiManager.getNameField().focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
             if (!isNowFocused && uiManager.isEditMode()) {
                 uiManager.validateNameField();
             }
         });
-        
+
         uiManager.getPhoneField().focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
             if (!isNowFocused && uiManager.isEditMode()) {
                 uiManager.validatePhoneField();
             }
         });
-        
+
         uiManager.getEmailField().focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
             if (!isNowFocused && uiManager.isEditMode()) {
                 uiManager.validateEmailField();
@@ -122,37 +125,37 @@ public class PatientEventHandler {
     private void handlePatientSelected(PatientDTO patient) {
         uiManager.displayPatientInfo(patient);
         dataManager.loadPatientHistory(patient, historyData);
-        
+
         // 예약 정보 로드
-        dataManager.loadPatientReservations(patient, 
-            reservation -> {
-                // 예약 정보 표시
-                String department = reservation.getDepartment();
-                if (department == null || department.trim().isEmpty()) {
-                    department = "일반의학과";
+        dataManager.loadPatientReservations(patient,
+                reservation -> {
+                    // 예약 정보 표시
+                    String department = reservation.getDepartment();
+                    if (department == null || department.trim().isEmpty()) {
+                        department = "일반의학과";
+                    }
+                    uiManager.displayReservationInfo(reservation.getDate(), reservation.getTime(), department);
+
+                    // 문진 정보 로드
+                    dataManager.loadMedicalInterview(
+                            patient.getUid(),
+                            patient.getPatient_id(),
+                            reservation.getReservation_id(),
+                            interview -> {
+                                uiManager.displayMedicalInfo(
+                                        interview.getSymptoms(),
+                                        interview.getPast_medical_history(),
+                                        interview.getAllergy(),
+                                        interview.getCurrent_medication()
+                                );
+                            },
+                            () -> uiManager.clearMedicalInfo()
+                    );
+                },
+                () -> {
+                    uiManager.displayReservationInfo("-", "-", "-");
+                    uiManager.clearMedicalInfo();
                 }
-                uiManager.displayReservationInfo(reservation.getDate(), reservation.getTime(), department);
-                
-                // 문진 정보 로드
-                dataManager.loadMedicalInterview(
-                    patient.getUid(),
-                    patient.getPatient_id(),
-                    reservation.getReservation_id(),
-                    interview -> {
-                        uiManager.displayMedicalInfo(
-                            interview.getSymptoms(),
-                            interview.getPast_medical_history(),
-                            interview.getAllergy(),
-                            interview.getCurrent_medication()
-                        );
-                    },
-                    () -> uiManager.clearMedicalInfo()
-                );
-            },
-            () -> {
-                uiManager.displayReservationInfo("-", "-", "-");
-                uiManager.clearMedicalInfo();
-            }
         );
     }
 
@@ -168,12 +171,12 @@ public class PatientEventHandler {
      * 오늘 환자 목록 로드
      */
     public void handleTodayPatients() {
-        dataManager.loadTodayPatients(patientData, errorHandler, 
-            () -> {
-                if (infoHandler != null) {
-                    infoHandler.accept("금일 예약 환자 목록을 로드했습니다.");
-                }
-            });
+        dataManager.loadTodayPatients(patientData, errorHandler,
+                () -> {
+                    if (infoHandler != null) {
+                        infoHandler.accept("금일 예약 환자 목록을 로드했습니다.");
+                    }
+                });
     }
 
     /**
@@ -205,9 +208,9 @@ public class PatientEventHandler {
      * 환자 정보 업데이트 처리 (한글 입력 문제 해결)
      */
     public void handleUpdatePatient() {
-        System.out.println("📝 환자 정보 수정 요청: " + (selectedPatient != null ? selectedPatient.getName() : "null") + 
-                          " (ID: " + (selectedPatient != null ? selectedPatient.getPatient_id() : "null") + ")");
-        
+        System.out.println("📝 환자 정보 수정 요청: " + (selectedPatient != null ? selectedPatient.getName() : "null") +
+                " (ID: " + (selectedPatient != null ? selectedPatient.getPatient_id() : "null") + ")");
+
         // 한글 조합 완료를 위한 짧은 지연
         PauseTransition pause = new PauseTransition(Duration.millis(100));
         pause.setOnFinished(e -> {
@@ -232,14 +235,14 @@ public class PatientEventHandler {
 
             // 필드 값 가져오기
             String name = uiManager.getNameField().getText().trim();
-            String gender = uiManager.getGenderField().getText().trim();
+            String gender = uiManager.getSelectedGender();
             String phone = uiManager.getPhoneField().getText().trim();
             String email = uiManager.getEmailField().getText().trim();
             String address = uiManager.getAddressField().getText().trim();
             String rnn = uiManager.getBirthField().getText().trim();
 
-            System.out.println("📋 기존 정보: " + selectedPatient.getName());
-            System.out.println("📝 새 정보: " + name);
+            System.out.println("기존 정보: " + selectedPatient.getName());
+            System.out.println("새 정보: " + name);
 
             // 입력 검증
             String validationError = validator.validatePatientInfo(name, gender, phone, email, address);
@@ -302,10 +305,10 @@ public class PatientEventHandler {
                     uiManager.setUpdateButtonLoading(false);
 
                     if (success) {
-                        System.out.println("✅ 환자 정보 수정 완료: " + name);
+                        System.out.println("환자 정보 수정 완료: " + name);
 
                         if (infoHandler != null) {
-                            infoHandler.accept("✅ 환자 정보가 성공적으로 수정되었습니다.\n\n" +
+                            infoHandler.accept("환자 정보가 성공적으로 수정되었습니다.\n\n" +
                                     "수정된 환자: " + name + "\n" +
                                     "수정 시간: " + java.time.LocalDateTime.now().format(
                                     java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
@@ -323,7 +326,7 @@ public class PatientEventHandler {
 
                     } else {
                         if (errorHandler != null) {
-                            errorHandler.accept("❌ 환자 정보 수정에 실패했습니다.\n다시 시도해주세요.");
+                            errorHandler.accept("환자 정보 수정에 실패했습니다.\n다시 시도해주세요.");
                         }
 
                         // 실패 시 원래 정보로 복원
@@ -335,7 +338,7 @@ public class PatientEventHandler {
                     uiManager.setUpdateButtonLoading(false);
 
                     if (errorHandler != null) {
-                        errorHandler.accept("❌ 환자 정보 수정 중 오류가 발생했습니다.\n\n오류 내용: " + e.getMessage());
+                        errorHandler.accept("환자 정보 수정 중 오류가 발생했습니다.\n\n오류 내용: " + e.getMessage());
                     }
 
                     // 실패 시 원래 정보로 복원
@@ -345,13 +348,13 @@ public class PatientEventHandler {
             });
 
         } catch (Exception e) {
-            System.err.println("❌ 환자 정보 수정 중 예외 발생: " + e.getMessage());
+            System.err.println("환자 정보 수정 중 예외 발생: " + e.getMessage());
             e.printStackTrace();
 
             Platform.runLater(() -> {
                 uiManager.setUpdateButtonLoading(false);
                 if (errorHandler != null) {
-                    errorHandler.accept("❌ 환자 정보 수정 중 오류가 발생했습니다.\n\n오류 내용: " + e.getMessage());
+                    errorHandler.accept("환자 정보 수정 중 오류가 발생했습니다.\n\n오류 내용: " + e.getMessage());
                 }
             });
         }
@@ -364,12 +367,12 @@ public class PatientEventHandler {
                 if (patient.getPatient_id().equals(updatedPatient.getPatient_id())) {
                     // 기존 환자 정보를 업데이트된 정보로 교체
                     patientData.set(i, updatedPatient);
-                    System.out.println("🔄 목록에서 환자 정보 업데이트: " + updatedPatient.getName());
+                    System.out.println("목록에서 환자 정보 업데이트: " + updatedPatient.getName());
                     break;
                 }
             }
         } catch (Exception e) {
-            System.err.println("❌ 환자 목록 업데이트 실패: " + e.getMessage());
+            System.err.println("환자 목록 업데이트 실패: " + e.getMessage());
         }
     }
     /**
@@ -398,7 +401,7 @@ public class PatientEventHandler {
      */
     public void refreshPatientList() {
         String currentPatientId = selectedPatient != null ? selectedPatient.getPatient_id() : null;
-        
+
         dataManager.loadAllPatients(patientData, errorHandler, () -> {
             if (currentPatientId != null) {
                 uiManager.selectPatientById(currentPatientId);
@@ -411,9 +414,9 @@ public class PatientEventHandler {
      */
     public void selectPatientById(String patientId) {
         if (patientId == null) return;
-        
+
         try {
-            System.out.println("🔍 환자 재선택 시도: " + patientId);
+            System.out.println("환자 재선택 시도: " + patientId);
 
             if (isUpdatingSelection) {
                 Platform.runLater(() -> {
@@ -433,18 +436,18 @@ public class PatientEventHandler {
             for (PatientDTO patient : patientData) {
                 if (patient.getPatient_id().equals(patientId)) {
                     selectedPatient = patient;
-                    System.out.println("🔄 환자 재선택 성공: " + patient.getName());
+                    System.out.println("환자 재선택 성공: " + patient.getName());
                     found = true;
                     break;
                 }
             }
 
             if (!found) {
-                System.err.println("❌ 환자를 찾을 수 없음: " + patientId);
+                System.err.println("환자를 찾을 수 없음: " + patientId);
             }
 
         } catch (Exception e) {
-            System.err.println("❌ 환자 재선택 실패: " + e.getMessage());
+            System.err.println("환자 재선택 실패: " + e.getMessage());
             e.printStackTrace();
         } finally {
             Platform.runLater(() -> {
