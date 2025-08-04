@@ -64,6 +64,25 @@ public class PatientController {
         }
     }
 
+    // patient_id로 환자 단건 조회
+    @GetMapping(value = "/by-patient-id/{patientId}", produces = "application/json; charset=UTF-8")
+    public ResponseEntity<PatientDTO> getPatientByPatientId(@PathVariable String patientId) {
+        try {
+            PatientDTO patient = patientDAO.findPatientByPatientId(patientId);
+            if (patient != null) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .body(patient);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            System.err.println("❌ patient_id로 환자 조회 실패: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
+
     // 신규 환자 등록
     @PostMapping(value = "/save",
             consumes = "application/json; charset=UTF-8",

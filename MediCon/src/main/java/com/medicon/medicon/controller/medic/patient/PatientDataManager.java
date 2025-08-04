@@ -221,11 +221,18 @@ public class PatientDataManager {
      * 환자의 방문 이력 로드
      */
     public void loadPatientHistory(PatientDTO patient, ObservableList<String> historyData) {
-        historyData.clear();
+        System.out.println("방문 이력 조회 시작: " + patient.getName());
+        // 기존 데이터 완전히 제거
+        Platform.runLater(() -> historyData.clear());
+        
         reservationApiService.getReservationsByPatientId(patient.getPatient_id())
                 .thenAccept(reservations -> {
                     Platform.runLater(() -> {
+                        // 다시 한번 클리어 (비동기 처리 중 다른 데이터가 들어올 수 있음)
+                        historyData.clear();
+                        
                         if (reservations != null && !reservations.isEmpty()) {
+                            System.out.println("총 예약 수: " + reservations.size());
                             LocalDate today = LocalDate.now();
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -233,13 +240,18 @@ public class PatientDataManager {
                                     .filter(reservation -> {
                                         try {
                                             LocalDate date = LocalDate.parse(reservation.getDate(), formatter);
-                                            return !date.isAfter(today); // 오늘 포함, 이후는 제외
+                                            boolean isPastOrToday = !date.isAfter(today);
+                                            System.out.println("예약일: " + reservation.getDate() + " (오늘 이전/포함: " + isPastOrToday + ")");
+                                            return isPastOrToday; // 오늘 포함, 이후는 제외
                                         } catch (Exception e) {
+                                            System.out.println("날짜 파싱 실패: " + reservation.getDate());
                                             return false;
                                         }
                                     })
                                     .sorted((r1, r2) -> r2.getDate().compareTo(r1.getDate()))
                                     .collect(Collectors.toList());
+
+                            System.out.println("필터링된 과거/오늘 예약 수: " + pastReservations.size());
 
                             if (pastReservations.isEmpty()) {
                                 historyData.add("방문 이력이 없습니다.");
