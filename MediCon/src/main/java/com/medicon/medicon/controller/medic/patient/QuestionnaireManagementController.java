@@ -29,9 +29,12 @@ public class QuestionnaireManagementController implements Initializable {
     @FXML private ListView<PatientDTO> patientListView;
     @FXML private Label interviewDateLabel;
     @FXML private Label symptomLabel;
+    @FXML private Label symptomDurationLabel;
     @FXML private Label historyLabel;
     @FXML private Label allergyLabel;
     @FXML private Label medicationLabel;
+    @FXML private TextArea symytomElse;
+    @FXML private Button addQuestionnaireButton;
     @FXML private ListView<String> historyQuestionnaireListView;
 
     private final PatientApiService patientApiService = new PatientApiService();
@@ -141,10 +144,12 @@ public class QuestionnaireManagementController implements Initializable {
                                 MedicalInterviewDTO interview = interviews.get(0);
                                 // 예약 날짜를 날짜 라벨에 설정
                                 interviewDateLabel.setText(latestReservation.getDate());
-                                symptomLabel.setText(interview.getSymptoms());
-                                historyLabel.setText(interview.getPast_medical_history());
-                                allergyLabel.setText(interview.getAllergy());
-                                medicationLabel.setText(interview.getCurrent_medication());
+                                // 데이터베이스의 실제 값들을 표시
+                                symptomLabel.setText(interview.getSymptoms() != null ? interview.getSymptoms() : "-");
+                                symptomDurationLabel.setText(interview.getSymptom_duration() != null ? interview.getSymptom_duration() : "-");
+                                historyLabel.setText(interview.getPast_medical_history() != null ? interview.getPast_medical_history() : "-");
+                                allergyLabel.setText(interview.getAllergy() != null ? interview.getAllergy() : "-");
+                                medicationLabel.setText(interview.getCurrent_medication() != null ? interview.getCurrent_medication() : "-");
                             } else {
                                 clearInterviewInfo();
                             }
@@ -200,9 +205,11 @@ public class QuestionnaireManagementController implements Initializable {
     private void clearInterviewInfo() {
         interviewDateLabel.setText("-");
         symptomLabel.setText("-");
+        symptomDurationLabel.setText("-");
         historyLabel.setText("-");
         allergyLabel.setText("-");
         medicationLabel.setText("-");
+        symytomElse.clear();
         historyQuestionnaireListView.getItems().clear();
     }
 

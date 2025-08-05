@@ -1,9 +1,9 @@
 package com.medicon.server.controller;
 
-import com.medicon.server.dto.signup.DoctorSignupRequest;
-import com.medicon.server.dto.signup.NurseSignupRequest;
-import com.medicon.server.dto.signup.PatientSignupRequest;
-import com.medicon.server.dto.signup.SignupResponse;
+import com.medicon.server.dto.auth.signup.DoctorSignupRequest;
+import com.medicon.server.dto.auth.signup.NurseSignupRequest;
+import com.medicon.server.dto.auth.signup.PatientSignupRequest;
+import com.medicon.server.dto.auth.signup.SignupResponse;
 import com.medicon.server.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

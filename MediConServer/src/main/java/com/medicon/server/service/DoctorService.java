@@ -2,9 +2,8 @@ package com.medicon.server.service;
 
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.cloud.FirestoreClient;
-import com.medicon.server.dto.auth.LoginResponse;
-import com.medicon.server.dto.signup.DoctorSignupRequest;
-import com.medicon.server.dto.signup.SignupResponse;
+import com.medicon.server.dto.auth.signup.DoctorSignupRequest;
+import com.medicon.server.dto.auth.signup.SignupResponse;
 import com.medicon.server.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.medicon.server.dto.signup;
+package com.medicon.server.dto.auth.signup;
 
 public class SignupResponse {
     private boolean success;

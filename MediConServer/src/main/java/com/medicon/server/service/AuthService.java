@@ -2,11 +2,11 @@ package com.medicon.server.service;
 
 import com.google.firebase.auth.*;
 import com.medicon.server.dto.auth.LoginResponse;
-import com.medicon.server.dto.signup.DoctorSignupRequest;
-import com.medicon.server.dto.signup.NurseSignupRequest;
-import com.medicon.server.dto.signup.PatientSignupRequest;
-import com.medicon.server.dto.auth.SignupRequest;
-import com.medicon.server.dto.signup.SignupResponse;
+import com.medicon.server.dto.auth.signup.DoctorSignupRequest;
+import com.medicon.server.dto.auth.signup.NurseSignupRequest;
+import com.medicon.server.dto.auth.signup.PatientSignupRequest;
+import com.medicon.server.dto.auth.signup.SignupRequest;
+import com.medicon.server.dto.auth.signup.SignupResponse;
 import com.medicon.server.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,12 +15,11 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     @Autowired private JwtUtil jwtUtil;
-    @Autowired private UserDataService userDataService;
     @Autowired private DoctorService doctorService;
     @Autowired private NurseService nurseService;
-    // 추후 NurseService, PatientService 추가 예정
+    @Autowired private PatientService patientService;
 
-    // 일반 회원가입
+    // 일반 회원가입 (안 씀)
     public LoginResponse signup(SignupRequest request) {
         try {
             UserRecord userRecord = FirebaseAuth.getInstance()
@@ -42,8 +41,6 @@ public class AuthService {
             FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
             String uid = decodedToken.getUid();
             String email = decodedToken.getEmail();
-
-            userDataService.createUserDocument(uid, email);
 
             String jwt = jwtUtil.generateToken(uid, email);
             return new LoginResponse(true, "로그인 성공", jwt, uid, email);
@@ -115,8 +112,19 @@ public class AuthService {
         }
     }
 
-    // 추후 환자 등록 (미구현)
-    public SignupResponse signupPatient(PatientSignupRequest request) {
-        return new SignupResponse(false, "환자 등록 미구현", null);
+    // 환자 등록
+    public SignupResponse signupPatient(PatientSignupRequest req) {
+        try {
+            UserRecord userRecord = FirebaseAuth.getInstance()
+                    .createUser(new UserRecord.CreateRequest()
+                            .setEmail(req.getEmail())
+                            .setPassword(req.getPassword()));
+
+            String uid = userRecord.getUid();
+            return patientService.registerPatient(uid, req);
+
+        } catch (FirebaseAuthException e) {
+            return new SignupResponse(false, "Firebase 계정 생성 실패: " + e.getMessage(), null);
+        }
     }
 }
