@@ -3,11 +3,11 @@ package com.medicon.server.controller;
 import com.medicon.server.dto.auth.ChangePasswordRequest;
 import com.medicon.server.dto.auth.LoginRequest;
 import com.medicon.server.dto.auth.LoginResponse;
-import com.medicon.server.dto.signup.DoctorSignupRequest;
-import com.medicon.server.dto.signup.NurseSignupRequest;
-import com.medicon.server.dto.signup.PatientSignupRequest;
-import com.medicon.server.dto.auth.SignupRequest;
-import com.medicon.server.dto.signup.SignupResponse;
+import com.medicon.server.dto.auth.signup.DoctorSignupRequest;
+import com.medicon.server.dto.auth.signup.NurseSignupRequest;
+import com.medicon.server.dto.auth.signup.PatientSignupRequest;
+import com.medicon.server.dto.auth.signup.SignupRequest;
+import com.medicon.server.dto.auth.signup.SignupResponse;
 import com.medicon.server.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +20,7 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    //일반 회원가입( 사용자별 DB생성하지 않음)
     @PostMapping("/signup")
     public ResponseEntity<LoginResponse> signup(@RequestBody SignupRequest request) {
         return ResponseEntity.ok(authService.signup(request));

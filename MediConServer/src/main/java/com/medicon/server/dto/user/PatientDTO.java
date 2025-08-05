@@ -14,7 +14,7 @@ public class PatientDTO {
     private String patient_id;
     private String gender;
     private String address;
-    private String rnn;
+    private String rnn;//주민번호인데, 사용X
 
     public PatientDTO() {}
 
