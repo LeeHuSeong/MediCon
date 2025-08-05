@@ -14,7 +14,8 @@ public class Main extends Application {
 //                "/com/medicon/medicon/view/medic/medic_main/MedicalCertificateForm.fxml"
 //        ));
 
-        //Main_view
+
+//        //Main_view
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource(
 //                "/com/medicon/medicon/view/medic/medic_main/MedicMain.fxml"
 //        ));
@@ -33,9 +34,9 @@ public class Main extends Application {
         stage.setScene(scene);
 
         // 최소 크기 설정
-//        stage.setMinWidth(1280);
-//        stage.setMinHeight(720);
-//        stage.setMaximized(true);
+        stage.setMinWidth(1280);
+        stage.setMinHeight(720);
+        stage.setMaximized(true);
         stage.show();
     }
 
