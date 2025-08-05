@@ -23,4 +23,10 @@ public class ReservationController {
         List<ReservationDTO> reservations = reservationDAO.findReservationByPatientId(patientId);
         return reservations;
     }
+
+    @GetMapping("/by-date")
+    public List<ReservationDTO> getReservationsByDate(@RequestParam String date) {
+        List<ReservationDTO> reservations = reservationDAO.findReservationByDate(date);
+        return reservations;
+    }
 }

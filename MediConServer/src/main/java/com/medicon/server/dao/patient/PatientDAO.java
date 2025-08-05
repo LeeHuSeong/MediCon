@@ -13,6 +13,9 @@ public interface PatientDAO {
     // 환자 UID로 단일 조회
     PatientDTO findPatientByUid(String uid);
 
+    // patient_id로 환자 단일 조회
+    PatientDTO findPatientByPatientId(String patientId);
+
     // 신규 환자 저장
     void savePatient(PatientDTO patient);
 
