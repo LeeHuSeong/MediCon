@@ -7,12 +7,18 @@ import com.medicon.medicon.service.PatientApiService;
 import com.medicon.medicon.service.ReservationApiService;
 import com.medicon.medicon.service.MedicalInterviewApiService;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -233,8 +239,20 @@ public class QuestionnaireManagementController implements Initializable {
     }
 
     @FXML
-    private void handleAddQuestionnaire() {
-        // 문진 추가 기능 (추후 구현)
-        showInfo("문진 추가 기능은 추후 구현 예정입니다.");
+    private void handleAddQuestionnaire(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/AddQuestionnaireForm.fxml"));
+            Parent popupRoot = loader.load();
+
+            Stage popupStage = new Stage();
+//            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.setTitle("추가 문진 작성");
+            popupStage.setScene(new Scene(popupRoot));
+            popupStage.setResizable(false);
+            popupStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
