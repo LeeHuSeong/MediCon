@@ -121,7 +121,7 @@ public class PatientApiService {
                     return null;
                 }
             } catch (Exception e) {
-                System.err.println("❌ 네트워크 오류: " + e.getMessage());
+                System.err.println(" 네트워크 오류: " + e.getMessage());
                 e.printStackTrace();
                 return null;
             }
@@ -156,7 +156,7 @@ public class PatientApiService {
                     return null;
                 }
             } catch (Exception e) {
-                System.err.println("❌ 네트워크 오류: " + e.getMessage());
+                System.err.println(" 네트워크 오류: " + e.getMessage());
                 e.printStackTrace();
                 return null;
             }
