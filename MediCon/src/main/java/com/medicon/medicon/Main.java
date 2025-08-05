@@ -10,14 +10,14 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
 
         //Test
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource(
-//                "/com/medicon/medicon/view/medic/medic_main/MedicalCertificateForm.fxml"
-//        ));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                "/com/medicon/medicon/view/medic/medic_main/DiagnosisCertificateForm.fxml"
+        ));
 
         //Main_view
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "/com/medicon/medicon/view/medic/medic_main/MedicMain.fxml"
-        ));
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource(
+//                "/com/medicon/medicon/view/medic/medic_main/MedicMain.fxml"
+//        ));
 
         //Patient_view
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource(

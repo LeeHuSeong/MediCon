@@ -1,0 +1,125 @@
+body {
+    font-family: 'Malgun Gothic', sans-serif;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.certificate-box {
+    background: #fff;
+    border: 1px solid #000;
+    padding: 30px;
+    max-width: 900px;
+    margin: auto;
+    box-sizing: border-box;
+}
+
+.title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+/* 테이블 기본 설정 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* 열 너비 강제 */
+    margin-bottom: 30px;
+    font-size: 15px;
+}
+
+th, td {
+    border: 1px solid #000;
+    padding: 8px;
+    text-align: left;
+    vertical-align: middle;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+}
+
+/* 제목 셀 */
+th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    text-align: center;         /* 가로 정렬 */
+    vertical-align: middle;     /* 세로 정렬 */
+}
+.align-top-left {
+    text-align: left;
+    vertical-align: top;
+}
+
+/* 푸터 */
+.footer {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.issue-date {
+    margin-top: 10px;
+}
+
+.hospital-info {
+    margin-top: 30px;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.bottom-center {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* 버튼 */
+.actions {
+    text-align: center;
+    margin: 30px 0;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    border: none;
+    background-color: #2d89ef;
+    color: white;
+    border-radius: 5px;
+    margin: 0 10px;
+    transition: background-color 0.2s ease;
+}
+button:hover {
+    background-color: #1c5fb6;
+}
+
+/* 모바일 대응 */
+@media screen and (max-width: 600px) {
+    table, th, td {
+        font-size: 13px;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+
+    button {
+        font-size: 13px;
+        padding: 8px 15px;
+    }
+}
+
+/* 인쇄 시 버튼 숨김 */
+@media print {
+    .actions {
+        display: none !important;
+    }
+}
+
+/* JS 대응용 */
+.print-mode .actions {
+    display: none !important;
+}
