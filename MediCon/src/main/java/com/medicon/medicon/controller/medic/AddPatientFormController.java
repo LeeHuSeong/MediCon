@@ -1,7 +1,7 @@
 package com.medicon.medicon.controller.medic;
 
-import com.medicon.medicon.model.PatientDTO;
-import com.medicon.medicon.service.PatientApiService;
+import com.medicon.medicon.model.PatientSignupRequest;
+import com.medicon.medicon.service.RegisterApiService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,10 +9,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
-import java.util.UUID;
 
 public class AddPatientFormController implements Initializable {
     
@@ -26,7 +23,7 @@ public class AddPatientFormController implements Initializable {
     @FXML private TextField addAddress;
     @FXML private TextField addAddressDetail;
     
-    private final PatientApiService patientApiService = new PatientApiService();
+    private final RegisterApiService registerApiService = new RegisterApiService();
     private ToggleGroup genderToggleGroup;
 
     @Override
@@ -48,14 +45,14 @@ public class AddPatientFormController implements Initializable {
             return;
         }
         
-        // PatientDTO 객체 생성
-        PatientDTO patient = createPatientDTO();
+        // PatientSignupRequest 객체 생성
+        PatientSignupRequest signupRequest = createPatientSignupRequest();
         
-        // Firebase에 저장
-        patientApiService.savePatientAsync(patient).thenAccept(success -> {
+        // Firebase Auth + Firestore에 저장
+        registerApiService.registerPatient(signupRequest).thenAccept(success -> {
             Platform.runLater(() -> {
                 if (success) {
-                    showAlert("성공", "환자가 성공적으로 등록되었습니다.");
+                    showAlert("성공", "환자가 성공적으로 등록되었습니다.\n이메일과 비밀번호로 로그인할 수 있습니다.");
                     clearForm();
                     closeWindow(); // 창 닫기
                 } else {
@@ -88,6 +85,14 @@ public class AddPatientFormController implements Initializable {
             addPasswordField.requestFocus();
             return false;
         }
+        
+        // Firebase Authentication 요구사항: 비밀번호 최소 6자
+        if (addPasswordField.getText().trim().length() < 6) {
+            showAlert("입력 오류", "비밀번호는 최소 6자 이상이어야 합니다.");
+            addPasswordField.requestFocus();
+            return false;
+        }
+        
         
         if (nameField.getText().trim().isEmpty()) {
             showAlert("입력 오류", "이름을 입력해주세요.");
@@ -125,51 +130,32 @@ public class AddPatientFormController implements Initializable {
         return true;
     }
 
-    private PatientDTO createPatientDTO() {
-        PatientDTO patient = new PatientDTO();
-        
-        // 고유 ID 생성
-        String uid = UUID.randomUUID().toString();
-        String patientId = generatePatientId();
-        
-        // 기본 정보 설정
-        patient.setUid(uid);
-        patient.setPatient_id(patientId);
-        patient.setEmail(addEmailField.getText().trim());
-        patient.setName(nameField.getText().trim());
-        patient.setPhone(addmedication.getText().trim()); // 휴대전화
-        patient.setRnn(birthField.getText().trim().replace("-", "")); // 주민등록번호 (하이픈 제거)
-        
-        // 성별 설정
-        if (addRadio1.isSelected()) {
-            patient.setGender("남자");
-        } else {
-            patient.setGender("여자");
-        }
-        
+    private PatientSignupRequest createPatientSignupRequest() {
         // 주소 설정
         String fullAddress = addAddress.getText().trim();
         if (!addAddressDetail.getText().trim().isEmpty()) {
             fullAddress += " " + addAddressDetail.getText().trim();
         }
-        patient.setAddress(fullAddress);
         
-        // 역할 및 권한 설정
-        patient.setRole("patient");
-        patient.setAuthority(1); // 환자 권한
+        // 성별 설정
+        String gender = addRadio1.isSelected() ? "남자" : "여자";
         
-        // 생성 시간 설정
-        String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        patient.setCreateAt(currentTime);
+        // PatientSignupRequest 생성
+        PatientSignupRequest signupRequest = new PatientSignupRequest(
+            addEmailField.getText().trim(),           // 이메일
+            addPasswordField.getText().trim(),        // 비밀번호 (이제 포함!)
+            nameField.getText().trim(),               // 이름
+            addmedication.getText().trim(),           // 휴대전화
+            birthField.getText().trim(),              // 주민등록번호 (birthdate로 사용)
+            gender,                                   // 성별
+            fullAddress,                              // 주소
+            birthField.getText().trim().replace("-", "") // RNN (하이픈 제거)
+        );
         
-        return patient;
+        return signupRequest;
     }
 
-    private String generatePatientId() {
-        // 환자 ID 생성 (P + 현재 시간 기반)
-        String timestamp = String.valueOf(System.currentTimeMillis());
-        return "P" + timestamp.substring(timestamp.length() - 8);
-    }
+
 
     private boolean isValidEmail(String email) {
         // 간단한 이메일 형식 검증
