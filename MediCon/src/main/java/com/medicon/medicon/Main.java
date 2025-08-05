@@ -33,9 +33,9 @@ public class Main extends Application {
         stage.setScene(scene);
 
         // 최소 크기 설정
-//        stage.setMinWidth(1280);
-//        stage.setMinHeight(720);
-//        stage.setMaximized(true);
+        stage.setMinWidth(1280);
+        stage.setMinHeight(720);
+        stage.setMaximized(true);
         stage.show();
     }
 
