@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.medicon.medicon.controller.AdminTopBarController"
+      styleClass="top-bar" stylesheets="@../../style/TopBar.css">
+
+    <!-- 병원 로고 -->
+    <ImageView fx:id="logoImg" fitHeight="34" fitWidth="34"/>
+
+    <!-- 경영관리 탭 버튼 -->
+    <Button fx:id="businessBtn" text="경영관리" styleClass="selected"/>
+
+    <!-- 직원관리 탭 버튼 -->
+    <Button fx:id="staffBtn" text="직원관리"/>
+
+    <!-- 로그아웃 버튼 (오른쪽 정렬을 위해 HBox에 추가) -->
+    <Pane HBox.hgrow="ALWAYS"/>
+    <Button fx:id="logoutBtn" text="로그아웃" styleClass="logout-button"/>
+
+</HBox>

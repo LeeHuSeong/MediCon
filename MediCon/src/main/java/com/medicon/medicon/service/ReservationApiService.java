@@ -53,4 +53,35 @@ public class ReservationApiService {
             }
         });
     }
+
+    // 날짜별 예약 조회
+    public CompletableFuture<List<ReservationDTO>> getReservationsByDate(String date) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                String urlString = BASE_URL + "/by-date?date=" + URLEncoder.encode(date, "UTF-8");
+                URL url = new URL(urlString);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Content-Type", "application/json");
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode == 200) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
+                    return objectMapper.readValue(response.toString(), new TypeReference<List<ReservationDTO>>() {});
+                } else {
+                    System.err.println("날짜별 예약 조회 실패: " + responseCode);
+                    return new ArrayList<>();
+                }
+            } catch (Exception e) {
+                System.err.println("날짜별 예약 조회 오류: " + e.getMessage());
+                return new ArrayList<>();
+            }
+        });
+    }
 }

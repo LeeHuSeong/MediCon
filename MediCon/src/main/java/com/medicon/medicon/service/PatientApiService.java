@@ -121,7 +121,42 @@ public class PatientApiService {
                     return null;
                 }
             } catch (Exception e) {
-                System.err.println("❌ 네트워크 오류: " + e.getMessage());
+                System.err.println(" 네트워크 오류: " + e.getMessage());
+                e.printStackTrace();
+                return null;
+            }
+        });
+    }
+
+    // patient_id로 환자 단건 조회 - GET /api/patient/by-patient-id/{patientId}
+    public CompletableFuture<PatientDTO> getPatientByPatientIdAsync(String patientId) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                String encodedPatientId = URLEncoder.encode(patientId, StandardCharsets.UTF_8);
+                URL url = new URL(BASE_URL + "/by-patient-id/" + encodedPatientId);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Content-Type", "application/json");
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode == 200) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
+
+                    PatientDTO patient = objectMapper.readValue(response.toString(), PatientDTO.class);
+                    System.out.println("patient_id로 환자 조회 성공: " + patient.getName());
+                    return patient;
+                } else {
+                    System.err.println("patient_id로 환자 조회 실패: " + responseCode);
+                    return null;
+                }
+            } catch (Exception e) {
+                System.err.println(" 네트워크 오류: " + e.getMessage());
                 e.printStackTrace();
                 return null;
             }

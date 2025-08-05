@@ -10,17 +10,19 @@ module com.medicon.medicon {
     requires eu.hansolo.tilesfx;
     requires com.fasterxml.jackson.databind;
     requires com.google.gson;
-
-
-    opens com.medicon.medicon.controller to javafx.fxml;
-    opens com.medicon.medicon.controller.salary;
-    opens com.medicon.medicon.model to com.google.gson;
-    exports com.medicon.medicon;
-    opens com.medicon.medicon.controller.staff;
+    requires java.desktop;
 
     opens com.medicon.medicon.controller.medic to javafx.fxml;
     opens com.medicon.medicon.controller.patient to javafx.fxml;
 
-    exports com.medicon.medicon.model to com.fasterxml.jackson.databind;
     opens com.medicon.medicon.controller.medic.patient to javafx.fxml;
+    opens com.medicon.medicon.controller;
+
+    opens com.medicon.medicon.controller.sale to javafx.fxml;
+    opens com.medicon.medicon.controller.salary;
+    opens com.medicon.medicon.model to com.google.gson;
+    opens com.medicon.medicon.controller.staff;
+    exports com.medicon.medicon.controller;
+    exports com.medicon.medicon;
+    exports com.medicon.medicon.model to com.fasterxml.jackson.databind;
 }
