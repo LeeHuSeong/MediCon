@@ -242,14 +242,14 @@ public class QuestionnaireManagementController implements Initializable {
     private void handleAddQuestionnaire(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/AddQuestionnaireForm.fxml"));
-            Parent popupRoot = loader.load();
+            Parent Root = loader.load();
 
-            Stage popupStage = new Stage();
+            Stage stage = new Stage();
 //            popupStage.initModality(Modality.APPLICATION_MODAL);
-            popupStage.setTitle("추가 문진 작성");
-            popupStage.setScene(new Scene(popupRoot));
-            popupStage.setResizable(false);
-            popupStage.show();
+            stage.setTitle("추가 문진 작성");
+            stage.setScene(new Scene(Root));
+            stage.setResizable(false);
+            stage.show();
 
         } catch (IOException e) {
             e.printStackTrace();

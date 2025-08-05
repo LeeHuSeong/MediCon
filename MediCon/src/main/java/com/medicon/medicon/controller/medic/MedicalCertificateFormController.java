@@ -5,24 +5,29 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ResourceBundle;
 
-public class MedicalCertificateController implements Initializable {
+public class MedicalCertificateFormController implements Initializable {
 
     // ▶ 기본 환자 정보
     @FXML private TextField nameField;
     @FXML private TextField rrnField;
+
+    @FXML private ToggleGroup genderGroup;
     @FXML private RadioButton maleRadio;
     @FXML private RadioButton femaleRadio;
+
     @FXML private TextField addressField;
     @FXML private TextField phoneNumField;             // 휴대전화번호
 
@@ -57,10 +62,11 @@ public class MedicalCertificateController implements Initializable {
 
     // ▶ 템플릿에 값 채워넣기
     private String fillTemplate(String template) {
+        String gender = ((RadioButton) genderGroup.getSelectedToggle()).getText();
         return template
                 .replace("${name}", nameField.getText())
                 .replace("${rrn}", rrnField.getText())
-                .replace("${gender}", maleRadio.isSelected() ? "남자" : "여자")
+                .replace("${gender}", gender)
                 .replace("${address}", addressField.getText())
                 .replace("${phoneNum}", phoneNumField.getText())                          // 휴대전화
                 .replace("${hospitalName}", hospitalNameField.getText())                  // 병원명
@@ -79,15 +85,32 @@ public class MedicalCertificateController implements Initializable {
     // ▶ HTML 임시 파일로 미리보기 실행
     private void previewHtml(String filledHtml) {
         try {
-            File tempFile = File.createTempFile("medical_certificate_", ".html");
-            try (FileWriter writer = new FileWriter(tempFile, StandardCharsets.UTF_8)) {
-                writer.write(filledHtml);
+            // 1. output 폴더 생성
+            Path outputDir = Paths.get("output");
+            Files.createDirectories(outputDir);
+
+            // 2. HTML 저장
+            Path htmlPath = outputDir.resolve("medical_certificate_preview.html");
+            Files.writeString(htmlPath, filledHtml);
+
+            // 3. CSS 복사 - classpath 기반
+            try (InputStream cssStream = getClass().getResourceAsStream("/com/medicon/medicon/templates/CertificateStyle.css")) {
+                if (cssStream == null) {
+                    throw new FileNotFoundException("DiagnosisStyle.css 파일을 classpath에서 찾을 수 없습니다.");
+                }
+
+                Path cssTarget = outputDir.resolve("CertificateStyle.css");
+                Files.copy(cssStream, cssTarget, StandardCopyOption.REPLACE_EXISTING);
             }
-            Desktop.getDesktop().browse(tempFile.toURI());
+
+            // 4. 브라우저로 열기
+            Desktop.getDesktop().browse(htmlPath.toUri());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     // ▶ 미리보기 버튼 이벤트
     @FXML
@@ -121,6 +144,9 @@ public class MedicalCertificateController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // 초기화 로직 필요 시 작성
+        genderGroup = new ToggleGroup();
+        maleRadio.setToggleGroup(genderGroup);
+        femaleRadio.setToggleGroup(genderGroup);
+        maleRadio.setSelected(true); // 기본 선택
     }
 }
