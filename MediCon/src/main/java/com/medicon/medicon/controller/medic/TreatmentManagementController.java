@@ -42,9 +42,8 @@ public class TreatmentManagementController {
     // 최근 문진 라벨들
     @FXML private Label interviewDateLabel;
     @FXML private Label symptomLabel;
+    @FXML private Label symptomDurationLabel;
     @FXML private Label historyLabel;
-    @FXML private HBox symptoms;
-    @FXML private HBox onsetOfSymptoms;
     @FXML private Label allergyLabel;
     @FXML private Label medicationLabel;
     @FXML private TextArea symytomElse;
@@ -99,7 +98,7 @@ public class TreatmentManagementController {
             loadPatientsFromReservations(reservations);
         }).exceptionally(throwable -> {
             Platform.runLater(() -> {
-                showAlert("오류", "예약 환자 조회 중 오류가 발생했습니다: " + throwable.getMessage());
+                showAlert("오류", "예약 조회 중 오류가 발생했습니다: " + throwable.getMessage());
             });
             return null;
         });
@@ -109,14 +108,15 @@ public class TreatmentManagementController {
      * 예약 목록에서 환자 정보를 가져와서 리스트에 표시
      */
     private void loadPatientsFromReservations(List<ReservationDTO> reservations) {
-        ObservableList<PatientDTO> todayPatients = FXCollections.observableArrayList();
+        ObservableList<PatientDTO> patientList = FXCollections.observableArrayList();
         
+        // 각 예약에 대해 환자 정보를 가져옴
         for (ReservationDTO reservation : reservations) {
             patientApiService.getPatientByPatientIdAsync(reservation.getPatient_id()).thenAccept(patient -> {
                 if (patient != null) {
                     Platform.runLater(() -> {
-                        if (!todayPatients.contains(patient)) {
-                            todayPatients.add(patient);
+                        if (!patientList.contains(patient)) {
+                            patientList.add(patient);
                         }
                     });
                 }
@@ -124,7 +124,7 @@ public class TreatmentManagementController {
         }
         
         Platform.runLater(() -> {
-            patientListView.setItems(todayPatients);
+            patientListView.setItems(patientList);
             patientListView.setCellFactory(param -> new ListCell<PatientDTO>() {
                 @Override
                 protected void updateItem(PatientDTO item, boolean empty) {
@@ -132,7 +132,7 @@ public class TreatmentManagementController {
                     if (empty || item == null) {
                         setText(null);
                     } else {
-                        setText(item.getName() + " (" + item.getGender() + ", " + calculateAge(item.getRnn()) + "세)");
+                        setText(item.getName() + " (" + item.getGender() + ")");
                     }
                 }
             });
@@ -144,31 +144,43 @@ public class TreatmentManagementController {
      */
     @FXML
     private void handleSearch(ActionEvent event) {
-        String searchTerm = searchField.getText().trim();
-        if (searchTerm.isEmpty()) {
+        String keyword = searchField.getText().trim();
+        if (keyword.isEmpty()) {
             showAlert("알림", "검색어를 입력해주세요.");
             return;
         }
         
-        patientApiService.getPatientsByNameAsync(searchTerm).thenAccept(patients -> {
+        patientApiService.getPatientsByNameAsync(keyword).thenAccept(patients -> {
             Platform.runLater(() -> {
-                if (patients == null || patients.isEmpty()) {
+                if (patients != null && !patients.isEmpty()) {
+                    ObservableList<PatientDTO> patientList = FXCollections.observableArrayList(patients);
+                    patientListView.setItems(patientList);
+                    patientListView.setCellFactory(param -> new ListCell<PatientDTO>() {
+                        @Override
+                        protected void updateItem(PatientDTO item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty || item == null) {
+                                setText(null);
+                            } else {
+                                setText(item.getName() + " (" + item.getGender() + ")");
+                            }
+                        }
+                    });
+                } else {
                     showAlert("알림", "검색 결과가 없습니다.");
                     patientListView.getItems().clear();
-                } else {
-                    patientListView.setItems(FXCollections.observableArrayList(patients));
                 }
             });
         }).exceptionally(throwable -> {
             Platform.runLater(() -> {
-                showAlert("오류", "환자 검색 중 오류가 발생했습니다: " + throwable.getMessage());
+                showAlert("오류", "검색 중 오류가 발생했습니다: " + throwable.getMessage());
             });
             return null;
         });
     }
 
     /**
-     * 선택된 환자의 상세 정보 로드
+     * 환자 상세 정보 로드
      */
     private void loadPatientDetails(PatientDTO patient) {
         // 환자 기본 정보 표시
@@ -177,23 +189,17 @@ public class TreatmentManagementController {
         patientAgeLabel.setText(String.valueOf(calculateAge(patient.getRnn())));
         patientPhoneLabel.setText(patient.getPhone());
         
-        // 해당 환자의 오늘 예약 찾기
-        LocalDate today = LocalDate.now();
-        String todayStr = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        
+        // 해당 환자의 예약 정보를 가져와서 최근 문진 로드
         reservationApiService.getReservationsByPatientId(patient.getPatient_id()).thenAccept(reservations -> {
-            ReservationDTO todayReservation = null;
-            for (ReservationDTO reservation : reservations) {
-                if (todayStr.equals(reservation.getDate())) {
-                    todayReservation = reservation;
-                    break;
-                }
-            }
-            
-            if (todayReservation != null) {
-                selectedReservation = todayReservation;
+            if (reservations != null && !reservations.isEmpty()) {
+                // 예약을 날짜순으로 정렬 (최신순)
+                reservations.sort((r1, r2) -> r2.getDate().compareTo(r1.getDate()));
+                selectedReservation = reservations.get(0); // 가장 최근 예약
+                
                 // 최근 문진 정보 로드
-                loadRecentMedicalInterview(patient.getUid(), patient.getPatient_id(), todayReservation.getReservation_id());
+                loadRecentMedicalInterview(patient.getUid(), patient.getPatient_id(), selectedReservation.getReservation_id());
+            } else {
+                clearMedicalInterviewDisplay();
             }
         });
     }
@@ -223,31 +229,12 @@ public class TreatmentManagementController {
      * 문진 정보를 UI에 표시
      */
     private void displayMedicalInterview(MedicalInterviewDTO interview) {
-        // 증상 표시
-        symptomLabel.setText(interview.getSymptoms());
-        
-        // 과거 병력 표시
-        historyLabel.setText(interview.getPast_medical_history());
-        
-        // 알레르기 표시
-        allergyLabel.setText(interview.getAllergy());
-        
-        // 복용 중인 약 표시
-        medicationLabel.setText(interview.getCurrent_medication());
-        
-        // 증상 시작 시점 표시 (라디오 버튼 설정)
-        String symptomDuration = interview.getSymptom_duration();
-        if (symptomDuration != null) {
-            for (javafx.scene.Node node : onsetOfSymptoms.getChildren()) {
-                if (node instanceof RadioButton) {
-                    RadioButton radioButton = (RadioButton) node;
-                    if (radioButton.getText().trim().equals(symptomDuration.trim())) {
-                        radioButton.setSelected(true);
-                        break;
-                    }
-                }
-            }
-        }
+        // 데이터베이스의 실제 값들을 표시
+        symptomLabel.setText(interview.getSymptoms() != null ? interview.getSymptoms() : "-");
+        symptomDurationLabel.setText(interview.getSymptom_duration() != null ? interview.getSymptom_duration() : "-");
+        historyLabel.setText(interview.getPast_medical_history() != null ? interview.getPast_medical_history() : "-");
+        allergyLabel.setText(interview.getAllergy() != null ? interview.getAllergy() : "-");
+        medicationLabel.setText(interview.getCurrent_medication() != null ? interview.getCurrent_medication() : "-");
     }
 
     /**
@@ -256,24 +243,11 @@ public class TreatmentManagementController {
     private void clearMedicalInterviewDisplay() {
         interviewDateLabel.setText("");
         symptomLabel.setText("");
+        symptomDurationLabel.setText("");
         historyLabel.setText("");
         allergyLabel.setText("");
         medicationLabel.setText("");
         symytomElse.clear();
-        
-        // 라디오 버튼 선택 해제
-        for (javafx.scene.Node node : onsetOfSymptoms.getChildren()) {
-            if (node instanceof RadioButton) {
-                ((RadioButton) node).setSelected(false);
-            }
-        }
-        
-        // 체크박스 선택 해제
-        for (javafx.scene.Node node : symptoms.getChildren()) {
-            if (node instanceof CheckBox) {
-                ((CheckBox) node).setSelected(false);
-            }
-        }
     }
 
     /**
@@ -327,11 +301,30 @@ public class TreatmentManagementController {
             stage.setTitle("진료확인서");
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
             stage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("오류", "진료확인서 창을 열 수 없습니다: " + e.getMessage());
+        }
+    }
+    @FXML
+    private void handleDiagnosisCertificate(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/DiagnosisCertificateForm.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("진단서");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("오류", "진단서 창을 열 수 없습니다: " + e.getMessage());
         }
     }
 }

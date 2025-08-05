@@ -76,15 +76,16 @@ public class PatientDAOImpl implements PatientDAO {
         try {
             System.out.println("환자 단건 조회 시작 - uid: " + uid);
 
-            // 새로운 구조: patients 컬렉션에서 문서 ID로 조회
-            DocumentReference docRef = db.collection("patients").document(uid);
-            ApiFuture<DocumentSnapshot> future = docRef.get();
-            DocumentSnapshot doc = future.get();
+            // 새로운 구조: patients 컬렉션에서 uid 필드로 검색
+            ApiFuture<QuerySnapshot> future = db.collection("patients")
+                    .whereEqualTo("uid", uid)
+                    .get();
+            List<QueryDocumentSnapshot> docs = future.get().getDocuments();
 
-            if (doc.exists()) {
-                PatientDTO patient = doc.toObject(PatientDTO.class);
+            if (!docs.isEmpty()) {
+                PatientDTO patient = docs.get(0).toObject(PatientDTO.class);
                 if (patient.getPatient_id() == null) {
-                    patient.setPatient_id(doc.getId());
+                    patient.setPatient_id(docs.get(0).getId());
                 }
                 System.out.println("환자 단건 조회 완료 - " + patient.getName());
                 return patient;
@@ -155,13 +156,22 @@ public class PatientDAOImpl implements PatientDAO {
         try {
             System.out.println("환자 삭제 시작 - uid: " + uid);
 
-            // 새로운 구조: patients 컬렉션에서 직접 삭제
-            db.collection("patients")
-                    .document(uid)
-                    .delete()
+            // 새로운 구조: patients 컬렉션에서 uid 필드로 검색 후 삭제
+            ApiFuture<QuerySnapshot> future = db.collection("patients")
+                    .whereEqualTo("uid", uid)
                     .get();
+            List<QueryDocumentSnapshot> docs = future.get().getDocuments();
 
-            System.out.println("환자 삭제 완료 - uid: " + uid);
+            if (!docs.isEmpty()) {
+                String docId = docs.get(0).getId();
+                db.collection("patients")
+                        .document(docId)
+                        .delete()
+                        .get();
+                System.out.println("환자 삭제 완료 - uid: " + uid);
+            } else {
+                System.out.println("삭제할 환자를 찾을 수 없음 - uid: " + uid);
+            }
 
         } catch (Exception e) {
             System.err.println("환자 삭제 실패: " + e.getMessage());

@@ -45,8 +45,7 @@ public class PatientService {
             data.put("createdAt", System.currentTimeMillis());
             data.put("patient_id", patientId);
 
-            // 경로: patients/{uid}
-            db.collection("patients").document(uid).set(data).get();
+            db.collection("patients").document(patientId).set(data).get();
 
             String jwt = jwtUtil.generateToken(uid, req.getEmail());
             return new SignupResponse(true, "환자 등록 성공", jwt);

@@ -7,12 +7,18 @@ import com.medicon.medicon.service.PatientApiService;
 import com.medicon.medicon.service.ReservationApiService;
 import com.medicon.medicon.service.MedicalInterviewApiService;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -29,9 +35,12 @@ public class QuestionnaireManagementController implements Initializable {
     @FXML private ListView<PatientDTO> patientListView;
     @FXML private Label interviewDateLabel;
     @FXML private Label symptomLabel;
+    @FXML private Label symptomDurationLabel;
     @FXML private Label historyLabel;
     @FXML private Label allergyLabel;
     @FXML private Label medicationLabel;
+    @FXML private TextArea symytomElse;
+    @FXML private Button addQuestionnaireButton;
     @FXML private ListView<String> historyQuestionnaireListView;
 
     private final PatientApiService patientApiService = new PatientApiService();
@@ -141,10 +150,12 @@ public class QuestionnaireManagementController implements Initializable {
                                 MedicalInterviewDTO interview = interviews.get(0);
                                 // 예약 날짜를 날짜 라벨에 설정
                                 interviewDateLabel.setText(latestReservation.getDate());
-                                symptomLabel.setText(interview.getSymptoms());
-                                historyLabel.setText(interview.getPast_medical_history());
-                                allergyLabel.setText(interview.getAllergy());
-                                medicationLabel.setText(interview.getCurrent_medication());
+                                // 데이터베이스의 실제 값들을 표시
+                                symptomLabel.setText(interview.getSymptoms() != null ? interview.getSymptoms() : "-");
+                                symptomDurationLabel.setText(interview.getSymptom_duration() != null ? interview.getSymptom_duration() : "-");
+                                historyLabel.setText(interview.getPast_medical_history() != null ? interview.getPast_medical_history() : "-");
+                                allergyLabel.setText(interview.getAllergy() != null ? interview.getAllergy() : "-");
+                                medicationLabel.setText(interview.getCurrent_medication() != null ? interview.getCurrent_medication() : "-");
                             } else {
                                 clearInterviewInfo();
                             }
@@ -200,9 +211,11 @@ public class QuestionnaireManagementController implements Initializable {
     private void clearInterviewInfo() {
         interviewDateLabel.setText("-");
         symptomLabel.setText("-");
+        symptomDurationLabel.setText("-");
         historyLabel.setText("-");
         allergyLabel.setText("-");
         medicationLabel.setText("-");
+        symytomElse.clear();
         historyQuestionnaireListView.getItems().clear();
     }
 
@@ -226,8 +239,20 @@ public class QuestionnaireManagementController implements Initializable {
     }
 
     @FXML
-    private void handleAddQuestionnaire() {
-        // 문진 추가 기능 (추후 구현)
-        showInfo("문진 추가 기능은 추후 구현 예정입니다.");
+    private void handleAddQuestionnaire(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/AddQuestionnaireForm.fxml"));
+            Parent Root = loader.load();
+
+            Stage stage = new Stage();
+//            popupStage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("추가 문진 작성");
+            stage.setScene(new Scene(Root));
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
