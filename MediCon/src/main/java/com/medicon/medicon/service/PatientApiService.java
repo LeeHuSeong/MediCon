@@ -94,6 +94,7 @@ public class PatientApiService {
         });
     }
 
+
 //    // UID로 환자 단건 조회 - GET /api/patient/{uid}
 //    public CompletableFuture<PatientDTO> getPatientByUidAsync(String uid) {
 //        return CompletableFuture.supplyAsync(() -> {
@@ -156,7 +157,7 @@ public class PatientApiService {
                     return null;
                 }
             } catch (Exception e) {
-                System.err.println("❌ 네트워크 오류: " + e.getMessage());
+                System.err.println(" 네트워크 오류: " + e.getMessage());
                 e.printStackTrace();
                 return null;
             }
