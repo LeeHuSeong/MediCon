@@ -15,11 +15,8 @@
 <div class="certificate-box" id="certificate">
   <div class="title">진 &nbsp; 단 &nbsp; 서</div>
 
+  <div class="issue-date">차트번호: ${chartNumber}</div>
   <table>
-    <tr>
-      <th>차트번호</th>
-      <td colspan="6">${chartNumber}</td>
-    </tr>
     <tr>
       <th rowspan="3">진료환자</th>
       <th>성명</th>
@@ -83,17 +80,15 @@
   </table>
 
   <div class="footer">
-    상기 환자에 대해 위와 같이 진단하였음을 증명합니다.
-    <div class="issue-date">진단일: ${diagnosisDate}</div>
-    <div class="issue-date">발행일: ${issueDate}</div>
+    상기 환자에 대해 위와 같이 진단하였음을 증명합니다
   </div>
+  <br/>
+  <div class="issue-date">진단일: ${diagnosisDate}</div>
+  <div class="issue-date">발행일: ${issueDate}</div>
 
   <div class="hospital-info">
-    병원명: ${hospitalName}<br />
-    연락처: ${hospitalContact}<br />
-    면허번호: ${licenseNumber}<br />
-    발급의사 성명: ${doctorName} (서명 또는 인)<br />
-    원장: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (인)
+    발급의사 성명: &nbsp; ${doctorName} &nbsp; (서명 또는 인)<br/><br/>
+    원장: 황원장 (인)
   </div>
 
   <div class="bottom-center">◯◯종합병원</div>

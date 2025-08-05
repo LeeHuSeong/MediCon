@@ -1,0 +1,160 @@
+package com.medicon.medicon.controller.medic;
+
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
+import java.awt.*;
+import java.io.*;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.ResourceBundle;
+
+public class DiagnosisCertificateFormController implements Initializable {
+    @FXML private TextField chartNumberField;          // 차트번호
+    // ▶ 기본 환자 정보
+    @FXML private TextField nameField; // 이름
+    @FXML private TextField rrnField; // 주민등록번호
+
+    @FXML private ToggleGroup genderGroup;
+    @FXML private RadioButton maleRadio;
+    @FXML private RadioButton femaleRadio;
+
+    @FXML private TextField phoneNumField; // 휴대전화번호
+    @FXML private TextField addressField; // 주소
+    // ▶ 병원 정보
+    @FXML private TextField hospitalNameField;         // 병원명
+    @FXML private TextField hospitalPhoneNumField;     // 병원 연락처
+    @FXML private TextField departmentField;        // 진료과
+    // ▶ 진료 정보
+    @FXML private TextField doctorNameField; // 의사 명
+    @FXML private TextField licenseNumberField; // 면허번호
+    @FXML private TextField diagnosisField; //병명
+    @FXML private TextField startSickDayField;         // 발병일
+    @FXML private TextField hospitalizationPeriodField; // 입원기간
+    @FXML private TextField outpatientPeriodField; //통원기간
+    @FXML private TextField dischargeDateField;        // 퇴원일
+    @FXML private TextArea doctorOpinionField;        // 진료경과 및 소견
+    @FXML private TextField notesField; //비고
+    @FXML private TextField propertiesField;           // 진단 목적
+    @FXML private DatePicker diagnosisDatePicker;      // 진단일
+    @FXML private DatePicker issueDatePicker; // 발행일
+
+    // ▶ HTML 템플릿 불러오기
+    private String loadHtmlTemplate() {
+        try (InputStream is = getClass().getResourceAsStream("/com/medicon/medicon/templates/diagnosis_certificate_template.html")) {
+            if (is == null) {
+                System.err.println("템플릿 파일을 찾을 수 없습니다.");
+                return null;
+            }
+            return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // ▶ 템플릿에 값 채워넣기
+    private String fillTemplate(String template) {
+        String gender = ((RadioButton) genderGroup.getSelectedToggle()).getText();
+        return template
+                .replace("${chartNumber}", chartNumberField.getText())
+                .replace("${name}", nameField.getText())
+                .replace("${rrn}", rrnField.getText())
+                .replace("${gender}", gender)
+                .replace("${phoneNum}", phoneNumField.getText())
+                .replace("${address}", addressField.getText())
+                .replace("${hospitalName}", hospitalNameField.getText())
+                .replace("${hospitalPhoneNum}", hospitalPhoneNumField.getText())
+                .replace("${department}", departmentField.getText())
+                .replace("${doctorName}", doctorNameField.getText())
+                .replace("${licenseNumber}", licenseNumberField.getText())
+                .replace("${diagnosis}", diagnosisField.getText())
+                .replace("${startSickDay}", startSickDayField.getText())
+                .replace("${hospitalizationPeriod}", hospitalizationPeriodField.getText())
+                .replace("${outpatientPeriod}", outpatientPeriodField.getText())
+                .replace("${dischargeDate}", dischargeDateField.getText())
+                .replace("${doctorOpinion}", doctorOpinionField.getText())
+                .replace("${notes}", notesField.getText())
+                .replace("${properties}", propertiesField.getText())
+                .replace("${diagnosisDate}", diagnosisDatePicker.getValue() != null ? diagnosisDatePicker.getValue().toString() : "")
+                .replace("${issueDate}", issueDatePicker.getValue() != null ? issueDatePicker.getValue().toString() : "");
+
+    }
+
+
+    // ▶ HTML 임시 파일로 미리보기 실행
+    private void previewHtml(String filledHtml) {
+        try {
+            // 1. output 폴더 생성
+            Path outputDir = Paths.get("output");
+            Files.createDirectories(outputDir);
+
+            // 2. HTML 저장
+            Path htmlPath = outputDir.resolve("diagnosis_certificate_preview.html");
+            Files.writeString(htmlPath, filledHtml);
+
+            // 3. CSS 복사 - classpath 기반
+            try (InputStream cssStream = getClass().getResourceAsStream("/com/medicon/medicon/templates/DiagnosisStyle.css")) {
+                if (cssStream == null) {
+                    throw new FileNotFoundException("DiagnosisStyle.css 파일을 classpath에서 찾을 수 없습니다.");
+                }
+
+                Path cssTarget = outputDir.resolve("DiagnosisStyle.css");
+                Files.copy(cssStream, cssTarget, StandardCopyOption.REPLACE_EXISTING);
+            }
+
+            // 4. 브라우저로 열기
+            Desktop.getDesktop().browse(htmlPath.toUri());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // ▶ 미리보기 버튼 이벤트
+    @FXML
+    private void handlePrintPreview() {
+        String template = loadHtmlTemplate();
+        if (template == null) return;
+
+        String filledHtml = fillTemplate(template);
+        previewHtml(filledHtml);
+    }
+
+    // ▶ 저장 버튼 이벤트
+    @FXML
+    private void handleSave() {
+        String title = nameField.getText();
+        // TODO: 저장 처리 (예: DB 저장 또는 상위 화면으로 전달 등)
+        System.out.println("제목: " + title);
+        closeWindow();
+    }
+
+    // ▶ 창 닫기 이벤트
+    @FXML
+    private void handleClose() {
+        closeWindow();
+    }
+
+    private void closeWindow() {
+        Stage stage = (Stage) nameField.getScene().getWindow();
+        stage.close();
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        genderGroup = new ToggleGroup();
+        maleRadio.setToggleGroup(genderGroup);
+        femaleRadio.setToggleGroup(genderGroup);
+        maleRadio.setSelected(true); // 기본 선택
+    }
+}

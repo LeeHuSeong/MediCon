@@ -301,11 +301,30 @@ public class TreatmentManagementController {
             stage.setTitle("진료확인서");
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
             stage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("오류", "진료확인서 창을 열 수 없습니다: " + e.getMessage());
+        }
+    }
+    @FXML
+    private void handleDiagnosisCertificate(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/DiagnosisCertificateForm.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("진단서");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("오류", "진단서 창을 열 수 없습니다: " + e.getMessage());
         }
     }
 }

@@ -15,7 +15,7 @@ body {
 
 .title {
     text-align: center;
-    font-size: 24px;
+    font-size: 30px;
     font-weight: bold;
     margin-bottom: 30px;
 }
@@ -26,12 +26,12 @@ table {
     border-collapse: collapse;
     table-layout: fixed; /* 열 너비 강제 */
     margin-bottom: 30px;
-    font-size: 15px;
+    font-size: 16px;
 }
 
 th, td {
     border: 1px solid #000;
-    padding: 8px;
+    padding: 7px;
     text-align: left;
     vertical-align: middle;
     word-wrap: break-word;
@@ -60,6 +60,7 @@ th {
 
 .issue-date {
     margin-top: 10px;
+    font-size: 14px;
 }
 
 .hospital-info {
