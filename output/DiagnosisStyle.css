@@ -15,23 +15,23 @@ body {
 
 .title {
     text-align: center;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: bold;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 /* 테이블 기본 설정 */
 table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed;
+    table-layout: fixed; /* 열 너비 강제 */
     margin-bottom: 30px;
     font-size: 16px;
 }
 
 th, td {
     border: 1px solid #000;
-    padding: 10px;
+    padding: 7px;
     text-align: left;
     vertical-align: middle;
     word-wrap: break-word;
@@ -39,21 +39,19 @@ th, td {
     box-sizing: border-box;
 }
 
-/* 제목 열 스타일 */
+/* 제목 셀 */
 th {
     background-color: #f0f0f0;
     font-weight: bold;
+    text-align: center;         /* 가로 정렬 */
+    vertical-align: middle;     /* 세로 정렬 */
+}
+.align-top-left {
+    text-align: left;
+    vertical-align: top;
 }
 
-/* colspan 대응 - 기본 너비 유지 */
-td[colspan="3"] {
-    width: 75%;
-}
-th[rowspan] {
-    width: 15%;
-}
-
-/* 푸터 텍스트 영역 */
+/* 푸터 */
 .footer {
     margin-top: 30px;
     text-align: center;
@@ -62,6 +60,7 @@ th[rowspan] {
 
 .issue-date {
     margin-top: 10px;
+    font-size: 14px;
 }
 
 .hospital-info {
@@ -77,7 +76,7 @@ th[rowspan] {
     font-weight: bold;
 }
 
-/* 버튼 영역 */
+/* 버튼 */
 .actions {
     text-align: center;
     margin: 30px 0;
@@ -113,14 +112,15 @@ button:hover {
         padding: 8px 15px;
     }
 }
+
+/* 인쇄 시 버튼 숨김 */
 @media print {
     .actions {
         display: none !important;
     }
 }
 
-/* 보조용 클래스: JS에서도 적용 */
+/* JS 대응용 */
 .print-mode .actions {
     display: none !important;
 }
-
