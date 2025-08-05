@@ -6,6 +6,7 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.medicon.medicon.controller.staff.StaffContainerController"
+            stylesheets="@../../../style/side_tab.css"
             prefWidth="1280" prefHeight="720">
 
     <!-- 좌측 탭 메뉴 -->
