@@ -25,30 +25,18 @@
         <VBox minWidth="300" spacing="10" prefWidth="700">
             <Label maxWidth="Infinity" styleClass="section-title" text="최근 문진" />
             <GridPane hgap="10" prefHeight="578.0" maxWidth="Infinity" VBox.vgrow="ALWAYS" vgap="10">
+                <!-- 날짜만 표시하는 라벨 -->
                 <Label fx:id="interviewDateLabel" styleClass="form-labelBig" text="" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
-                <Label fx:id="symptomLabel" styleClass="form-labelBig" text="감기인가 코로나인가" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                 <Label styleClass="form-labelBig" text="과거 병력 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
                 <Label fx:id="historyLabel" styleClass="form-labelBig" text="코로나" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                 <Label styleClass="form-labelBig" text="현재 증상 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-                <HBox fx:id="symptoms" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
-                    <CheckBox text="기침  " />
-                    <CheckBox text="발열  " />
-                    <CheckBox text="가래  " />
-                    <CheckBox text="두통  " />
-                    <CheckBox text="복통  " />
-                    <CheckBox text="기타  "/>
-                </HBox>
+                <Label fx:id="symptomLabel" styleClass="form-labelBig" text="감기인가 코로나인가" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
                 <Label styleClass="form-labelBig" text="증상시작시점 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-                <HBox fx:id="onsetOfSymptoms" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
-                    <RadioButton text="오늘  " fx:id="Radio1" />
-                    <RadioButton text="어제  " fx:id="Radio2"/>
-                    <RadioButton text="3일 전  " fx:id="Radio3"/>
-                    <RadioButton text="일주일 전  " fx:id="Radio4"/>
-                    <RadioButton text="기타  " fx:id="Radio5"/>
-                </HBox>
+                <Label fx:id="symptomDurationLabel" styleClass="form-labelBig" text="오늘" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
                 <Label styleClass="form-labelBig" text="알레르기 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
                 <Label fx:id="allergyLabel" styleClass="form-labelBig" text="갑각류" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
