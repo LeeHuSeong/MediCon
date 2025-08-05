@@ -1,6 +1,4 @@
-package com.medicon.server.dto.signup;
-
-import com.medicon.server.dto.auth.SignupRequest;
+package com.medicon.server.dto.auth.signup;
 
 public class DoctorSignupRequest extends SignupRequest {
     private String rank; // 인턴, 레지던트, 교수 등

@@ -1,10 +1,9 @@
 package com.medicon.server.controller;
 
 import com.medicon.server.dto.common.ApiResponse;
-import com.medicon.server.dto.salary.SalaryRecordRequest;
-import com.medicon.server.dto.signup.DoctorSignupRequest;
-import com.medicon.server.dto.signup.NurseSignupRequest;
-import com.medicon.server.dto.signup.SignupResponse;
+import com.medicon.server.dto.auth.signup.DoctorSignupRequest;
+import com.medicon.server.dto.auth.signup.NurseSignupRequest;
+import com.medicon.server.dto.auth.signup.SignupResponse;
 import com.medicon.server.dto.user.UserDTO;
 import com.medicon.server.service.AuthService;
 import com.medicon.server.service.StaffService;
