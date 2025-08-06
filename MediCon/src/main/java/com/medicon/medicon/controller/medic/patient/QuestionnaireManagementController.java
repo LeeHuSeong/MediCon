@@ -6,7 +6,7 @@ import com.medicon.medicon.model.ReservationDTO;
 import com.medicon.medicon.service.PatientApiService;
 import com.medicon.medicon.service.ReservationApiService;
 import com.medicon.medicon.service.MedicalInterviewApiService;
-import com.medicon.medicon.controller.medic.form.AddQuestionnaireFormController;
+import com.medicon.medicon.controller.medic.AddQuestionnaireFormController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
