@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane stylesheets="@../../../../style/ComponentStyle.css" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.medicon.medicon.controller.medic.form.TreatmentHistoryFormController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <!-- 과거 진료 이력 리스트 -->
+    <VBox AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0">
+        <Label text="과거 진료 이력" styleClass="section-title" maxWidth="Infinity"/>
+        <ListView fx:id="historyListView" />
+    </VBox>
+</AnchorPane>

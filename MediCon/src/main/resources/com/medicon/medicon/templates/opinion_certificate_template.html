@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>진료소견서</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="CertificateStyle.css">
+</head>
+<body>
+
+<div class="actions">
+    <button onclick="window.print()">인쇄하기</button>
+    <button id="download">PDF 저장</button>
+</div>
+
+<div class="certificate-box" id="certificate">
+    <div class="title">진료소견서</div>
+
+    <!-- 발급 정보 -->
+    <div class="issue-info">
+        차트번호: ${chartNumber}<br/>
+        진료일: ${visitDate}
+    </div>
+
+    <!-- 환자 정보 -->
+    <table>
+        <tr>
+            <th rowspan="3">환자 정보</th>
+            <th>성명</th>
+            <td colspan="2">${name}</td>
+            <th>주민번호</th>
+            <td colspan="2">${rrn}</td>
+        </tr>
+        <tr>
+            <th>성별</th>
+            <td colspan="2">${gender}</td>
+            <th>연락처</th>
+            <td colspan="2">${phoneNum}</td>
+        </tr>
+        <tr>
+            <th>주소</th>
+            <td colspan="5">${address}</td>
+        </tr>
+
+        <!-- 병원/진료 정보 -->
+        <tr>
+            <th rowspan="2">병원 정보</th>
+            <th>병원명</th>
+            <td colspan="2">${hospitalName}</td>
+            <th>병원 연락처</th>
+            <td colspan="2">${hospitalPhoneNum}</td>
+        </tr>
+        <tr>
+            <th>진료과</th>
+            <td colspan="5">${department}</td>
+        </tr>
+
+        <!-- 담당 의사 -->
+        <tr>
+            <th>담당 의사</th>
+            <td colspan="2">${doctorName}</td>
+            <th>면허번호</th>
+            <td colspan="3">${licenseNumber}</td>
+        </tr>
+
+        <!-- 진료소견 -->
+        <tr>
+            <th style="height: 120px;" colspan="2">진료경과 및 소견</th>
+            <td class="align-top-left" colspan="5">${doctorOpinion}</td>
+        </tr>
+        <tr>
+            <th style="height: 80px;" colspan="2">치료 및 추후 계획</th>
+            <td class="align-top-left" colspan="5">${treatmentPlan}</td>
+        </tr>
+
+        <!-- 비고 -->
+        <tr>
+            <th>비고</th>
+            <td colspan="6">${notes}</td>
+        </tr>
+    </table>
+
+    <!-- 하단 문구 -->
+    <div class="footer">
+        상기 환자에 대해 위와 같이 소견을 제시함.
+    </div>
+    <br/>
+    <div class="issue-info">발행일: ${issueDate}</div>
+
+    <!-- 의사 정보 -->
+    <div class="hospital-info">
+        발급 의사: ${doctorName} (서명 또는 인)<br/>
+        병원장: ${directorName} (인)
+    </div>
+
+    <div class="bottom-center">◯◯종합병원</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script>
+    document.getElementById("download").addEventListener("click", () => {
+        const element = document.getElementById("certificate");
+        html2pdf().set({
+            margin: 0.5,
+            filename: '진료소견서.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        }).from(element).save();
+    });
+</script>
+</body>
+</html>

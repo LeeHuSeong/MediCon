@@ -15,8 +15,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -24,7 +22,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public class TreatmentManagementController {
 
@@ -47,9 +44,6 @@ public class TreatmentManagementController {
     @FXML private Label allergyLabel;
     @FXML private Label medicationLabel;
     @FXML private TextArea symytomElse;
-    
-    // 진료확인서 버튼
-    @FXML private Button medicalCertificateBtn;
 
     private final PatientApiService patientApiService = new PatientApiService();
     private final ReservationApiService reservationApiService = new ReservationApiService();
@@ -231,7 +225,7 @@ public class TreatmentManagementController {
     private void displayMedicalInterview(MedicalInterviewDTO interview) {
         // 데이터베이스의 실제 값들을 표시
         symptomLabel.setText(interview.getSymptoms() != null ? interview.getSymptoms() : "-");
-        symptomDurationLabel.setText(interview.getSymptom_duration() != null ? interview.getSymptom_duration() : "-");
+                        symptomDurationLabel.setText(interview.getSymptom_duration() != null ? interview.getSymptom_duration() : "-");
         historyLabel.setText(interview.getPast_medical_history() != null ? interview.getPast_medical_history() : "-");
         allergyLabel.setText(interview.getAllergy() != null ? interview.getAllergy() : "-");
         medicationLabel.setText(interview.getCurrent_medication() != null ? interview.getCurrent_medication() : "-");
@@ -287,6 +281,27 @@ public class TreatmentManagementController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+    /**
+     * 과거문진기록 버튼 클릭 처리
+     */
+    @FXML
+    private void handleQuestionnaireHistory(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/Form/TreatmentHistoryForm.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("과거진료이력");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("오류", "과거진료이력 창을 열 수 없습니다: " + e.getMessage());
+        }
+    }
 
     /**
      * 진료확인서 버튼 클릭 처리
@@ -294,7 +309,7 @@ public class TreatmentManagementController {
     @FXML
     private void handleMedicalCertificate(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/MedicalCertificateForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/Form/AttendenceCertificateForm.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();
@@ -312,7 +327,7 @@ public class TreatmentManagementController {
     @FXML
     private void handleDiagnosisCertificate(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/DiagnosisCertificateForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/Form/DiagnosisCertificateForm.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();
@@ -325,6 +340,60 @@ public class TreatmentManagementController {
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("오류", "진단서 창을 열 수 없습니다: " + e.getMessage());
+        }
+    }
+    @FXML
+    private void handleOpinionCertificate(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/Form/OpinionCertificateForm.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("진료소견서");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("오류", "진료소견서 창을 열 수 없습니다: " + e.getMessage());
+        }
+    }
+    @FXML
+    private void handleReferralLetter(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/Form/ReferralLetterForm.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("진료의뢰서");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("오류", "진료의뢰서 창을 열 수 없습니다: " + e.getMessage());
+        }
+    }
+    @FXML
+    private void handlePerscription(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/Form/PrescriptionForm.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("처방전");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("오류", "처방전 창을 열 수 없습니다: " + e.getMessage());
         }
     }
 }

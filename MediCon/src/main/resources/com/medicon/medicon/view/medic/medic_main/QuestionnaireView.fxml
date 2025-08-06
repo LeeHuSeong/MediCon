@@ -51,7 +51,10 @@
                     <Insets left="20.0" right="20" />
                 </VBox.margin>
             </GridPane>
-            <Button fx:id="addQuestionnaireButton" onAction="#handleAddQuestionnaire" styleClass="button-blue" text="추가 문진 작성"/>
+            <HBox spacing="5" alignment="CENTER">
+                <Button fx:id="addQuestionnaireButton" onAction="#handleAddQuestionnaire" styleClass="button-blue" text="추가 문진 작성"/>
+                <Button fx:id="addReservationButton" onAction="#handleAddReservation" styleClass="button-lightblue" text="예약 추가"/>
+            </HBox>
         </VBox>
         <!-- 오른쪽 패널: 과거 문진 내역 -->
         <VBox minWidth="300" prefWidth="700" spacing="10" >
