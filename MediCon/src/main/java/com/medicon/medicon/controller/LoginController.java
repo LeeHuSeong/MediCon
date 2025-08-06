@@ -1,5 +1,6 @@
 package com.medicon.medicon.controller;
 
+import com.medicon.medicon.model.LoginResult;
 import com.medicon.medicon.service.AuthService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -66,7 +67,8 @@ public class LoginController {
 
     }
 
-    public void onLoginButtonClick() {
+    @FXML
+    private void onLoginButtonClick() {
         String email = idField.getText();
         String password = pwField.getText();
 
@@ -77,36 +79,45 @@ public class LoginController {
 
         new Thread(() -> {
             try {
-                // 핵심 로직 위임
-                String jwt = authService.loginAndGetJwt(email, password);
+                LoginResult result = authService.loginAndGetResult(email, password);
 
                 Platform.runLater(() -> {
-                    System.out.println("로그인 성공! JWT: " + jwt);
-                    // TODO: JWT 저장 로직
+                    if (!result.isSuccess() || result.getToken() == null) {
+                        showError("로그인 실패: " + result.getMessage());
+                        return;
+                    }
 
-                    // 로그인 성공 후 Main.fxml로 화면 전환
+                    System.out.println("로그인 성공: " + result.getUid() + ", 권한: " + result.getAuthority());
+                    // TODO: result.getToken() 저장 필요 시 처리
+
+                    String fxmlPath;
+                    String title;
+
+                    if (result.getAuthority() == 0) {
+                        fxmlPath = "/com/medicon/medicon/view/patient/patient_main/PatientMainView.fxml";
+                        title = "MediCon 환자 메인 화면";
+                    } else if (result.getAuthority() == 1 || result.getAuthority() == 2) {
+                        fxmlPath = "/com/medicon/medicon/view/medic/medic_main/MedicMain.fxml";
+                        title = "MediCon 메인 화면";
+                    } else {
+                        showError("권한 정보가 없거나 잘못된 사용자입니다.");
+                        return;
+                    }
+
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/MedicMain.fxml"));
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
                         Parent root = loader.load();
-                        Stage stage;
-
-                        if (loginButton.getScene() != null && loginButton.getScene().getWindow() instanceof Stage s) {
-                            stage = s;
-                        } else {
-                            showError("로그인 화면이 제대로 로드되지 않았습니다. 다시 시도해 주세요.");
-                            return;
-                        }
+                        Stage stage = (Stage) loginButton.getScene().getWindow();
 
                         stage.setScene(new Scene(root));
-                        stage.setTitle("MediCon 메인 화면");
-
-                        // 최소 크기 설정
+                        stage.setTitle(title);
                         stage.setMinWidth(1280);
                         stage.setMinHeight(720);
                         stage.setMaximized(true);
                         stage.show();
+
                     } catch (IOException ex) {
-                        showError("메인 화면 로딩 실패: " + ex.getMessage());
+                        showError("화면 로딩 실패: " + ex.getMessage());
                     }
                 });
 
