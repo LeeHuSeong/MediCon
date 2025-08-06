@@ -17,10 +17,11 @@ public class ReservationDAOImpl implements ReservationDAO {
     @Override
     public ReservationDTO saveReservation(ReservationDTO reservation) {
         try {
-            System.out.println("예약 저장 시작 - patient_id: " + reservation.getPatient_id());
+            System.out.println("예약 저장 시작 - uid: " + reservation.getPatient_id());
 
+            // uid를 문서 ID로 사용하여 저장
             db.collection("patients")
-                    .document(reservation.getPatient_id())
+                    .document(reservation.getPatient_id()) // patient_id는 실제로 uid
                     .collection("reservations")
                     .document(reservation.getReservation_id())
                     .set(reservation)
@@ -45,10 +46,10 @@ public class ReservationDAOImpl implements ReservationDAO {
             List<QueryDocumentSnapshot> patientDocs = patientsFuture.get().getDocuments();
 
             for (QueryDocumentSnapshot patientDoc : patientDocs) {
-                String patientId = patientDoc.getId();
+                String uid = patientDoc.getId(); // 문서 ID가 uid
 
                 DocumentReference reservationRef = db.collection("patients")
-                        .document(patientId)
+                        .document(uid)
                         .collection("reservations")
                         .document(reservationId);
 
@@ -76,36 +77,24 @@ public class ReservationDAOImpl implements ReservationDAO {
     public List<ReservationDTO> findReservationByPatientId(String patientId) {
         List<ReservationDTO> reservations = new ArrayList<>();
         try {
-            // 모든 환자 문서에서 patient_id 필드로 검색
-            ApiFuture<QuerySnapshot> patientsFuture = db.collection("patients").get();
-            List<QueryDocumentSnapshot> patientDocs = patientsFuture.get().getDocuments();
+            // uid를 문서 ID로 사용하여 직접 조회
+            String uid = patientId; // patientId는 실제로 uid
 
-            for (QueryDocumentSnapshot patientDoc : patientDocs) {
-                String actualPatientId = patientDoc.getString("patient_id");
+            ApiFuture<QuerySnapshot> reservationsFuture = db.collection("patients")
+                    .document(uid)
+                    .collection("reservations")
+                    .get();
+            List<QueryDocumentSnapshot> reservationDocs = reservationsFuture.get().getDocuments();
 
-                // patient_id 필드가 일치하는 환자 찾기
-                if (patientId.equals(actualPatientId)) {
-                    String patientDocId = patientDoc.getId();
-
-                    // 해당 환자의 예약 조회
-                    ApiFuture<QuerySnapshot> reservationsFuture = db.collection("patients")
-                            .document(patientDocId)
-                            .collection("reservations")
-                            .get();
-                    List<QueryDocumentSnapshot> reservationDocs = reservationsFuture.get().getDocuments();
-
-                    for (QueryDocumentSnapshot reservationDoc : reservationDocs) {
-                        ReservationDTO reservation = reservationDoc.toObject(ReservationDTO.class);
-                        reservation.setReservation_id(reservationDoc.getId());
-                        reservations.add(reservation);
-                    }
-                    break;
-                }
+            for (QueryDocumentSnapshot reservationDoc : reservationDocs) {
+                ReservationDTO reservation = reservationDoc.toObject(ReservationDTO.class);
+                reservation.setReservation_id(reservationDoc.getId());
+                reservations.add(reservation);
             }
 
             // 결과만 간단히 로그
             if (reservations.size() > 0) {
-                System.out.println("[" + patientId + "] 예약 " + reservations.size() + "건 조회");
+                System.out.println("[" + uid + "] 예약 " + reservations.size() + "건 조회");
             }
 
         } catch (Exception e) {
@@ -125,10 +114,10 @@ public class ReservationDAOImpl implements ReservationDAO {
             List<QueryDocumentSnapshot> patientDocs = patientsFuture.get().getDocuments();
 
             for (QueryDocumentSnapshot patientDoc : patientDocs) {
-                String patientId = patientDoc.getId();
+                String uid = patientDoc.getId(); // 문서 ID가 uid
 
                 ApiFuture<QuerySnapshot> reservationsFuture = db.collection("patients")
-                        .document(patientId)
+                        .document(uid)
                         .collection("reservations")
                         .whereEqualTo("date", date)
                         .get();
@@ -141,7 +130,7 @@ public class ReservationDAOImpl implements ReservationDAO {
                 }
             }
 
-            System.out.println("날짜별 예약 조회 완료 - " + reservations.size() + "개 발견");
+            System.out.println("날짜별 예약 조회 완료 - " + reservations.size() + "건");
 
         } catch (Exception e) {
             System.err.println("날짜별 예약 조회 실패: " + e.getMessage());
@@ -150,10 +139,24 @@ public class ReservationDAOImpl implements ReservationDAO {
         return reservations;
     }
 
-    //덮어쓰기 -> 중복저장 방식
     @Override
     public void updateReservation(ReservationDTO reservation) {
-        saveReservation(reservation); // Firestore의 set은 upsert
+        try {
+            System.out.println("예약 수정 시작 - reservation_id: " + reservation.getReservation_id());
+
+            db.collection("patients")
+                    .document(reservation.getPatient_id()) // patient_id는 실제로 uid
+                    .collection("reservations")
+                    .document(reservation.getReservation_id())
+                    .set(reservation)
+                    .get();
+
+            System.out.println("예약 수정 완료");
+
+        } catch (Exception e) {
+            System.err.println("예약 수정 실패: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -161,20 +164,30 @@ public class ReservationDAOImpl implements ReservationDAO {
         try {
             System.out.println("예약 삭제 시작 - reservation_id: " + reservationId);
 
-            // 해당 예약이 어느 환자 것인지 찾기
-            ReservationDTO reservation = findReservationById(reservationId);
-            if (reservation != null) {
-                db.collection("patients")
-                        .document(reservation.getPatient_id())
-                        .collection("reservations")
-                        .document(reservationId)
-                        .delete()
-                        .get();
+            // 모든 환자의 예약에서 해당 ID 찾아서 삭제
+            ApiFuture<QuerySnapshot> patientsFuture = db.collection("patients").get();
+            List<QueryDocumentSnapshot> patientDocs = patientsFuture.get().getDocuments();
 
-                System.out.println("예약 삭제 완료");
-            } else {
-                System.err.println("삭제할 예약을 찾을 수 없음");
+            for (QueryDocumentSnapshot patientDoc : patientDocs) {
+                String uid = patientDoc.getId(); // 문서 ID가 uid
+
+                DocumentReference reservationRef = db.collection("patients")
+                        .document(uid)
+                        .collection("reservations")
+                        .document(reservationId);
+
+                ApiFuture<DocumentSnapshot> reservationFuture = reservationRef.get();
+                DocumentSnapshot reservationDoc = reservationFuture.get();
+
+                if (reservationDoc.exists()) {
+                    reservationRef.delete().get();
+                    System.out.println("예약 삭제 완료 - reservation_id: " + reservationId);
+                    return;
+                }
             }
+
+            System.out.println("삭제할 예약을 찾을 수 없음: " + reservationId);
+
         } catch (Exception e) {
             System.err.println("예약 삭제 실패: " + e.getMessage());
             e.printStackTrace();

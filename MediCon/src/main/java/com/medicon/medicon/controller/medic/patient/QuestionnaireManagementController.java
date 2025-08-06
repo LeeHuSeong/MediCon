@@ -142,7 +142,7 @@ public class QuestionnaireManagementController implements Initializable {
     }
 
     private void displayRecentInterview(PatientDTO patient) {
-        reservationApiService.getReservationsByPatientId(patient.getPatient_id()).thenAccept(reservations -> {
+        reservationApiService.getReservationsByPatientId(patient.getUid()).thenAccept(reservations -> {
             Platform.runLater(() -> {
                 if (reservations != null && !reservations.isEmpty()) {
                     // 예약을 날짜순으로 정렬 (최신순)
@@ -150,7 +150,7 @@ public class QuestionnaireManagementController implements Initializable {
                     
                     ReservationDTO latestReservation = reservations.get(0);
                     interviewApiService.getInterviewByReservationAsync(
-                            patient.getUid(), patient.getPatient_id(), latestReservation.getReservation_id()
+                            patient.getUid(), patient.getUid(), latestReservation.getReservation_id()
                     ).thenAccept(interviews -> {
                         Platform.runLater(() -> {
                             if (interviews != null && !interviews.isEmpty()) {
@@ -200,7 +200,7 @@ public class QuestionnaireManagementController implements Initializable {
         // 각 과거 예약에 대해 문진 조회
         for (ReservationDTO reservation : pastReservations) {
             interviewApiService.getInterviewByReservationAsync(
-                    patient.getUid(), patient.getPatient_id(), reservation.getReservation_id()
+                    patient.getUid(), patient.getUid(), reservation.getReservation_id()
             ).thenAccept(interviews -> {
                 Platform.runLater(() -> {
                     if (interviews != null && !interviews.isEmpty()) {
@@ -337,7 +337,7 @@ public class QuestionnaireManagementController implements Initializable {
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == saveButtonType) {
                 ReservationDTO newReservation = new ReservationDTO();
-                newReservation.setPatient_id(selectedPatient.getPatient_id());
+                newReservation.setPatient_id(selectedPatient.getUid());
                 newReservation.setDate(datePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
                 newReservation.setTime(timeComboBox.getValue());
                 newReservation.setDepartment(departmentComboBox.getValue());
@@ -368,7 +368,7 @@ public class QuestionnaireManagementController implements Initializable {
     private ReservationDTO getLatestReservation(PatientDTO patient) {
         try {
             // 환자의 모든 예약 조회
-            List<ReservationDTO> allReservations = reservationApiService.getReservationsByPatientId(patient.getPatient_id()).get();
+            List<ReservationDTO> allReservations = reservationApiService.getReservationsByPatientId(patient.getUid()).get();
             
             if (allReservations != null && !allReservations.isEmpty()) {
                 // 오늘 날짜의 예약 찾기

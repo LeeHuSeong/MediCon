@@ -20,16 +20,14 @@ public class PatientDAOImpl implements PatientDAO {
         try {
             System.out.println("전체 환자 조회 시작");
 
-            // 새로운 구조: patients 컬렉션에서 직접 조회
+            // uid를 문서 ID로 사용하는 새로운 구조
             ApiFuture<QuerySnapshot> future = db.collection("patients").get();
             List<QueryDocumentSnapshot> docs = future.get().getDocuments();
 
             for (QueryDocumentSnapshot doc : docs) {
                 PatientDTO patient = doc.toObject(PatientDTO.class);
-                // 문서 ID를 patient_id 또는 uid로 설정 (데이터 구조에 따라)
-                if (patient.getPatient_id() == null) {
-                    patient.setPatient_id(doc.getId());
-                }
+                // 문서 ID를 uid로 설정
+                patient.setUid(doc.getId());
                 patients.add(patient);
             }
 
@@ -76,17 +74,15 @@ public class PatientDAOImpl implements PatientDAO {
         try {
             System.out.println("환자 단건 조회 시작 - uid: " + uid);
 
-            // 새로운 구조: patients 컬렉션에서 uid 필드로 검색
-            ApiFuture<QuerySnapshot> future = db.collection("patients")
-                    .whereEqualTo("uid", uid)
+            // uid를 문서 ID로 사용하여 직접 조회
+            DocumentSnapshot doc = db.collection("patients")
+                    .document(uid)
+                    .get()
                     .get();
-            List<QueryDocumentSnapshot> docs = future.get().getDocuments();
 
-            if (!docs.isEmpty()) {
-                PatientDTO patient = docs.get(0).toObject(PatientDTO.class);
-                if (patient.getPatient_id() == null) {
-                    patient.setPatient_id(docs.get(0).getId());
-                }
+            if (doc.exists()) {
+                PatientDTO patient = doc.toObject(PatientDTO.class);
+                patient.setUid(doc.getId());
                 System.out.println("환자 단건 조회 완료 - " + patient.getName());
                 return patient;
             } else {
@@ -106,16 +102,14 @@ public class PatientDAOImpl implements PatientDAO {
         try {
             System.out.println("환자 저장 시작 - " + patient.getName());
 
-            // 새로운 구조: patients 컬렉션에 직접 저장
-            String docId = patient.getPatient_id();
-            if (docId == null || docId.trim().isEmpty()) {
-                // patient_id가 없으면 자동 생성
-                docId = db.collection("patients").document().getId();
-                patient.setPatient_id(docId);
+            // uid를 문서 ID로 사용하여 저장
+            String uid = patient.getUid();
+            if (uid == null || uid.trim().isEmpty()) {
+                throw new IllegalArgumentException("uid가 없습니다");
             }
 
             db.collection("patients")
-                    .document(docId)
+                    .document(uid)
                     .set(patient)
                     .get();
 
@@ -132,17 +126,17 @@ public class PatientDAOImpl implements PatientDAO {
         try {
             System.out.println("✏환자 정보 수정 시작 - " + patient.getName());
 
-            // 새로운 구조: patients 컬렉션에서 직접 업데이트
-            String docId = patient.getPatient_id();
-            if (docId != null && !docId.trim().isEmpty()) {
+            // uid를 문서 ID로 사용하여 업데이트
+            String uid = patient.getUid();
+            if (uid != null && !uid.trim().isEmpty()) {
                 db.collection("patients")
-                        .document(docId)
+                        .document(uid)
                         .set(patient)
                         .get();
 
                 System.out.println("환자 정보 수정 완료 - " + patient.getName());
             } else {
-                System.err.println("patient_id가 없어서 수정할 수 없음");
+                System.err.println("uid가 없어서 수정할 수 없음");
             }
 
         } catch (Exception e) {
@@ -156,22 +150,13 @@ public class PatientDAOImpl implements PatientDAO {
         try {
             System.out.println("환자 삭제 시작 - uid: " + uid);
 
-            // 새로운 구조: patients 컬렉션에서 uid 필드로 검색 후 삭제
-            ApiFuture<QuerySnapshot> future = db.collection("patients")
-                    .whereEqualTo("uid", uid)
+            // uid를 문서 ID로 사용하여 직접 삭제
+            db.collection("patients")
+                    .document(uid)
+                    .delete()
                     .get();
-            List<QueryDocumentSnapshot> docs = future.get().getDocuments();
-
-            if (!docs.isEmpty()) {
-                String docId = docs.get(0).getId();
-                db.collection("patients")
-                        .document(docId)
-                        .delete()
-                        .get();
-                System.out.println("환자 삭제 완료 - uid: " + uid);
-            } else {
-                System.out.println("삭제할 환자를 찾을 수 없음 - uid: " + uid);
-            }
+            
+            System.out.println("환자 삭제 완료 - uid: " + uid);
 
         } catch (Exception e) {
             System.err.println("환자 삭제 실패: " + e.getMessage());
