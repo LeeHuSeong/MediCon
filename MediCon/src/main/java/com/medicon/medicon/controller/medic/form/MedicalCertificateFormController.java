@@ -1,4 +1,4 @@
-package com.medicon.medicon.controller.medic;
+package com.medicon.medicon.controller.medic.form;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -48,7 +48,7 @@ public class MedicalCertificateFormController implements Initializable {
 
     // ▶ HTML 템플릿 불러오기
     private String loadHtmlTemplate() {
-        try (InputStream is = getClass().getResourceAsStream("/com/medicon/medicon/templates/medical_certificate_template.html")) {
+        try (InputStream is = getClass().getResourceAsStream("/com/medicon/medicon/templates/attendence_certificate_template.html")) {
             if (is == null) {
                 System.err.println("템플릿 파일을 찾을 수 없습니다.");
                 return null;

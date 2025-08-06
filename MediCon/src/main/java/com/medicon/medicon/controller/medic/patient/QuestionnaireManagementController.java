@@ -241,7 +241,7 @@ public class QuestionnaireManagementController implements Initializable {
     @FXML
     private void handleAddQuestionnaire(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/AddQuestionnaireForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/Form/AddQuestionnaireForm.fxml"));
             Parent Root = loader.load();
 
             Stage stage = new Stage();

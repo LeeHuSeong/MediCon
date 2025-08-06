@@ -15,8 +15,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -24,7 +22,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public class TreatmentManagementController {
 
@@ -47,9 +44,6 @@ public class TreatmentManagementController {
     @FXML private Label allergyLabel;
     @FXML private Label medicationLabel;
     @FXML private TextArea symytomElse;
-    
-    // 진료확인서 버튼
-    @FXML private Button medicalCertificateBtn;
 
     private final PatientApiService patientApiService = new PatientApiService();
     private final ReservationApiService reservationApiService = new ReservationApiService();
@@ -294,7 +288,7 @@ public class TreatmentManagementController {
     @FXML
     private void handleMedicalCertificate(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/MedicalCertificateForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/Form/AttendenceCertificateForm.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();
@@ -312,7 +306,7 @@ public class TreatmentManagementController {
     @FXML
     private void handleDiagnosisCertificate(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/DiagnosisCertificateForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/Form/DiagnosisCertificateForm.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();
@@ -325,6 +319,42 @@ public class TreatmentManagementController {
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("오류", "진단서 창을 열 수 없습니다: " + e.getMessage());
+        }
+    }
+    @FXML
+    private void handleOpinionCertificate(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/Form/OpinionCertificateForm.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("진료소견서");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("오류", "진료소견서 창을 열 수 없습니다: " + e.getMessage());
+        }
+    }
+    @FXML
+    private void handleReferralLetter(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/Form/ReferralLetterForm.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("진료의뢰서");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("오류", "진료의뢰서 창을 열 수 없습니다: " + e.getMessage());
         }
     }
 }

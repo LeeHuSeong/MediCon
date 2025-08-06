@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane minHeight="800" minWidth="600.0" style="-fx-background-color: white;"
-            stylesheets="@../../../style/ComponentStyle.css" xmlns="http://javafx.com/javafx/24.0.1"
+            stylesheets="@../../../../style/ComponentStyle.css" xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.medicon.medicon.controller.medic.DiagnosisCertificateFormController">
+            fx:controller="com.medicon.medicon.controller.medic.form.DiagnosisCertificateFormController">
 
     <VBox prefHeight="800.0" prefWidth="1000.0" spacing="10">
         <Label maxWidth="Infinity" styleClass="section-title" text="진단서" />
