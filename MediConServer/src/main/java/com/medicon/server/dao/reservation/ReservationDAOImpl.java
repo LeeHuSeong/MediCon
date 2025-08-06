@@ -15,7 +15,7 @@ public class ReservationDAOImpl implements ReservationDAO {
     private final Firestore db = FirestoreClient.getFirestore();
 
     @Override
-    public void saveReservation(ReservationDTO reservation) {
+    public ReservationDTO saveReservation(ReservationDTO reservation) {
         try {
             System.out.println("예약 저장 시작 - patient_id: " + reservation.getPatient_id());
 
@@ -27,9 +27,11 @@ public class ReservationDAOImpl implements ReservationDAO {
                     .get();
 
             System.out.println("예약 저장 완료");
+            return reservation;
         } catch (Exception e) {
             System.err.println("예약 저장 실패: " + e.getMessage());
             e.printStackTrace();
+            throw new RuntimeException("예약 저장 중 오류가 발생했습니다: " + e.getMessage());
         }
     }
 

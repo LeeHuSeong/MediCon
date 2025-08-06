@@ -7,6 +7,7 @@ import com.medicon.medicon.model.MedicalInterviewDTO;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -96,6 +97,49 @@ public class MedicalInterviewApiService {
                 System.err.println("환자 문진 기록 조회 오류: " + e.getMessage());
                 e.printStackTrace();
                 return new ArrayList<>();
+            }
+        });
+    }
+
+    // 문진 저장 - POST /api/interview/save
+    public CompletableFuture<Boolean> saveInterviewAsync(MedicalInterviewDTO interview) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                URL url = new URL(BASE_URL + "/save");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setDoOutput(true);
+
+                // JSON 데이터 전송
+                String jsonInputString = objectMapper.writeValueAsString(interview);
+                try (OutputStream os = conn.getOutputStream()) {
+                    byte[] input = jsonInputString.getBytes("utf-8");
+                    os.write(input, 0, input.length);
+                }
+
+                int responseCode = conn.getResponseCode();
+                System.out.println("문진 저장 응답 코드: " + responseCode);
+
+                if (responseCode >= 200 && responseCode < 300) {
+                    System.out.println("문진 저장 성공");
+                    return true;
+                } else {
+                    // 에러 응답 읽기
+                    try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getErrorStream(), "utf-8"))) {
+                        StringBuilder response = new StringBuilder();
+                        String responseLine;
+                        while ((responseLine = br.readLine()) != null) {
+                            response.append(responseLine.trim());
+                        }
+                        System.err.println("문진 저장 실패 응답: " + response.toString());
+                    }
+                    return false;
+                }
+            } catch (Exception e) {
+                System.err.println("문진 저장 오류: " + e.getMessage());
+                e.printStackTrace();
+                return false;
             }
         });
     }

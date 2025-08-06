@@ -1,4 +1,4 @@
-package com.medicon.medicon.controller.medic;
+package com.medicon.medicon.controller.medic.form;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

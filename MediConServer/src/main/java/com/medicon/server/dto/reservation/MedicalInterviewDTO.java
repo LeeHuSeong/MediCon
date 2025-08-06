@@ -23,6 +23,8 @@ public class MedicalInterviewDTO {
         this.allergy = allergy;
     }
 
+
+
     public String getInterview_id() {
         return interview_id;
     }
@@ -86,6 +88,8 @@ public class MedicalInterviewDTO {
     public void setAllergy(String allergy) {
         this.allergy = allergy;
     }
+
+
 
     @Override
     public String toString() {

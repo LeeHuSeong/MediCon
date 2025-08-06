@@ -4,7 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane styleClass="background" stylesheets="@../../../style/ComponentStyle.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.medicon.medicon.controller.medic.TreatmentManagementController">
+<AnchorPane styleClass="background" stylesheets="@../../../style/ComponentStyle.css" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.medicon.medicon.controller.medic.TreatmentManagementController">
     <VBox spacing="20" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20.0">
         <HBox spacing="20" VBox.vgrow="ALWAYS">
             <!-- 맨 왼쪽 패널 -->
@@ -55,7 +56,7 @@
                         <Label fx:id="patientPhoneLabel" styleClass="form-labelBig" text="" />
                     </HBox>
                     <!--                    과거 진료이력버튼-->
-                    <Button styleClass="button-blue-small" text="과거진료이력" HBox.hgrow="ALWAYS" />
+                    <Button styleClass="button-blue-small" text="과거진료이력" HBox.hgrow="ALWAYS" onAction="#handleQuestionnaireHistory"/>
                 </HBox>
                 <HBox spacing="20">
                     <!-- 가운데 패널: 최근 문진 -->
@@ -115,11 +116,11 @@
         </HBox>
         <HBox maxHeight="150" spacing="40" VBox.vgrow="NEVER">
             <HBox spacing="10">
-                <Button styleClass="button-blue" text="진료확인서" fx:id="medicalCertificateBtn" onAction="#handleMedicalCertificate"/>
-                <Button styleClass="button-blue" text="진단서" fx:id="diagnosisCertificateBtn" onAction="#handleDiagnosisCertificate" />
-                <Button styleClass="button-blue" text="처방전" />
-                <Button styleClass="button-blue" text="진료소견서" />
-                <Button styleClass="button-blue" text="진료의뢰서" />
+                <Button styleClass="button-blue" text="진료확인서" onAction="#handleMedicalCertificate"/>
+                <Button styleClass="button-blue" text="진단서" onAction="#handleDiagnosisCertificate" />
+                <Button styleClass="button-blue" text="처방전" onAction="#handlePerscription"/>
+                <Button styleClass="button-blue" text="진료소견서" onAction="#handleOpinionCertificate" />
+                <Button styleClass="button-blue" text="진료의뢰서" onAction="#handleReferralLetter"/>
             </HBox>
             <!-- 중간 빈 공간 -->
             <Region HBox.hgrow="ALWAYS" />

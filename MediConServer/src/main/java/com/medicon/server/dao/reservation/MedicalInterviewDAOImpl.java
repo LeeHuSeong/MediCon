@@ -143,6 +143,42 @@ public class MedicalInterviewDAOImpl implements MedicalInterviewDAO {
     }
 
     @Override
+    public MedicalInterviewDTO saveInterview(MedicalInterviewDTO interviewDTO) {
+        try {
+            System.out.println("문진 저장 시작 - DTO 방식");
+
+            String patientId = interviewDTO.getPatient_id();
+            String reservationId = interviewDTO.getReservation_id();
+            
+            if (patientId == null || reservationId == null) {
+                throw new IllegalArgumentException("patient_id 또는 reservation_id가 없습니다");
+            }
+
+            // interview_id 생성
+            String interviewId = UUID.randomUUID().toString();
+            interviewDTO.setInterview_id(interviewId);
+
+            // Firestore에 저장
+            db.collection("patients")
+                    .document(patientId)
+                    .collection("reservations")
+                    .document(reservationId)
+                    .collection("medical_interviews")
+                    .document(interviewId)
+                    .set(interviewDTO)
+                    .get();
+
+            System.out.println("문진 저장 완료 - interview_id: " + interviewId);
+            return interviewDTO;
+            
+        } catch (Exception e) {
+            System.err.println("문진 저장 실패: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("문진 저장 중 오류가 발생했습니다: " + e.getMessage());
+        }
+    }
+
+    @Override
     public void updateInterview(String reservationId, MedicalInterviewDTO interview) {
         try {
             System.out.println("문진 수정 시작 - reservation_id: " + reservationId);
