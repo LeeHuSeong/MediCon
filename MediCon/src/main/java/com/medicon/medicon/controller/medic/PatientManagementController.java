@@ -330,7 +330,7 @@ public class PatientManagementController implements Initializable {
     private void handleAddPatient() {
         try {
             // FXML 로드
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/Form/AddPatientForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/form/AddPatientForm.fxml"));
             Parent root = loader.load();
 
             // 새 Stage 생성
