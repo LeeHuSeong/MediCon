@@ -8,6 +8,7 @@ import com.medicon.medicon.model.ReservationDTO;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -81,6 +82,38 @@ public class ReservationApiService {
             } catch (Exception e) {
                 System.err.println("날짜별 예약 조회 오류: " + e.getMessage());
                 return new ArrayList<>();
+            }
+        });
+    }
+
+    // 예약 저장
+    public CompletableFuture<Boolean> saveReservationAsync(ReservationDTO reservationDTO) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                URL url = new URL(BASE_URL + "/save");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setDoOutput(true);
+
+                // JSON 데이터 전송
+                String jsonInputString = objectMapper.writeValueAsString(reservationDTO);
+                try (OutputStream os = conn.getOutputStream()) {
+                    byte[] input = jsonInputString.getBytes("utf-8");
+                    os.write(input, 0, input.length);
+                }
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode >= 200 && responseCode < 300) {
+                    System.out.println("예약 저장 성공");
+                    return true;
+                } else {
+                    System.err.println("예약 저장 실패: " + responseCode);
+                    return false;
+                }
+            } catch (Exception e) {
+                System.err.println("예약 저장 오류: " + e.getMessage());
+                return false;
             }
         });
     }

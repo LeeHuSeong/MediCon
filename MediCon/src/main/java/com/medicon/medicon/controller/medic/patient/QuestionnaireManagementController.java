@@ -15,9 +15,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
+import javafx.geometry.Insets;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 import java.io.IOException;
 import java.net.URL;
@@ -42,6 +47,7 @@ public class QuestionnaireManagementController implements Initializable {
     @FXML private Label medicationLabel;
     @FXML private TextArea symytomElse;
     @FXML private Button addQuestionnaireButton;
+    @FXML private Button addReservationButton;
     @FXML private ListView<String> historyQuestionnaireListView;
 
     private final PatientApiService patientApiService = new PatientApiService();
@@ -274,6 +280,88 @@ public class QuestionnaireManagementController implements Initializable {
             e.printStackTrace();
             showInfo("문진 작성 창을 열 수 없습니다.");
         }
+    }
+
+    @FXML
+    private void handleAddReservation(ActionEvent event) {
+        // 선택된 환자가 있는지 확인
+        PatientDTO selectedPatient = patientListView.getSelectionModel().getSelectedItem();
+        if (selectedPatient == null) {
+            showInfo("환자를 선택해주세요.");
+            return;
+        }
+
+        // 간단한 예약 추가 다이얼로그 생성
+        Dialog<ReservationDTO> dialog = new Dialog<>();
+        dialog.setTitle("예약 추가 - " + selectedPatient.getName());
+        dialog.setHeaderText("새로운 예약을 추가합니다.");
+
+        // 다이얼로그 버튼 설정
+        ButtonType saveButtonType = new ButtonType("예약 추가", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+
+        // 다이얼로그 내용 생성
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        DatePicker datePicker = new DatePicker();
+        datePicker.setValue(LocalDate.now());
+        
+        ComboBox<String> timeComboBox = new ComboBox<>();
+        timeComboBox.getItems().addAll(
+            "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
+            "13:00", "13:30", "14:00", "14:30", "15:00", "15:30",
+            "16:00", "16:30", "17:00", "17:30"
+        );
+        timeComboBox.setValue("09:00");
+
+        ComboBox<String> departmentComboBox = new ComboBox<>();
+        departmentComboBox.getItems().addAll(
+            "내과", "외과", "정형외과", "신경외과", "소아과", "산부인과",
+            "피부과", "안과", "이비인후과", "정신건강의학과", "재활의학과"
+        );
+        departmentComboBox.setValue("내과");
+
+        grid.add(new Label("날짜:"), 0, 0);
+        grid.add(datePicker, 1, 0);
+        grid.add(new Label("시간:"), 0, 1);
+        grid.add(timeComboBox, 1, 1);
+        grid.add(new Label("진료과:"), 0, 2);
+        grid.add(departmentComboBox, 1, 2);
+
+        dialog.getDialogPane().setContent(grid);
+
+        // 결과 처리
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == saveButtonType) {
+                ReservationDTO newReservation = new ReservationDTO();
+                newReservation.setPatient_id(selectedPatient.getPatient_id());
+                newReservation.setDate(datePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                newReservation.setTime(timeComboBox.getValue());
+                newReservation.setDepartment(departmentComboBox.getValue());
+                newReservation.setReservation_id("RES_" + System.currentTimeMillis());
+                return newReservation;
+            }
+            return null;
+        });
+
+        Optional<ReservationDTO> result = dialog.showAndWait();
+        result.ifPresent(reservation -> {
+            // 서버에 예약 저장
+            reservationApiService.saveReservationAsync(reservation).thenAccept(success -> {
+                Platform.runLater(() -> {
+                    if (success) {
+                        showInfo("예약이 성공적으로 저장되었습니다: " + reservation.getDate() + " " + reservation.getTime());
+                        // 환자 목록 새로고침
+                        loadAllPatients();
+                    } else {
+                        showInfo("예약 저장에 실패했습니다.");
+                    }
+                });
+            });
+        });
     }
     
     // 선택된 환자의 오늘 날짜 예약 정보 가져오기
