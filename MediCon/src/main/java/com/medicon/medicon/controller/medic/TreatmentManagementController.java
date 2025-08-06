@@ -143,17 +143,26 @@ public class TreatmentManagementController {
 
     /** 예약 목록에서 환자 정보 로드 */
     private void loadPatientsFromReservations(List<ReservationDTO> reservations) {
-        ObservableList<PatientDTO> list = FXCollections.observableArrayList();
-        for (ReservationDTO r : reservations) {
-            patientApiService.getPatientByPatientIdAsync(r.getPatient_id())
-                    .thenAccept(p -> {
-                        if (p != null) {
-                            Platform.runLater(() -> { if (!list.contains(p)) list.add(p); });
+        ObservableList<PatientDTO> patientList = FXCollections.observableArrayList();
+        
+        // 각 예약에 대해 환자 정보를 가져옴
+        for (ReservationDTO reservation : reservations) {
+            patientApiService.getPatientByUidAsync(reservation.getPatient_uid()).thenAccept(patient -> {
+                if (patient != null) {
+                    Platform.runLater(() -> {
+                        if (!patientList.contains(patient)) {
+                            patientList.add(patient);
                         }
                     });
+                }
+            }).exceptionally(e -> {
+                System.err.println("환자 정보 로드 실패: " + e.getMessage());
+                return null;
+            });
         }
+        
         Platform.runLater(() -> {
-            patientListView.setItems(list);
+            patientListView.setItems(patientList);
             patientListView.setCellFactory(param -> new ListCell<PatientDTO>() {
                 @Override
                 protected void updateItem(PatientDTO item, boolean empty) {
@@ -192,16 +201,24 @@ public class TreatmentManagementController {
         patientGenderLabel.setText(patient.getGender());
         patientAgeLabel.setText(String.valueOf(calculateAge(patient.getRnn())));
         patientPhoneLabel.setText(patient.getPhone());
-        reservationApiService.getReservationsByPatientId(patient.getPatient_id())
-                .thenAccept(reservations -> {
-                    if (reservations != null && !reservations.isEmpty()) {
-                        reservations.sort((r1, r2) -> r2.getDate().compareTo(r1.getDate()));
-                        ReservationDTO recent = reservations.get(0);
-                        loadRecentMedicalInterview(patient.getUid(), patient.getPatient_id(), recent.getReservation_id());
-                    } else {
-                        clearMedicalInterviewDisplay();
-                    }
-                });
+
+        // 해당 환자의 예약 정보를 가져와서 최근 문진 로드
+        reservationApiService.getReservationsByPatientId(patient.getUid()).thenAccept(reservations -> {
+            if (reservations != null && !reservations.isEmpty()) {
+                // 예약을 날짜순으로 정렬 (최신순)
+                reservations.sort((r1, r2) -> r2.getDate().compareTo(r1.getDate()));
+                ReservationDTO recent = reservations.get(0);
+                
+                // 최근 문진 정보 로드 - 환자관리와 동일한 방식 사용
+                loadRecentMedicalInterview(patient.getUid(), patient.getUid(), recent.getReservation_id());
+            } else {
+                clearMedicalInterviewDisplay();
+            }
+        }).exceptionally(e -> {
+            System.err.println("환자 예약 정보 로드 실패: " + e.getMessage());
+            Platform.runLater(() -> clearMedicalInterviewDisplay());
+            return null;
+        });
     }
 
     private void loadRecentMedicalInterview(String uid, String patientId, String reservationId) {
@@ -209,16 +226,23 @@ public class TreatmentManagementController {
                 .thenAccept(interviews -> Platform.runLater(() -> {
                     if (interviews != null && !interviews.isEmpty()) {
                         MedicalInterviewDTO mi = interviews.get(0);
-                        symptomLabel.setText(mi.getSymptoms());
-                        symptomDurationLabel.setText(mi.getSymptom_duration());
-                        historyLabel.setText(mi.getPast_medical_history());
-                        allergyLabel.setText(mi.getAllergy());
-                        medicationLabel.setText(mi.getCurrent_medication());
+                        symptomLabel.setText(mi.getSymptoms() != null ? mi.getSymptoms() : "");
+                        symptomDurationLabel.setText(mi.getSymptom_duration() != null ? mi.getSymptom_duration() : "");
+                        historyLabel.setText(mi.getPast_medical_history() != null ? mi.getPast_medical_history() : "");
+                        allergyLabel.setText(mi.getAllergy() != null ? mi.getAllergy() : "");
+                        medicationLabel.setText(mi.getCurrent_medication() != null ? mi.getCurrent_medication() : "");
+                        symytomElse.setText(""); // other_symptoms 필드가 없으므로 빈 문자열로 설정
 //                        interviewDateLabel.setText(mi.getVisit_date());
+                        System.out.println("문진 정보 로드 완료: " + mi.getSymptoms());
                     } else {
                         clearMedicalInterviewDisplay();
+                        System.out.println("문진 정보가 없습니다.");
                     }
-                }));
+                })).exceptionally(e -> {
+                    System.err.println("문진 정보 로드 실패: " + e.getMessage());
+                    Platform.runLater(() -> clearMedicalInterviewDisplay());
+                    return null;
+                });
     }
 
     private void clearMedicalInterviewDisplay() {
