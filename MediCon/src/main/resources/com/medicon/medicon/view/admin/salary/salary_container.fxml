@@ -13,9 +13,9 @@
     <!-- 좌측 급여 관리 메뉴 -->
     <left>
         <VBox spacing="20" style="-fx-padding: 20;" prefWidth="150">
-            <Button fx:id="registerViewButton" text="급여 등록" maxWidth="Infinity" />
-            <Button fx:id="batchPayButton" text="일괄 지급" onAction="#handleBatchPay" />
-            <Button fx:id="modifyViewButton" text="급여 수정/삭제/조회" maxWidth="Infinity" />
+            <Button fx:id="registerViewButton" text="급여 등록" maxWidth="Infinity" prefWidth="250" />
+            <Button fx:id="batchPayButton" text="일괄 지급" maxWidth="Infinity" prefWidth="250" onAction="#handleBatchPay" />
+            <Button fx:id="modifyViewButton" text="급여 관리" maxWidth="Infinity" prefWidth="250" />
         </VBox>
     </left>
 
