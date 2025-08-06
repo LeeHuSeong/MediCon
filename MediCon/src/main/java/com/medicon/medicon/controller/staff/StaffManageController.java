@@ -323,6 +323,7 @@ public class StaffManageController {
         for (String rank : ranks) {
             ToggleButton btn = new ToggleButton(rank);
             btn.setToggleGroup(rankGroup);
+            btn.getStyleClass().add("tile-button");
             rankPane.getChildren().add(btn);
         }
 
@@ -332,6 +333,14 @@ public class StaffManageController {
                 selectedRank = ((ToggleButton) newToggle).getText();  // 선택된 직급 저장
             }
         });
+
+        // 선택된 직급 버튼 강조
+        for (Toggle toggle : rankGroup.getToggles()) {
+            if (((ToggleButton) toggle).getText().equals(selectedRank)) {
+                toggle.setSelected(true);  // 이걸 추가
+                break;
+            }
+        }
     }
 
     // Initialize department buttons based on selected role
@@ -345,6 +354,7 @@ public class StaffManageController {
         for (String dept : departments) {
             ToggleButton btn = new ToggleButton(dept);
             btn.setToggleGroup(deptGroup);
+            btn.getStyleClass().add("tile-button");
             departmentPane.getChildren().add(btn);
         }
 
@@ -354,5 +364,13 @@ public class StaffManageController {
                 selectedDepartment = ((ToggleButton) newVal).getText();  // 선택된 부서 저장
             }
         });
+
+        // 선택된 부서 버튼 강조
+        for (Toggle toggle : deptGroup.getToggles()) {
+            if (((ToggleButton) toggle).getText().equals(selectedDepartment)) {
+                toggle.setSelected(true);
+                break;
+            }
+        }
     }
 }

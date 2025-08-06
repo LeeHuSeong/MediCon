@@ -8,7 +8,7 @@
             fx:id="adminBorderPane"
             fx:controller="com.medicon.medicon.controller.AdminMainController"
             prefWidth="1920" prefHeight="1080"
-            stylesheets="@../../style/admin.css">
+            stylesheets="@../../style/staff/admin.css">
 
     <!-- 상단 TopBar -->
     <top>
