@@ -4,6 +4,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.firebase.cloud.FirestoreClient;
 import com.medicon.server.dto.auth.signup.PatientSignupRequest;
 import com.medicon.server.dto.auth.signup.SignupResponse;
+import com.medicon.server.dto.user.PatientDTO;
 import com.medicon.server.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class PatientService {
 
-    @Autowired private JwtUtil jwtUtil;
+    @Autowired
+    private JwtUtil jwtUtil;
 
-    // 일자별 patient_id 숫자 증가용 카운터
     private final Map<String, AtomicInteger> dailyCounter = new HashMap<>();
 
     public SignupResponse registerPatient(String uid, PatientSignupRequest req) {
@@ -45,7 +46,8 @@ public class PatientService {
             data.put("createdAt", System.currentTimeMillis());
             data.put("patient_id", patientId);
 
-            db.collection("patients").document(patientId).set(data).get();
+            // uid를 문서 ID로 사용하여 저장
+            db.collection("patients").document(uid).set(data).get();
 
             String jwt = jwtUtil.generateToken(uid, req.getEmail());
             return new SignupResponse(true, "환자 등록 성공", jwt);
