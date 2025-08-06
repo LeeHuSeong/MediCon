@@ -17,11 +17,11 @@ public class ReservationDAOImpl implements ReservationDAO {
     @Override
     public ReservationDTO saveReservation(ReservationDTO reservation) {
         try {
-            System.out.println("예약 저장 시작 - uid: " + reservation.getPatient_id());
+            System.out.println("예약 저장 시작 - uid: " + reservation.getPatient_uid());
 
             // uid를 문서 ID로 사용하여 저장
             db.collection("patients")
-                    .document(reservation.getPatient_id()) // patient_id는 실제로 uid
+                    .document(reservation.getPatient_uid()) // patient_uid 사용
                     .collection("reservations")
                     .document(reservation.getReservation_id())
                     .set(reservation)
@@ -39,7 +39,7 @@ public class ReservationDAOImpl implements ReservationDAO {
     @Override
     public ReservationDTO findReservationById(String reservationId) {
         try {
-            System.out.println("예약 단건 조회 - reservation_id: " + reservationId);
+            System.out.println("예약 ID로 조회 시작 - reservation_id: " + reservationId);
 
             // 모든 환자의 예약에서 해당 ID 찾기
             ApiFuture<QuerySnapshot> patientsFuture = db.collection("patients").get();
@@ -59,15 +59,16 @@ public class ReservationDAOImpl implements ReservationDAO {
                 if (reservationDoc.exists()) {
                     ReservationDTO reservation = reservationDoc.toObject(ReservationDTO.class);
                     reservation.setReservation_id(reservationDoc.getId());
-                    System.out.println("예약 단건 조회 완료");
+                    System.out.println("예약 ID로 조회 완료 - " + reservationId);
                     return reservation;
                 }
             }
 
-            System.out.println("예약을 찾을 수 없음: " + reservationId);
+            System.out.println("해당 예약을 찾을 수 없음: " + reservationId);
             return null;
+
         } catch (Exception e) {
-            System.err.println("예약 단건 조회 실패: " + e.getMessage());
+            System.err.println("예약 ID로 조회 실패: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -145,7 +146,7 @@ public class ReservationDAOImpl implements ReservationDAO {
             System.out.println("예약 수정 시작 - reservation_id: " + reservation.getReservation_id());
 
             db.collection("patients")
-                    .document(reservation.getPatient_id()) // patient_id는 실제로 uid
+                    .document(reservation.getPatient_uid()) // patient_uid 사용
                     .collection("reservations")
                     .document(reservation.getReservation_id())
                     .set(reservation)

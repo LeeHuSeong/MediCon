@@ -161,7 +161,7 @@ public class PatientManagementController implements Initializable {
             genderToggleGroup.selectToggle(null);
         }
 
-        reservationApiService.getReservationsByPatientId(patient.getPatient_id())
+        reservationApiService.getReservationsByPatientId(patient.getUid())
                 .thenAccept(reservations -> {
                     Platform.runLater(() -> {
                         if (reservations != null && !reservations.isEmpty()) {
@@ -215,7 +215,7 @@ public class PatientManagementController implements Initializable {
         historyData.clear();
 
         // 환자의 모든 예약 정보를 가져와서 방문 이력 생성
-        reservationApiService.getReservationsByPatientId(patient.getPatient_id())
+        reservationApiService.getReservationsByPatientId(patient.getUid())
                 .thenAccept(reservations -> {
                     Platform.runLater(() -> {
                         if (reservations != null && !reservations.isEmpty()) {
@@ -364,7 +364,7 @@ public class PatientManagementController implements Initializable {
                 
                 // 예약된 환자들의 정보를 가져와서 리스트에 표시
                 for (ReservationDTO reservation : reservations) {
-                    patientApiService.getPatientByPatientIdAsync(reservation.getPatient_id()).thenAccept(patient -> {
+                    patientApiService.getPatientByUidAsync(reservation.getPatient_uid()).thenAccept(patient -> {
                         if (patient != null) {
                             Platform.runLater(() -> {
                                 if (!patientData.contains(patient)) {

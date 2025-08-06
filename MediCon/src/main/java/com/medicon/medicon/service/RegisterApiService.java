@@ -26,6 +26,8 @@ public class RegisterApiService {
             HttpURLConnection conn = null;
             try {
                 URL url = new URL(BASE_URL + "/patient");
+                System.out.println("🌐 요청 URL: " + url.toString());
+                
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
@@ -50,10 +52,18 @@ public class RegisterApiService {
                         while ((inputLine = in.readLine()) != null) {
                             response.append(inputLine);
                         }
+                        String responseBody = response.toString();
                         System.out.println("✅ 환자 회원가입 성공: " + request.getName());
                         System.out.println("📧 이메일: " + request.getEmail());
-                        System.out.println("📄 응답 내용: " + response.toString());
-                        return true;
+                        System.out.println("📄 응답 내용: " + responseBody);
+                        
+                        // 응답 내용에서 success 필드 확인
+                        if (responseBody.contains("\"success\":true")) {
+                            return true;
+                        } else {
+                            System.err.println("❌ 서버에서 실패 응답: " + responseBody);
+                            return false;
+                        }
                     }
                 } else {
                     // 에러 응답 읽기
@@ -61,11 +71,15 @@ public class RegisterApiService {
                         String errorResponse = br.lines().collect(java.util.stream.Collectors.joining("\n"));
                         System.err.println("❌ 환자 회원가입 실패: " + responseCode);
                         System.err.println("🔍 에러 내용: " + errorResponse);
+                        System.err.println("📧 이메일: " + request.getEmail());
+                        System.err.println("👤 이름: " + request.getName());
                     }
                     return false;
                 }
             } catch (Exception e) {
                 System.err.println("❌ 환자 회원가입 중 오류: " + e.getMessage());
+                System.err.println("📧 이메일: " + request.getEmail());
+                System.err.println("👤 이름: " + request.getName());
                 e.printStackTrace();
                 return false;
             } finally {
