@@ -26,11 +26,11 @@ public class MedicalInterviewDAOImpl implements MedicalInterviewDAO {
             List<QueryDocumentSnapshot> patientDocs = patientsFuture.get().getDocuments();
 
             for (QueryDocumentSnapshot patientDoc : patientDocs) {
-                String patientId = patientDoc.getId();
+                String uid = patientDoc.getId(); // 문서 ID가 uid
 
                 // 2. 해당 환자의 특정 예약에서 문진 조회
                 CollectionReference interviewsRef = db.collection("patients")
-                        .document(patientId)
+                        .document(uid)
                         .collection("reservations")
                         .document(reservationId)
                         .collection("medical_interviews");
@@ -47,7 +47,7 @@ public class MedicalInterviewDAOImpl implements MedicalInterviewDAO {
                         interview.setReservation_id(reservationId);
                     }
                     if (interview.getPatient_id() == null) {
-                        interview.setPatient_id(patientId);
+                        interview.setPatient_id(uid); // uid를 patient_id로 설정
                     }
 
                     list.add(interview);
@@ -64,17 +64,18 @@ public class MedicalInterviewDAOImpl implements MedicalInterviewDAO {
         return list;
     }
 
-
-    //모든 users 문서에서 해당 patient_id를 가진 환자 찾기
+    //uid로 환자별 문진 조회
     @Override
     public List<MedicalInterviewDTO> findInterviewByPatientId(String patientId) {
         List<MedicalInterviewDTO> results = new ArrayList<>();
         try {
-            System.out.println("환자별 문진 조회 시작 - patient_id: " + patientId);
+            System.out.println("환자별 문진 조회 시작 - uid: " + patientId);
 
-            // 해당 환자의 모든 예약에서 문진 조회
+            // uid를 문서 ID로 사용하여 직접 조회
+            String uid = patientId; // patientId는 실제로 uid
+
             ApiFuture<QuerySnapshot> reservationsFuture = db.collection("patients")
-                    .document(patientId)
+                    .document(uid)
                     .collection("reservations")
                     .get();
             List<QueryDocumentSnapshot> reservationDocs = reservationsFuture.get().getDocuments();
@@ -95,7 +96,7 @@ public class MedicalInterviewDAOImpl implements MedicalInterviewDAO {
 
                     // 필요한 필드 설정
                     if (interview.getPatient_id() == null) {
-                        interview.setPatient_id(patientId);
+                        interview.setPatient_id(uid); // uid를 patient_id로 설정
                     }
                     if (interview.getReservation_id() == null) {
                         interview.setReservation_id(reservationId);
@@ -119,12 +120,12 @@ public class MedicalInterviewDAOImpl implements MedicalInterviewDAO {
             //로그체크
             System.out.println("문진 저장 시작 - reservation_id: " + reservationId);
 
-            String patientId = interview.getPatient_id();
-            if (patientId != null) {
+            String uid = interview.getPatient_id(); // patient_id는 실제로 uid
+            if (uid != null) {
                 String docId = UUID.randomUUID().toString();
 
                 db.collection("patients")
-                        .document(patientId)
+                        .document(uid)
                         .collection("reservations")
                         .document(reservationId)
                         .collection("medical_interviews")
@@ -134,7 +135,7 @@ public class MedicalInterviewDAOImpl implements MedicalInterviewDAO {
 
                 System.out.println("문진 저장 완료");
             } else {
-                System.err.println("patient_id가 없습니다");
+                System.err.println("uid가 없습니다");
             }
         } catch (Exception e) {
             System.err.println("문진 저장 실패: " + e.getMessage());
@@ -147,11 +148,11 @@ public class MedicalInterviewDAOImpl implements MedicalInterviewDAO {
         try {
             System.out.println("문진 저장 시작 - DTO 방식");
 
-            String patientId = interviewDTO.getPatient_id();
+            String uid = interviewDTO.getPatient_id(); // patient_id는 실제로 uid
             String reservationId = interviewDTO.getReservation_id();
             
-            if (patientId == null || reservationId == null) {
-                throw new IllegalArgumentException("patient_id 또는 reservation_id가 없습니다");
+            if (uid == null || reservationId == null) {
+                throw new IllegalArgumentException("uid 또는 reservation_id가 없습니다");
             }
 
             // interview_id 생성
@@ -160,7 +161,7 @@ public class MedicalInterviewDAOImpl implements MedicalInterviewDAO {
 
             // Firestore에 저장
             db.collection("patients")
-                    .document(patientId)
+                    .document(uid)
                     .collection("reservations")
                     .document(reservationId)
                     .collection("medical_interviews")
@@ -183,27 +184,20 @@ public class MedicalInterviewDAOImpl implements MedicalInterviewDAO {
         try {
             System.out.println("문진 수정 시작 - reservation_id: " + reservationId);
 
-            // 해당 예약의 문진 찾기
-            List<MedicalInterviewDTO> existingInterviews = findInterviewByReservationId(reservationId);
-
-            if (!existingInterviews.isEmpty()) {
-                MedicalInterviewDTO existing = existingInterviews.get(0);
-                String patientId = existing.getPatient_id();
-                String interviewId = existing.getInterview_id();
-
-                // 문진 수정
+            String uid = interview.getPatient_id(); // patient_id는 실제로 uid
+            if (uid != null) {
                 db.collection("patients")
-                        .document(patientId)
+                        .document(uid)
                         .collection("reservations")
                         .document(reservationId)
                         .collection("medical_interviews")
-                        .document(interviewId)
+                        .document(interview.getInterview_id())
                         .set(interview)
                         .get();
 
                 System.out.println("문진 수정 완료");
             } else {
-                System.err.println("수정할 문진을 찾을 수 없음: reservation_id=" + reservationId);
+                System.err.println("uid가 없어서 수정할 수 없음");
             }
         } catch (Exception e) {
             System.err.println("문진 수정 실패: " + e.getMessage());
@@ -211,34 +205,37 @@ public class MedicalInterviewDAOImpl implements MedicalInterviewDAO {
         }
     }
 
-    //예약ID로 찾아서 삭제
     @Override
-    public void deleteInterview(String reservationId, String notUsed) {
+    public void deleteInterview(String reservationId, String interviewId) {
         try {
-            System.out.println("문진 삭제 시작 - reservation_id: " + reservationId);
+            System.out.println("문진 삭제 시작 - interview_id: " + interviewId);
 
-            // 해당 예약의 문진 찾기
-            List<MedicalInterviewDTO> existingInterviews = findInterviewByReservationId(reservationId);
+            // 모든 환자의 예약에서 해당 문진 찾아서 삭제
+            ApiFuture<QuerySnapshot> patientsFuture = db.collection("patients").get();
+            List<QueryDocumentSnapshot> patientDocs = patientsFuture.get().getDocuments();
 
-            if (!existingInterviews.isEmpty()) {
-                MedicalInterviewDTO existing = existingInterviews.get(0);
-                String patientId = existing.getPatient_id();
-                String interviewId = existing.getInterview_id();
+            for (QueryDocumentSnapshot patientDoc : patientDocs) {
+                String uid = patientDoc.getId(); // 문서 ID가 uid
 
-                // 문진 삭제
-                db.collection("patients")
-                        .document(patientId)
+                DocumentReference interviewRef = db.collection("patients")
+                        .document(uid)
                         .collection("reservations")
                         .document(reservationId)
                         .collection("medical_interviews")
-                        .document(interviewId)
-                        .delete()
-                        .get();
+                        .document(interviewId);
 
-                System.out.println("문진 삭제 완료");
-            } else {
-                System.err.println("삭제할 문진을 찾을 수 없음: reservation_id=" + reservationId);
+                ApiFuture<DocumentSnapshot> interviewFuture = interviewRef.get();
+                DocumentSnapshot interviewDoc = interviewFuture.get();
+
+                if (interviewDoc.exists()) {
+                    interviewRef.delete().get();
+                    System.out.println("문진 삭제 완료 - interview_id: " + interviewId);
+                    return;
+                }
             }
+
+            System.out.println("삭제할 문진을 찾을 수 없음: " + interviewId);
+
         } catch (Exception e) {
             System.err.println("문진 삭제 실패: " + e.getMessage());
             e.printStackTrace();
