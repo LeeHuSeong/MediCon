@@ -68,11 +68,13 @@
             <TextArea fx:id="testResultsField" GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.columnSpan="3" prefRowCount="3" wrapText="true"/>
 
             <!-- row 10: 복용약물 -->
-            <Label text="복용 중인 약물" wrapText="true" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="10" GridPane.halignment="RIGHT"/>
+            <Label text="복용 중인 약물" wrapText="true" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="10"
+                   GridPane.halignment="RIGHT" textAlignment="RIGHT"/>
             <TextArea fx:id="medicationsField" GridPane.columnIndex="1" GridPane.rowIndex="10" GridPane.columnSpan="3" prefRowCount="2" wrapText="true"/>
 
             <!-- row 11: 의뢰 목적 및 사유 -->
-            <Label text="의뢰 목적/사유" wrapText="true" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="11" GridPane.halignment="RIGHT"/>
+            <Label text="의뢰 목적/사유" wrapText="true" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="11"
+                   GridPane.halignment="RIGHT" textAlignment="RIGHT"/>
             <TextArea fx:id="purposeField" GridPane.columnIndex="1" GridPane.rowIndex="11" GridPane.columnSpan="3" prefRowCount="3" wrapText="true"/>
 
             <!-- row 12: 첨부물 -->
