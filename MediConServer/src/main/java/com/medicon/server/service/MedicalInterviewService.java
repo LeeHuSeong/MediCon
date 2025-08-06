@@ -24,4 +24,8 @@ public class MedicalInterviewService {
     public List<MedicalInterviewDTO> findInterviewByPatientId(String patientId) {
         return interviewDAO.findInterviewByPatientId(patientId);
     }
+
+    public MedicalInterviewDTO saveInterview(MedicalInterviewDTO interviewDTO) {
+        return interviewDAO.saveInterview(interviewDTO);
+    }
 }
