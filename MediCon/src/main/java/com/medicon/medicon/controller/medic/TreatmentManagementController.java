@@ -225,7 +225,7 @@ public class TreatmentManagementController {
     private void displayMedicalInterview(MedicalInterviewDTO interview) {
         // 데이터베이스의 실제 값들을 표시
         symptomLabel.setText(interview.getSymptoms() != null ? interview.getSymptoms() : "-");
-        symptomDurationLabel.setText(interview.getSymptom_duration() != null ? interview.getSymptom_duration() : "-");
+                        symptomDurationLabel.setText(interview.getSymptom_duration() != null ? interview.getSymptom_duration() : "-");
         historyLabel.setText(interview.getPast_medical_history() != null ? interview.getPast_medical_history() : "-");
         allergyLabel.setText(interview.getAllergy() != null ? interview.getAllergy() : "-");
         medicationLabel.setText(interview.getCurrent_medication() != null ? interview.getCurrent_medication() : "-");

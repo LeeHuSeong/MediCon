@@ -11,8 +11,8 @@
     <VBox prefHeight="800.0" prefWidth="1141.0" spacing="10">
         <Label maxWidth="Infinity" styleClass="section-title" text="추가 문진 작성" />
         <GridPane hgap="10" maxWidth="Infinity" prefHeight="359.0" prefWidth="1071.0" vgap="10" VBox.vgrow="ALWAYS">
-            <Label styleClass="form-labelBig" text="오늘 날짜 받아오기" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
-            <TextField fx:id="addtitleField" promptText="문진 제목" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
+            <Label styleClass="form-labelBig" text="문진 날짜 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
+            <Label fx:id="addtitleField" styleClass="form-labelBig" text="" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="0" />
 
             <Label styleClass="form-labelBig" text="과거 병력 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
             <TextField fx:id="addhistoryLabel" styleClass="form-labelBig" GridPane.columnIndex="1" GridPane.rowIndex="1" />

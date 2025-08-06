@@ -6,6 +6,7 @@ import com.medicon.medicon.model.ReservationDTO;
 import com.medicon.medicon.service.PatientApiService;
 import com.medicon.medicon.service.ReservationApiService;
 import com.medicon.medicon.service.MedicalInterviewApiService;
+import com.medicon.medicon.controller.medic.AddQuestionnaireFormController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -240,19 +241,68 @@ public class QuestionnaireManagementController implements Initializable {
 
     @FXML
     private void handleAddQuestionnaire(ActionEvent event) {
+        // 선택된 환자가 있는지 확인
+        PatientDTO selectedPatient = patientListView.getSelectionModel().getSelectedItem();
+        if (selectedPatient == null) {
+            showInfo("환자를 선택해주세요.");
+            return;
+        }
+
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/Form/AddQuestionnaireForm.fxml"));
-            Parent Root = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/AddQuestionnaireForm.fxml"));
+            Parent root = loader.load();
+
+            // 컨트롤러 가져오기
+            AddQuestionnaireFormController controller = loader.getController();
+            
+            // 선택된 환자의 최신 예약 정보 가져오기
+            ReservationDTO latestReservation = getLatestReservation(selectedPatient);
+            if (latestReservation != null) {
+                controller.setSelectedPatient(selectedPatient, latestReservation);
+            } else {
+                showInfo("해당 환자의 예약 정보가 없습니다. 먼저 예약을 생성해주세요.");
+                return;
+            }
 
             Stage stage = new Stage();
-//            popupStage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("추가 문진 작성");
-            stage.setScene(new Scene(Root));
+            stage.setTitle("추가 문진 작성 - " + selectedPatient.getName());
+            stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
+            showInfo("문진 작성 창을 열 수 없습니다.");
         }
+    }
+    
+    // 선택된 환자의 오늘 날짜 예약 정보 가져오기
+    private ReservationDTO getLatestReservation(PatientDTO patient) {
+        try {
+            // 환자의 모든 예약 조회
+            List<ReservationDTO> allReservations = reservationApiService.getReservationsByPatientId(patient.getPatient_id()).get();
+            
+            if (allReservations != null && !allReservations.isEmpty()) {
+                // 오늘 날짜의 예약 찾기
+                String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                
+                for (ReservationDTO reservation : allReservations) {
+                    if (today.equals(reservation.getDate())) {
+                        System.out.println("오늘 날짜 예약 발견: " + reservation.getReservation_id());
+                        return reservation;
+                    }
+                }
+                
+                // 오늘 날짜 예약이 없으면 가장 최근 예약 반환
+                System.out.println("오늘 날짜 예약이 없어서 최근 예약 사용: " + allReservations.get(0).getReservation_id());
+                return allReservations.get(0);
+            }
+        } catch (Exception e) {
+            System.err.println("예약 조회 실패: " + e.getMessage());
+        }
+        
+        // 예약이 없거나 오류 발생 시 null 반환
+        System.err.println("사용 가능한 예약이 없습니다.");
+        return null;
     }
 }
