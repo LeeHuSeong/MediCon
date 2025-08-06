@@ -89,6 +89,12 @@
     -fx-background-color: #3399FF;
     -fx-text-fill: white;
 }
+.list-view .list-cell {
+    -fx-pref-height: 50px;   /* 셀 하나당 높이 */
+    -fx-padding: 10px;       /* 내부 여백 */
+    -fx-font-size: 20px;
+}
+
 
 /* 섹션 타이틀 공통 스타일 */
 .section-title {
