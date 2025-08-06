@@ -5,7 +5,7 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.medicon.medicon.controller.AdminPasswordController"
-            stylesheets="@../../style/admin_password.css"
+            stylesheets="@../../style/staff/admin_password.css"
             prefWidth="400" prefHeight="250">
     <Label layoutX="120" layoutY="40" text="관리자 비밀번호 확인"/>
     <PasswordField fx:id="adminPwField"

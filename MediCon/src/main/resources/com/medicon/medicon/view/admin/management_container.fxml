@@ -5,7 +5,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            stylesheets="@../../style/side_tab.css"
+            stylesheets="@../../style/staff/side_tab.css"
             fx:controller="com.medicon.medicon.controller.ManagementContainerController"
             prefWidth="1280" prefHeight="720">
 

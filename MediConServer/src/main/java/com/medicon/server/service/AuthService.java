@@ -1,5 +1,10 @@
 package com.medicon.server.service;
 
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.firebase.cloud.FirestoreClient;
+
 import com.google.firebase.auth.*;
 import com.medicon.server.dto.auth.LoginResponse;
 import com.medicon.server.dto.auth.signup.DoctorSignupRequest;
@@ -42,11 +47,23 @@ public class AuthService {
             String uid = decodedToken.getUid();
             String email = decodedToken.getEmail();
 
-            String jwt = jwtUtil.generateToken(uid, email);
-            return new LoginResponse(true, "로그인 성공", jwt, uid, email);
+            // Firestore에서 authority 조회
+            Firestore db = FirestoreClient.getFirestore();
+            ApiFuture<DocumentSnapshot> future = db.collection("patients").document(uid).get();
+            DocumentSnapshot snapshot = future.get();
 
-        } catch (FirebaseAuthException e) {
-            return new LoginResponse(false, "로그인 실패: " + e.getMessage(), null);
+            Integer authority = null;
+            if (snapshot.exists()) {
+                Long authorityLong = snapshot.getLong("authority");
+                authority = authorityLong != null ? authorityLong.intValue() : null;
+            }
+
+            String jwt = jwtUtil.generateToken(uid, email);
+
+            return new LoginResponse(true, "로그인 성공", jwt, uid, email, authority);
+
+        } catch (Exception e) {
+            return new LoginResponse(false, "로그인 실패: " + e.getMessage());
         }
     }
 
