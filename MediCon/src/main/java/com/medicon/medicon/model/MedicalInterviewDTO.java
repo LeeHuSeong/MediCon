@@ -88,4 +88,6 @@ public class MedicalInterviewDTO {
     public void setAllergy(String allergy) {
         this.allergy = allergy;
     }
+
+
 }
