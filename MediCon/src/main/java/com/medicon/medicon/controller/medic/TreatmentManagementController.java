@@ -106,7 +106,7 @@ public class TreatmentManagementController {
         
         // 각 예약에 대해 환자 정보를 가져옴
         for (ReservationDTO reservation : reservations) {
-            patientApiService.getPatientByPatientIdAsync(reservation.getPatient_id()).thenAccept(patient -> {
+            patientApiService.getPatientByUidAsync(reservation.getPatient_uid()).thenAccept(patient -> {
                 if (patient != null) {
                     Platform.runLater(() -> {
                         if (!patientList.contains(patient)) {
@@ -184,14 +184,14 @@ public class TreatmentManagementController {
         patientPhoneLabel.setText(patient.getPhone());
         
         // 해당 환자의 예약 정보를 가져와서 최근 문진 로드
-        reservationApiService.getReservationsByPatientId(patient.getPatient_id()).thenAccept(reservations -> {
+        reservationApiService.getReservationsByPatientId(patient.getUid()).thenAccept(reservations -> {
             if (reservations != null && !reservations.isEmpty()) {
                 // 예약을 날짜순으로 정렬 (최신순)
                 reservations.sort((r1, r2) -> r2.getDate().compareTo(r1.getDate()));
                 selectedReservation = reservations.get(0); // 가장 최근 예약
                 
                 // 최근 문진 정보 로드
-                loadRecentMedicalInterview(patient.getUid(), patient.getPatient_id(), selectedReservation.getReservation_id());
+                loadRecentMedicalInterview(patient.getUid(), patient.getUid(), selectedReservation.getReservation_id());
             } else {
                 clearMedicalInterviewDisplay();
             }

@@ -14,20 +14,20 @@ public class Main extends Application {
 //                "/com/medicon/medicon/view/medic/medic_main/DiagnosisCertificateForm.fxml"
 //        ));
 
-        //Main_view
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource(
-//                "/com/medicon/medicon/view/medic/medic_main/MedicMain.fxml"
-//        ));
+//        //Main_view
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                "/com/medicon/medicon/view/medic/medic_main/MedicMain.fxml"
+        ));
 
         //Patient_view
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource(
 //                "/com/medicon/medicon/view/patient/patient_main/PatientMainView.fxml"
 //        ));
 
-        //login_view
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "/com/medicon/medicon/view/login.fxml"
-        ));
+//        //login_view
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource(
+//                "/com/medicon/medicon/view/login.fxml"
+//        ));
         Scene scene = new Scene(loader.load());
         stage.setTitle("MediCon 로그인");
         stage.setScene(scene);

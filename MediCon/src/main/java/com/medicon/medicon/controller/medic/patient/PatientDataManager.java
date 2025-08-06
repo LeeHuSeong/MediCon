@@ -107,7 +107,7 @@ public class PatientDataManager {
             AtomicInteger pendingRequests = new AtomicInteger(allPatients.size());
 
             for (PatientDTO patient : allPatients) {
-                reservationApiService.getReservationsByPatientId(patient.getPatient_id())
+                reservationApiService.getReservationsByPatientId(patient.getUid())
                         .thenAccept(reservations -> {
                             boolean hasTodayReservation = false;
 
@@ -177,7 +177,7 @@ public class PatientDataManager {
     public void loadPatientReservations(PatientDTO patient,
                                         Consumer<ReservationDTO> onReservationLoaded,
                                         Runnable onNoReservation) {
-        reservationApiService.getReservationsByPatientId(patient.getPatient_id())
+        reservationApiService.getReservationsByPatientId(patient.getUid())
                 .thenAccept(reservations -> {
                     Platform.runLater(() -> {
                         if (reservations != null && !reservations.isEmpty()) {
@@ -225,7 +225,7 @@ public class PatientDataManager {
         // 기존 데이터 완전히 제거
         Platform.runLater(() -> historyData.clear());
         
-        reservationApiService.getReservationsByPatientId(patient.getPatient_id())
+        reservationApiService.getReservationsByPatientId(patient.getUid())
                 .thenAccept(reservations -> {
                     Platform.runLater(() -> {
                         // 다시 한번 클리어 (비동기 처리 중 다른 데이터가 들어올 수 있음)
