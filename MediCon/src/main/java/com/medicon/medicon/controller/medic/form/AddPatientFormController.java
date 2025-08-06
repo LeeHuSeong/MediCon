@@ -1,4 +1,4 @@
-package com.medicon.medicon.controller.medic;
+package com.medicon.medicon.controller.medic.form;
 
 import com.medicon.medicon.model.PatientSignupRequest;
 import com.medicon.medicon.service.RegisterApiService;
