@@ -94,12 +94,13 @@
                         <Label maxWidth="Infinity" styleClass="section-title" text="진단" />
                         <GridPane hgap="10" maxWidth="Infinity" prefHeight="578.0" vgap="10" VBox.vgrow="ALWAYS">
                             <Label styleClass="form-label" text="내원 목적 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
-                            <TextField styleClass="form-label" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                            <TextField fx:id="tfVisitPurpose"  styleClass="form-label" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
                             <Label styleClass="form-label" text="진단 명 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-                            <TextField styleClass="form-label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            <TextField fx:id="tfDiagnosisName" styleClass="form-label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                             <Label styleClass="form-label" text="진로 소견 및 특이사항" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
-                            <TextArea prefHeight="124.0" prefWidth="666.0" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
+                            <TextArea fx:id="taOpinion" prefHeight="124.0" prefWidth="666.0" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
 
                             <Label styleClass="form-label" text="첨부된 파일" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
                             <TextArea GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="5" />
@@ -126,7 +127,7 @@
             <Region HBox.hgrow="ALWAYS" />
             <HBox spacing="10">
                 <Button styleClass="button-lightblue" text="임시저장" />
-                <Button styleClass="button-blue" text="변경사항저장" />
+                <Button fx:id="btnSaveChart" styleClass="button-blue" text="변경사항저장" onAction="#handleSaveChart"/>
             </HBox>
         </HBox>
     </VBox>

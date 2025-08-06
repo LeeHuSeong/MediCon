@@ -14,7 +14,9 @@ public class Main extends Application {
 //                "/com/medicon/medicon/view/medic/medic_main/DiagnosisCertificateForm.fxml"
 //        ));
 
-//        //Main_view
+
+        //Main_view
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
                 "/com/medicon/medicon/view/medic/medic_main/MedicMain.fxml"
         ));
@@ -24,7 +26,7 @@ public class Main extends Application {
 //                "/com/medicon/medicon/view/patient/patient_main/PatientMainView.fxml"
 //        ));
 
-//        //login_view
+        //login_view
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource(
 //                "/com/medicon/medicon/view/login.fxml"
 //        ));
