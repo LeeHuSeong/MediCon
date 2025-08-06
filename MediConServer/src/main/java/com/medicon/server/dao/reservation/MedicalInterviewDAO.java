@@ -13,6 +13,9 @@ public interface MedicalInterviewDAO {
 
     // 문진 등록
     void saveInterview(String reservationId, MedicalInterviewDTO interview);
+    
+    // 문진 저장 (DTO 반환)
+    MedicalInterviewDTO saveInterview(MedicalInterviewDTO interviewDTO);
 
     // 문진 수정
     void updateInterview(String reservationId, MedicalInterviewDTO interview);
