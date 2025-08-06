@@ -50,26 +50,38 @@ public class RegisterController {
 
     private void generateRankButtons(List<String> ranks) {
         rankPane.getChildren().clear();
+        ToggleGroup rankGroup = new ToggleGroup();
+
         for (String rank : ranks) {
-            Button btn = new Button(rank);
-            btn.setOnAction(e -> {
-                selectedRank = rank;
-                highlightSelected(btn, rankPane);
-            });
+            ToggleButton btn = new ToggleButton(rank);
+            btn.setToggleGroup(rankGroup);
+            btn.getStyleClass().add("tile-button");  // 공통 스타일 사용
             rankPane.getChildren().add(btn);
         }
+
+        rankGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                selectedRank = ((ToggleButton) newVal).getText();
+            }
+        });
     }
 
     private void generateDepartmentButtons() {
         departmentPane.getChildren().clear();
+        ToggleGroup deptGroup = new ToggleGroup();
+
         for (String dept : departments) {
-            Button btn = new Button(dept);
-            btn.setOnAction(e -> {
-                selectedDepartment = dept;
-                highlightSelected(btn, departmentPane);
-            });
+            ToggleButton btn = new ToggleButton(dept);
+            btn.setToggleGroup(deptGroup);
+            btn.getStyleClass().add("tile-button");  // 공통 스타일 사용
             departmentPane.getChildren().add(btn);
         }
+
+        deptGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                selectedDepartment = ((ToggleButton) newVal).getText();
+            }
+        });
     }
 
     private void highlightSelected(Button selectedBtn, TilePane pane) {

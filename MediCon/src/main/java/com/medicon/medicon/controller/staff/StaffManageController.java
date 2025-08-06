@@ -36,10 +36,15 @@ public class StaffManageController {
     private String selectedDepartment;
     private String selectedRank;
 
+    private ToggleGroup rankGroup = new ToggleGroup();
+    private ToggleGroup deptGroup = new ToggleGroup();
+
+
     @FXML
     public void initialize() {
         // 권한 콤보박스 초기화 (환자, 간호사, 의사)
         authorityComboBox.setItems(FXCollections.observableArrayList("환자", "간호사", "의사"));
+        authorityComboBox.setDisable(true);
 
         // 직원 목록 보기 설정
         userListView.setItems(staffList);
@@ -59,13 +64,13 @@ public class StaffManageController {
                 phoneField.setText(newVal.getPhone());
                 authorityComboBox.setValue(mapAuthorityToString(newVal.getAuthority())); // 권한 설정 (수정 불가)
 
-                // 역할에 따라 부서 및 직급 버튼 초기화
-                initializeDepartmentButtons(newVal.getRole());
-                initializeRankButtons(newVal.getRole());
-
-                // 선택된 부서 및 직급 저장
+                // 먼저 선택된 값 설정
                 selectedDepartment = newVal.getDepartment();
                 selectedRank = newVal.getRank();
+
+                // 다음 버튼 초기화
+                initializeDepartmentButtons(newVal.getRole());
+                initializeRankButtons(newVal.getRole());
             }
         });
 
@@ -306,71 +311,68 @@ public class StaffManageController {
         }
     }
 
-    // Initialize rank buttons based on selected role
     private void initializeRankButtons(String role) {
-        List<String> ranks = new ArrayList<>();
+        List<String> ranks = switch (role.toLowerCase()) {
+            case "doctor" -> Arrays.asList("인턴", "레지던트", "전임의", "조교수", "부교수", "교수");
+            case "nurse" -> Arrays.asList("간호사", "수간호사", "책임간호사", "수석간호사");
+            default -> Collections.emptyList();
+        };
 
-        if ("doctor".equalsIgnoreCase(role)) {
-            ranks = Arrays.asList("인턴", "레지던트", "전임의", "조교수", "부교수", "교수");
-        } else if ("nurse".equalsIgnoreCase(role)) {
-            ranks = Arrays.asList("간호사", "수간호사", "책임간호사", "수석간호사");
-        }
+        rankPane.getChildren().clear();
+        rankGroup.getToggles().clear();
+        ToggleButton toSelect = null;
 
-        rankPane.getChildren().clear();  // 기존 버튼 초기화
-        ToggleGroup rankGroup = new ToggleGroup();
-
-        // 직급 버튼을 TilePane에 추가
         for (String rank : ranks) {
             ToggleButton btn = new ToggleButton(rank);
             btn.setToggleGroup(rankGroup);
             btn.getStyleClass().add("tile-button");
             rankPane.getChildren().add(btn);
+
+            if (rank.equals(selectedRank)) {
+                toSelect = btn;
+            }
         }
 
-        // 버튼 클릭 시 직급 선택 저장
-        rankGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
-            if (newToggle != null) {
-                selectedRank = ((ToggleButton) newToggle).getText();  // 선택된 직급 저장
+        // 모든 버튼 추가 후 선택
+        if (toSelect != null) {
+            rankGroup.selectToggle(toSelect);
+        }
+
+        // 클릭 시 업데이트
+        rankGroup.selectedToggleProperty().addListener((obs, old, now) -> {
+            if (now != null) {
+                selectedRank = ((ToggleButton) now).getText();
             }
         });
-
-        // 선택된 직급 버튼 강조
-        for (Toggle toggle : rankGroup.getToggles()) {
-            if (((ToggleButton) toggle).getText().equals(selectedRank)) {
-                toggle.setSelected(true);  // 이걸 추가
-                break;
-            }
-        }
     }
 
-    // Initialize department buttons based on selected role
+
     private void initializeDepartmentButtons(String role) {
-        List<String> departments = Arrays.asList("내과", "외과", "소아과", "산부인과", "정형외과", "응급의학과");
-        ToggleGroup deptGroup = new ToggleGroup();
+        List<String> departments = Arrays.asList("내과", "외과", "소아과", "산부인과", "정형외과", "피부과","비뇨기과","신경외과","정신과");
 
-        departmentPane.getChildren().clear();  // 기존 버튼 초기화
+        departmentPane.getChildren().clear();
+        deptGroup.getToggles().clear();
+        ToggleButton toSelect = null;
 
-        // 부서 버튼을 TilePane에 추가
         for (String dept : departments) {
             ToggleButton btn = new ToggleButton(dept);
             btn.setToggleGroup(deptGroup);
             btn.getStyleClass().add("tile-button");
             departmentPane.getChildren().add(btn);
+
+            if (dept.equals(selectedDepartment)) {
+                toSelect = btn;
+            }
         }
 
-        // 버튼 클릭 시 부서 선택 저장
-        deptGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null) {
-                selectedDepartment = ((ToggleButton) newVal).getText();  // 선택된 부서 저장
+        if (toSelect != null) {
+            deptGroup.selectToggle(toSelect);
+        }
+
+        deptGroup.selectedToggleProperty().addListener((obs, old, now) -> {
+            if (now != null) {
+                selectedDepartment = ((ToggleButton) now).getText();
             }
         });
-
-        // 선택된 부서 버튼 강조
-        for (Toggle toggle : deptGroup.getToggles()) {
-            if (((ToggleButton) toggle).getText().equals(selectedDepartment)) {
-                toggle.setSelected(true);
-                break;
-            }
-        }
     }
 }

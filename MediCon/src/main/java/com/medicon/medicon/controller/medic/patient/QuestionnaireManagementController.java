@@ -337,7 +337,8 @@ public class QuestionnaireManagementController implements Initializable {
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == saveButtonType) {
                 ReservationDTO newReservation = new ReservationDTO();
-                newReservation.setPatient_id(selectedPatient.getUid());
+                newReservation.setPatient_uid(selectedPatient.getUid()); // Firebase UID
+                newReservation.setPatient_id(selectedPatient.getPatient_id()); // 생성된 patient_id
                 newReservation.setDate(datePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
                 newReservation.setTime(timeComboBox.getValue());
                 newReservation.setDepartment(departmentComboBox.getValue());

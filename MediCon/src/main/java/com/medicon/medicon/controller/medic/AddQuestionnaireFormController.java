@@ -86,7 +86,7 @@ public class AddQuestionnaireFormController implements Initializable {
             // MedicalInterviewDTO 생성
             MedicalInterviewDTO interview = new MedicalInterviewDTO();
             interview.setInterview_id(generateInterviewId());
-            interview.setPatient_id(selectedPatient.getPatient_id());
+            interview.setPatient_id(selectedPatient.getUid()); // uid 사용
             interview.setReservation_id(selectedReservation.getReservation_id());
             interview.setPast_medical_history(addhistoryLabel.getText());
             interview.setSymptoms(symptomsStr.toString());

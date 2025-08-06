@@ -92,16 +92,13 @@ public class LoginController {
 
                     String fxmlPath;
                     String title;
-
-                    if (result.getAuthority() == 0) {
+                    Integer authority = result.getAuthority();
+                    if (authority == 0 && authority != null) {
                         fxmlPath = "/com/medicon/medicon/view/patient/patient_main/PatientMainView.fxml";
                         title = "MediCon 환자 메인 화면";
-                    } else if (result.getAuthority() == 1 || result.getAuthority() == 2) {
+                    } else{
                         fxmlPath = "/com/medicon/medicon/view/medic/medic_main/MedicMain.fxml";
                         title = "MediCon 메인 화면";
-                    } else {
-                        showError("권한 정보가 없거나 잘못된 사용자입니다.");
-                        return;
                     }
 
                     try {
@@ -113,8 +110,9 @@ public class LoginController {
                         stage.setTitle(title);
                         stage.setMinWidth(1280);
                         stage.setMinHeight(720);
-                        stage.setMaximized(true);
+
                         stage.show();
+                        stage.setMaximized(true);
 
                     } catch (IOException ex) {
                         showError("화면 로딩 실패: " + ex.getMessage());

@@ -143,12 +143,16 @@ public class TreatmentManagementController {
 
     /** 예약 목록에서 환자 정보 로드 */
     private void loadPatientsFromReservations(List<ReservationDTO> reservations) {
-        ObservableList<PatientDTO> list = FXCollections.observableArrayList();
-        for (ReservationDTO r : reservations) {
-            patientApiService.getPatientByPatientIdAsync(r.getPatient_id())
-                    .thenAccept(p -> {
-                        if (p != null) {
-                            Platform.runLater(() -> { if (!list.contains(p)) list.add(p); });
+
+        ObservableList<PatientDTO> patientList = FXCollections.observableArrayList();
+        
+        // 각 예약에 대해 환자 정보를 가져옴
+        for (ReservationDTO reservation : reservations) {
+            patientApiService.getPatientByUidAsync(reservation.getPatient_uid()).thenAccept(patient -> {
+                if (patient != null) {
+                    Platform.runLater(() -> {
+                        if (!patientList.contains(patient)) {
+                            patientList.add(patient);
                         }
                     });
         }
@@ -192,16 +196,21 @@ public class TreatmentManagementController {
         patientGenderLabel.setText(patient.getGender());
         patientAgeLabel.setText(String.valueOf(calculateAge(patient.getRnn())));
         patientPhoneLabel.setText(patient.getPhone());
-        reservationApiService.getReservationsByPatientId(patient.getPatient_id())
-                .thenAccept(reservations -> {
-                    if (reservations != null && !reservations.isEmpty()) {
-                        reservations.sort((r1, r2) -> r2.getDate().compareTo(r1.getDate()));
-                        ReservationDTO recent = reservations.get(0);
-                        loadRecentMedicalInterview(patient.getUid(), patient.getPatient_id(), recent.getReservation_id());
-                    } else {
-                        clearMedicalInterviewDisplay();
-                    }
-                });
+
+        
+        // 해당 환자의 예약 정보를 가져와서 최근 문진 로드
+        reservationApiService.getReservationsByPatientId(patient.getUid()).thenAccept(reservations -> {
+            if (reservations != null && !reservations.isEmpty()) {
+                // 예약을 날짜순으로 정렬 (최신순)
+                reservations.sort((r1, r2) -> r2.getDate().compareTo(r1.getDate()));
+                selectedReservation = reservations.get(0); // 가장 최근 예약
+                
+                // 최근 문진 정보 로드
+                loadRecentMedicalInterview(patient.getUid(), patient.getUid(), selectedReservation.getReservation_id());
+            } else {
+                clearMedicalInterviewDisplay();
+            }
+        });
     }
 
     private void loadRecentMedicalInterview(String uid, String patientId, String reservationId) {

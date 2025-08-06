@@ -54,7 +54,7 @@
 /* 7. 타일 영역 */
 .tile-pane {
     -fx-padding: 5;
-    -fx-border-color: #d0d0d0;
+    -fx-border-color: transparent;
     -fx-border-radius: 8;
     -fx-background-radius: 8;
     -fx-background-color: #fdfdfd;

@@ -148,7 +148,7 @@ public class MedicalInterviewDAOImpl implements MedicalInterviewDAO {
         try {
             System.out.println("문진 저장 시작 - DTO 방식");
 
-            String uid = interviewDTO.getPatient_id(); // patient_id는 실제로 uid
+            String uid = interviewDTO.getPatient_id(); // patient_id 필드에 uid가 저장됨
             String reservationId = interviewDTO.getReservation_id();
             
             if (uid == null || reservationId == null) {
