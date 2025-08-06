@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>처방전</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="PrescriptionStyle.css">
+</head>
+<body>
+
+<div class="actions">
+  <button onclick="window.print()">인쇄하기</button>
+  <button id="download">PDF 저장</button>
+</div>
+
+<div class="certificate-box" id="certificate">
+  <div class="title">처방전</div>
+
+  <div class="issue-date">
+    차트번호:  &nbsp;&nbsp;
+    처방전 번호:  &nbsp;&nbsp;
+    발행일자:  &nbsp;&nbsp;
+    유효기간: 
+  </div>
+
+  <table>
+    <!-- 환자 정보 -->
+    <tr>
+      <th rowspan="3">환자 정보</th>
+      <th>성명</th>
+      <td colspan="2"></td>
+      <th>주민등록번호</th>
+      <td colspan="2"></td>
+    </tr>
+    <tr>
+      <th>성별</th>
+      <td colspan="2">남자</td>
+      <th>연락처</th>
+      <td colspan="2"></td>
+    </tr>
+    <tr>
+      <th>주소</th>
+      <td colspan="5"></td>
+    </tr>
+
+    <!-- 병원 정보 -->
+    <tr>
+      <th rowspan="2">병원 정보</th>
+      <th>병원명</th>
+      <td colspan="2"></td>
+      <th>연락처</th>
+      <td colspan="2"></td>
+    </tr>
+    <tr>
+      <th>의사명</th>
+      <td colspan="2"></td>
+      <th>면허번호</th>
+      <td colspan="2"></td>
+    </tr>
+
+    <!-- 처방 내역 -->
+    <tr>
+      <th colspan="7">처방 내역</th>
+    </tr>
+    <tr>
+      <th>약품명</th>
+      <th>용법·용량</th>
+      <th>투여 경로</th>
+      <th>투여 기간</th>
+      <th colspan="3">복약 지도</th>
+    </tr>
+    <tr><td>텐텐</td><td>1일 2정</td><td></td><td></td><td></td></tr>
+
+    <!-- 일반 복약 지도 -->
+    <tr>
+      <th style="height:80px;" colspan="2">일반 복약 지도</th>
+      <td class="align-top-left" colspan="5"></td>
+    </tr>
+  </table>
+
+  <div class="footer">
+    상기 환자에 대해 위와 같이 처방함.
+  </div>
+  <br/>
+  <div class="issue-date">발급 의사:  (서명 및 인)</div>
+  <div class="bottom-center">◯◯종합병원</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script>
+  document.getElementById("download").addEventListener("click", () => {
+    const element = document.getElementById("certificate");
+    html2pdf().set({
+      margin: 0.5,
+      filename: '처방전.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    }).from(element).save();
+  });
+</script>
+</body>
+</html>

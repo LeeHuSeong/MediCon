@@ -281,6 +281,27 @@ public class TreatmentManagementController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+    /**
+     * 과거문진기록 버튼 클릭 처리
+     */
+    @FXML
+    private void handleQuestionnaireHistory(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/Form/TreatmentHistoryForm.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("과거진료이력");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("오류", "과거진료이력 창을 열 수 없습니다: " + e.getMessage());
+        }
+    }
 
     /**
      * 진료확인서 버튼 클릭 처리
@@ -355,6 +376,24 @@ public class TreatmentManagementController {
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("오류", "진료의뢰서 창을 열 수 없습니다: " + e.getMessage());
+        }
+    }
+    @FXML
+    private void handlePerscription(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/Form/PrescriptionForm.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("처방전");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("오류", "처방전 창을 열 수 없습니다: " + e.getMessage());
         }
     }
 }
