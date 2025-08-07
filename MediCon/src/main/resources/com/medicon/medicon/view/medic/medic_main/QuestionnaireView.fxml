@@ -28,11 +28,11 @@
                 <!-- 날짜만 표시하는 라벨 -->
                 <Label fx:id="interviewDateLabel" styleClass="form-labelBig" text="" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
 
-                <Label styleClass="form-labelBig" text="과거 병력 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-                <Label fx:id="historyLabel" styleClass="form-labelBig" text="코로나" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label styleClass="form-labelBig" text="현재 증상 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                <Label fx:id="symptomLabel" styleClass="form-labelBig" text="감기인가 코로나인가" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                <Label styleClass="form-labelBig" text="현재 증상 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-                <Label fx:id="symptomLabel" styleClass="form-labelBig" text="감기인가 코로나인가" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Label styleClass="form-labelBig" text="과거 병력 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+                <Label fx:id="historyLabel" styleClass="form-labelBig" text="코로나" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
                 <Label styleClass="form-labelBig" text="증상시작시점 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
                 <Label fx:id="symptomDurationLabel" styleClass="form-labelBig" text="오늘" GridPane.columnIndex="1" GridPane.rowIndex="3" />
@@ -44,7 +44,7 @@
                 <Label fx:id="medicationLabel" styleClass="form-labelBig" text="텐텐" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
                 <Label styleClass="form-labelBig" text="기타" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.rowIndex="6" />
-                <TextArea fx:id="symytomElse" prefRowCount="2" wrapText="true"
+                <TextArea fx:id="symptomElse" prefRowCount="2" wrapText="true"  editable="false"
                           GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="7"  GridPane.columnSpan="2" />
 
                 <VBox.margin>

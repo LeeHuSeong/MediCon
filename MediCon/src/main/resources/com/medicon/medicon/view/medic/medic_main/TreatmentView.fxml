@@ -25,11 +25,11 @@
                     <!-- 가운데 중앙 제목 -->
                     <Label styleClass="section-title" text="진료 차트" StackPane.alignment="CENTER" />
                     <!-- 오른쪽 위 작성자 정보 -->
-                    <AnchorPane pickOnBounds="false" StackPane.alignment="TOP_RIGHT">
-                        <HBox alignment="CENTER_RIGHT" spacing="5" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="1">
-                            <Label styleClass="form-label" text="작성자 :" />
-                            <Label styleClass="form-label" text="의사" />
-                            <TextField prefWidth="100" promptText="이름" />
+                    <AnchorPane pickOnBounds="false" StackPane.alignment="CENTER_RIGHT">
+                        <HBox alignment="CENTER_RIGHT" spacing="5" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="7">
+                            <Label styleClass="form-labelBig" text="작성자 : " />
+                            <Label fx:id="doctorLabel" styleClass="form-labelBig" text="의사 " />
+                            <Label fx:id="doctorNameLabel" styleClass="form-labelBig" text="" />
                         </HBox>
                     </AnchorPane>
                 </StackPane>
@@ -66,11 +66,11 @@
                             <!-- 날짜만 표시하는 라벨 -->
                             <Label fx:id="interviewDateLabel" styleClass="form-labelBig" text="" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
 
-                            <Label styleClass="form-labelBig" text="과거 병력 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-                            <Label fx:id="historyLabel" styleClass="form-labelBig" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            <Label styleClass="form-labelBig" text="현재 증상 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                            <Label fx:id="symptomLabel" styleClass="form-labelBig" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                            <Label styleClass="form-labelBig" text="현재 증상 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-                            <Label fx:id="symptomLabel" styleClass="form-labelBig" text="" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                            <Label styleClass="form-labelBig" text="과거 병력 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+                            <Label fx:id="historyLabel" styleClass="form-labelBig" text="" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
                             <Label styleClass="form-labelBig" text="증상시작시점 :" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
                             <Label fx:id="symptomDurationLabel" styleClass="form-labelBig" text="" GridPane.columnIndex="1" GridPane.rowIndex="3" />
@@ -82,7 +82,7 @@
                             <Label fx:id="medicationLabel" styleClass="form-labelBig" text="" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
                             <Label styleClass="form-labelBig" text="기타" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.rowIndex="6" />
-                            <TextArea fx:id="symytomElse" prefRowCount="2" wrapText="true" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
+                            <TextArea fx:id="symptomElse"  editable="false" prefRowCount="2" wrapText="true" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
 
                             <VBox.margin>
                                 <Insets left="20.0" right="20" />
