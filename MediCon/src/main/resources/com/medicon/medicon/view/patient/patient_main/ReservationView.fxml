@@ -55,12 +55,12 @@
             </GridPane>
             <HBox alignment="CENTER" spacing="10">
                 <children>
-                    <Button fx:id="changePatientButton" styleClass="button-blue" text="환자 정보 변경"> <!-- onAction="#handleChangePatient" -->
+                    <Button fx:id="changePatientButton" styleClass="button-blue" text="환자 정보 변경" onAction="#handleChangePatient" >
                         <HBox.margin>
                             <Insets right="10.0" />
                         </HBox.margin>
                     </Button>
-                    <Button fx:id="updatePatientButton" styleClass="button-lightblue" text="완료" />
+                    <Button fx:id="updatePatientButton" styleClass="button-lightblue" text="완료" onAction="#handleUpdatePatient"/>
                 </children>
             </HBox>
         </VBox>
@@ -83,64 +83,65 @@
                         </padding>
                         <Label text="오전" styleClass="time-section-label"/>
                         <FlowPane hgap="10" vgap="5">
-                            <Button text="09:00" styleClass="time-button"/> <!-- onAction="#selectTime" -->
-                            <Button text="09:10" styleClass="time-button"/>
-                            <Button text="09:20" styleClass="time-button"/>
-                            <Button text="09:30" styleClass="time-button"/>
-                            <Button text="09:40" styleClass="time-button"/>
-                            <Button text="09:50" styleClass="time-button"/>
-                            <Button text="10:00" styleClass="time-button"/>
-                            <Button text="10:10" styleClass="time-button"/>
-                            <Button text="10:20" styleClass="time-button"/>
-                            <Button text="10:30" styleClass="time-button"/>
-                            <Button text="10:40" styleClass="time-button"/>
-                            <Button text="10:50" styleClass="time-button"/>
-                            <Button text="11:00" styleClass="time-button"/>
-                            <Button text="11:10" styleClass="time-button"/>
-                            <Button text="11:20" styleClass="time-button"/>
+                            <Button text="09:00" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="09:10" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="09:20" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="09:30" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="09:40" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="09:50" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="10:00" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="10:10" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="10:20" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="10:30" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="10:40" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="10:50" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="11:00" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="11:10" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="11:20" styleClass="time-button" onAction="#selectTime"/>
 
                             <!-- ... -->
                         </FlowPane>
                         <Label text="오후" styleClass="time-section-label" />
                         <FlowPane hgap="10" vgap="5">
-                            <Button text="13:00" styleClass="time-button"/>
-                            <Button text="13:10" styleClass="time-button"/>
-                            <Button text="13:20" styleClass="time-button"/>
-                            <Button text="13:30" styleClass="time-button"/>
-                            <Button text="13:40" styleClass="time-button"/>
-                            <Button text="13:50" styleClass="time-button"/>
-                            <Button text="14:00" styleClass="time-button"/>
-                            <Button text="14:10" styleClass="time-button"/>
-                            <Button text="14:20" styleClass="time-button"/>
-                            <Button text="14:30" styleClass="time-button"/>
-                            <Button text="14:40" styleClass="time-button"/>
-                            <Button text="14:50" styleClass="time-button"/>
-                            <Button text="15:00" styleClass="time-button"/>
-                            <Button text="15:10" styleClass="time-button"/>
-                            <Button text="15:20" styleClass="time-button"/>
-                            <Button text="15:30" styleClass="time-button"/>
-                            <Button text="15:40" styleClass="time-button"/>
-                            <Button text="15:50" styleClass="time-button"/>
-                            <Button text="16:00" styleClass="time-button"/>
-                            <Button text="16:10" styleClass="time-button"/>
-                            <Button text="16:20" styleClass="time-button"/>
-                            <Button text="16:30" styleClass="time-button"/>
-                            <Button text="16:40" styleClass="time-button"/>
-                            <Button text="16:50" styleClass="time-button"/>
-                            <Button text="17:00" styleClass="time-button"/>
-                            <Button text="17:10" styleClass="time-button"/>
-                            <Button text="17:20" styleClass="time-button"/>
-                            <Button text="17:30" styleClass="time-button"/>
-                            <Button text="17:40" styleClass="time-button"/>
-                            <Button text="17:50" styleClass="time-button"/>
+                            <Button text="13:00" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="13:10" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="13:20" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="13:30" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="13:40" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="13:50" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="14:00" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="14:10" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="14:20" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="14:30" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="14:40" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="14:50" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="15:00" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="15:10" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="15:20" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="15:30" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="15:40" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="15:50" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="16:00" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="16:10" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="16:20" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="16:30" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="16:40" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="16:50" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="17:00" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="17:10" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="17:20" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="17:30" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="17:40" styleClass="time-button" onAction="#selectTime"/>
+                            <Button text="17:50" styleClass="time-button" onAction="#selectTime"/>
                             <!-- ... -->
                         </FlowPane>
                     </VBox>
                 </content>
             </ScrollPane>
-            <Button fx:id="reserveButton" text="예약하기" styleClass="button-blue" />
+            <!-- New Label to display selected time -->
+            <Label fx:id="selectedTimeDisplayLabel" text="" styleClass="form-label" />
+            <Button fx:id="reserveButton" text="예약하기" styleClass="button-blue" onAction="#handleReservation"/>
         </VBox>
 
     </HBox>
 </AnchorPane>
-

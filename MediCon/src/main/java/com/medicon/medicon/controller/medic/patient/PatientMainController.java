@@ -1,5 +1,6 @@
 package com.medicon.medicon.controller.medic.patient;
 
+import com.medicon.medicon.controller.patient.PerInfoController;
 import com.medicon.medicon.controller.patient.PatientTopBarController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +11,6 @@ public class PatientMainController {
 
     @FXML
     private BorderPane mainBorderPane;
-    @FXML
     private String patientUid;
 
 
@@ -18,6 +18,12 @@ public class PatientMainController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Node node = loader.load();
+
+            Object controller = loader.getController();
+            if (controller instanceof PerInfoController) {
+                ((PerInfoController) controller).setUid(this.patientUid);
+            }
+
             mainBorderPane.setCenter(node);
         } catch (Exception e) {
             e.printStackTrace();
@@ -31,7 +37,7 @@ public class PatientMainController {
             Node topBar = topBarLoader.load();
 
             PatientTopBarController controller = topBarLoader.getController();
-            controller.setMainController(this); // 🔗 MainController 연결
+            controller.setMainController(this);
 
             mainBorderPane.setTop(topBar);
         } catch (Exception e) {
@@ -41,5 +47,6 @@ public class PatientMainController {
 
     public void setUid(String uid) {
         this.patientUid = uid;
+        setCenter("/com/medicon/medicon/view/patient/patient_main/ReservationView.fxml");
     }
 }
