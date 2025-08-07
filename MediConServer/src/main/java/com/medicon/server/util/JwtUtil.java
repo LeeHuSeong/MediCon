@@ -64,4 +64,22 @@ public class JwtUtil {
                 .getBody()
                 .getSubject();
     }
+
+    public boolean isValidToken(String token) {
+        try {
+            Claims claims = getClaims(token);
+            Date expiration = claims.getExpiration();
+            return expiration.after(new Date());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)  // 기존 비밀키 사용
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
 }
