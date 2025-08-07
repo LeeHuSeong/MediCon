@@ -1,5 +1,6 @@
 package com.medicon.medicon.controller.medic.form;
 
+import com.medicon.medicon.controller.medic.TreatmentManagementController;
 import com.medicon.medicon.model.ChartDTO;
 import com.medicon.medicon.service.ChartApiService;
 import javafx.application.Platform;
@@ -21,21 +22,19 @@ public class TreatmentHistoryFormController implements Initializable {
     private final ChartApiService chartService = new ChartApiService();
     private String patientUid;
 
-    // === [콜백 필드 & setter 추가] ===
-    private ChartSelectionListener chartSelectionListener;
+    private TreatmentManagementController treatmentManagementController;
 
-    public void setChartSelectionListener(ChartSelectionListener listener) {
-        this.chartSelectionListener = listener;
+    public void setTreatmentManagementController(TreatmentManagementController controller) {
+        this.treatmentManagementController = controller;
     }
-    // ==============================
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         historyListView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 ChartDTO selected = historyListView.getSelectionModel().getSelectedItem();
-                if (selected != null && chartSelectionListener != null) {
-                    chartSelectionListener.onChartSelected(selected.getChart_id()); // 콜백 호출
+                if (selected != null && treatmentManagementController != null) {
+                    treatmentManagementController.showChartDetail(selected.getChart_id());
                     Stage stage = (Stage) historyListView.getScene().getWindow();
                     stage.close();
                 }

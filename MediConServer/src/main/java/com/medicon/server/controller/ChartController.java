@@ -39,7 +39,7 @@ public class ChartController {
     }
 
     // 환자 UID로 차트 전체 이력 조회
-    @GetMapping("/by-uid/{uid}")
+    @GetMapping("/by-patient/{uid}")
     public List<ChartDTO> getChartsByPatientUid(@PathVariable String uid) {
         return chartDAO.findChartByPatientUid(uid);
     }

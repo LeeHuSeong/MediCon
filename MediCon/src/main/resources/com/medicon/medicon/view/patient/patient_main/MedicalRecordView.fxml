@@ -11,14 +11,6 @@
     <VBox spacing="10" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0"
           AnchorPane.topAnchor="20.0" AnchorPane.rightAnchor="20" alignment="TOP_CENTER">
         <Label text="진료 기록" maxWidth="Infinity" styleClass="section-title"/>
-        <TableView fx:id="recordTable" prefHeight="400" >
-            <columns >
-                <TableColumn text="진료일자" fx:id="dateColumn" styleClass="table-label" prefWidth="200"/>
-                <TableColumn text="진료과" fx:id="departmentColumn" styleClass="table-label" prefWidth="100"/>
-                <TableColumn text="담당의사" fx:id="doctorColumn" styleClass="table-label" prefWidth="100"/>
-                <TableColumn text="진단명" fx:id="diagnosisColumn" styleClass="table-label" prefWidth="200"/>
-                <TableColumn text="진료요약보기" fx:id="detailColumn" styleClass="table-label" prefWidth="500"/>
-            </columns>
-        </TableView>
+        <ListView fx:id="recordListView" prefHeight="400" VBox.vgrow="ALWAYS"/>
     </VBox>
 </AnchorPane>
