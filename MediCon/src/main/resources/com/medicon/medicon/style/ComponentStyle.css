@@ -89,6 +89,13 @@
     -fx-background-color: #3399FF;
     -fx-text-fill: white;
 }
+
+.time-button-selected {
+    -fx-background-color: #3399FF;
+    -fx-text-fill: white;
+    -fx-border-color: #1A75FF;
+    -fx-border-width: 2px;
+}
 .list-view .list-cell {
     -fx-pref-height: 50px;   /* 셀 하나당 높이 */
     -fx-padding: 10px;       /* 내부 여백 */
