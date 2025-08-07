@@ -6,6 +6,7 @@ import com.medicon.medicon.config.AppConfig;
 import com.medicon.medicon.model.PatientDTO;
 
 import com.medicon.medicon.model.ReservationDTO;
+import com.medicon.medicon.model.ChartDTO;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -22,6 +23,7 @@ public class PatientApiService {
 
     private static final String PATIENT_BASE_URL = AppConfig.SERVER_BASE_URL + "/api/patient";
     private static final String RESERVATION_BASE_URL = AppConfig.SERVER_BASE_URL + "/api/reservation";
+    private static final String CHART_BASE_URL = AppConfig.SERVER_BASE_URL + "/api/chart";
     private final ObjectMapper objectMapper;
 
     public PatientApiService() {
@@ -299,6 +301,66 @@ public class PatientApiService {
         });
     }
 
+    // UID로 차트 조회 - GET /api/chart/by-patient/{uid}
+    public CompletableFuture<List<ChartDTO>> getMedicalRecordsByUidAsync(String uid) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                URL url = new URL(CHART_BASE_URL + "/by-patient/" + uid);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Content-Type", "application/json");
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode == 200) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
+
+                    return objectMapper.readValue(response.toString(), new TypeReference<List<ChartDTO>>() {});
+                } else {
+                    System.err.println("차트 조회 실패: " + responseCode);
+                    return new ArrayList<>();
+                }
+            } catch (Exception e) {
+                System.err.println("네트워크 오류: " + e.getMessage());
+                e.printStackTrace();
+                return new ArrayList<>();
+            }
+        });
+    }
+
+//    // 환자 삭제 - DELETE /api/patient/delete/{uid}
+//    public CompletableFuture<Boolean> deletePatientAsync(String uid) {
+//        return CompletableFuture.supplyAsync(() -> {
+//            try {
+//                URL url = new URL(BASE_URL + "/delete/" + uid);
+//                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//                conn.setRequestMethod("DELETE");
+//                conn.setRequestProperty("Content-Type", "application/json");
+//
+//                int responseCode = conn.getResponseCode();
+//                if (responseCode == 200) {
+//                    System.out.println("환자 삭제 성공: UID=" + uid);
+//                    return true;
+//                }
+// else {
+//                    System.err.println("환자 삭제 실패: " + responseCode);
+//                    return false;
+//                }
+//            }
+// catch (Exception e) {
+//                System.err.println("환자 삭제 중 오류: " + e.getMessage());
+//                e.printStackTrace();
+//                return false;
+//            }
+//        });
+//    }
+}
+
 //    // 환자 삭제 - DELETE /api/patient/delete/{uid}
 //    public CompletableFuture<Boolean> deletePatientAsync(String uid) {
 //        return CompletableFuture.supplyAsync(() -> {
@@ -324,4 +386,4 @@ public class PatientApiService {
 //            }
 //        });
 //    }
-}
+
