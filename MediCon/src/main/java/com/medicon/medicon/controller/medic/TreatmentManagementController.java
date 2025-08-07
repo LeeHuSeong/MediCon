@@ -422,9 +422,7 @@ public class TreatmentManagementController {
             // 3) 컨트롤러에 UID 전달
             TreatmentHistoryFormController controller = loader.getController();
             controller.setPatientUid(currentPatientUid);
-            controller.setChartSelectionListener(chartId -> {
-                showChartDetail(chartId);
-            });
+            controller.setTreatmentManagementController(this);
 
             // 4) 새로운 모달 창 띄우기
             Stage stage = new Stage();
