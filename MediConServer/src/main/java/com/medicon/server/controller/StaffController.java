@@ -41,6 +41,18 @@ public class StaffController {
         }
     }
 
+    @GetMapping("/{uid}")
+    public ResponseEntity<ApiResponse<UserDTO>> getStaffByUid(@PathVariable String uid) {
+        try {
+            UserDTO dto = staffService.getStaffByUid(uid);
+            return ResponseEntity.ok(new ApiResponse<>(true, "직원 정보 조회 성공", dto));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "직원 정보 조회 실패: " + e.getMessage()));
+        }
+    }
+
+
     /**
      * 직원 등록 API (의사 전용)
      */
