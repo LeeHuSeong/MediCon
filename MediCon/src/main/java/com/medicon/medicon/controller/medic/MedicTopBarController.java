@@ -51,7 +51,15 @@ public class MedicTopBarController implements Initializable {
         treatmentBtn.setOnAction(e -> {
             System.out.println("진료관리 버튼 클릭!");
             selectTab(treatmentBtn);
+
             if (mainController != null) {
+                var staffUser = mainController.getStaffUser();
+                if (staffUser != null) {
+                    System.out.println("[DEBUG] staffUser 있음: " +
+                            staffUser.getUid() + ", 이름: " + staffUser.getName());
+                } else {
+                    System.out.println("[DEBUG] staffUser가 null입니다!");
+                }
                 mainController.setCenter("/com/medicon/medicon/view/medic/medic_main/TreatmentView.fxml");
             }
         });
