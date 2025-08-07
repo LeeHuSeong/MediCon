@@ -117,11 +117,11 @@
         </HBox>
         <HBox maxHeight="150" spacing="40" VBox.vgrow="NEVER">
             <HBox spacing="10">
-                <Button styleClass="button-blue" text="진료확인서" onAction="#handleAttendenceCertificate"/>
-                <Button styleClass="button-blue" text="진단서" onAction="#handleDiagnosisCertificate" />
-                <Button styleClass="button-blue" text="처방전" onAction="#handlePerscription"/>
-                <Button styleClass="button-blue" text="진료소견서" onAction="#handleOpinionCertificate" />
-                <Button styleClass="button-blue" text="진료의뢰서" onAction="#handleReferralLetter"/>
+                <Button fx:id="btnAttendence" styleClass="button-blue" text="진료확인서" onAction="#handleAttendenceCertificate"/>
+                <Button fx:id="btnDiagnosis" styleClass="button-blue" text="진단서" onAction="#handleDiagnosisCertificate" />
+                <Button fx:id="btnPerscription" styleClass="button-blue" text="처방전" onAction="#handlePerscription"/>
+                <Button fx:id="btnOpinion" styleClass="button-blue" text="진료소견서" onAction="#handleOpinionCertificate" />
+                <Button fx:id="btnReferralLetter" styleClass="button-blue" text="진료의뢰서" onAction="#handleReferralLetter"/>
             </HBox>
             <!-- 중간 빈 공간 -->
             <Region HBox.hgrow="ALWAYS" />
