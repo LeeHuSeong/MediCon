@@ -157,4 +157,67 @@ public class StaffService {
         }
     }
 
+    //uid스태프 검색
+    public UserDTO getStaffByUid(String uid) throws Exception {
+        Firestore db = FirestoreClient.getFirestore();
+
+        // 1. users/{uid} 문서 조회
+        DocumentSnapshot userDoc = db.collection("users").document(uid).get().get();
+        if (!userDoc.exists()) {
+            throw new IllegalArgumentException("해당 UID의 사용자가 존재하지 않습니다.");
+        }
+
+        Map<String, Object> userMap = userDoc.getData();
+        if (userMap == null) {
+            throw new IllegalStateException("사용자 문서에 데이터가 없습니다.");
+        }
+
+        String name = (String) userMap.getOrDefault("name", "");
+        String email = (String) userMap.getOrDefault("email", "");
+        String phone = (String) userMap.getOrDefault("phone", "");
+        String roleStr = String.valueOf(userMap.getOrDefault("role", "")).toLowerCase();
+        long createdAt = ((Number) userMap.getOrDefault("createdAt", 0)).longValue();
+        int authority = ((Number) userMap.getOrDefault("authority", 0)).intValue();
+
+        // 2. 서브 컬렉션 접근: role 기반
+        String subCollection;
+        if ("doctor".equals(roleStr)) {
+            subCollection = "doctors";
+        } else if ("nurse".equals(roleStr)) {
+            subCollection = "nurses";
+        } else {
+            throw new IllegalStateException("알 수 없는 역할: " + roleStr);
+        }
+
+        List<QueryDocumentSnapshot> subDocs = db.collection("users")
+                .document(uid)
+                .collection(subCollection)
+                .get()
+                .get()
+                .getDocuments();
+
+        if (subDocs.isEmpty()) {
+            throw new IllegalStateException("직원의 상세 정보가 존재하지 않습니다.");
+        }
+
+        Map<String, Object> detail = subDocs.get(0).getData();
+
+        if ("doctor".equals(roleStr)) {
+            return new DoctorDTO(
+                    uid, name, phone, email, roleStr, authority, createdAt,
+                    (String) detail.getOrDefault("doctor_id", ""),
+                    (String) detail.getOrDefault("department", ""),
+                    (String) detail.getOrDefault("rank", ""),
+                    (String) detail.getOrDefault("employee_number", "")
+            );
+        } else {
+            return new NurseDTO(
+                    uid, name, phone, email, roleStr, authority, createdAt,
+                    (String) detail.getOrDefault("nurse_id", ""),
+                    (String) detail.getOrDefault("department", ""),
+                    (String) detail.getOrDefault("rank", ""),
+                    (String) detail.getOrDefault("employee_number", "")
+            );
+        }
+    }
 }
