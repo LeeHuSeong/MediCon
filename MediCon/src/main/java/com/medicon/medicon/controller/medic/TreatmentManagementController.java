@@ -1,10 +1,7 @@
 package com.medicon.medicon.controller.medic;
 
 import com.medicon.medicon.controller.medic.form.TreatmentHistoryFormController;
-import com.medicon.medicon.model.ChartDTO;
-import com.medicon.medicon.model.MedicalInterviewDTO;
-import com.medicon.medicon.model.PatientDTO;
-import com.medicon.medicon.model.ReservationDTO;
+import com.medicon.medicon.model.*;
 import com.medicon.medicon.service.ChartApiService;
 import com.medicon.medicon.service.MedicalInterviewApiService;
 import com.medicon.medicon.service.PatientApiService;
@@ -34,6 +31,9 @@ public class TreatmentManagementController {
     @FXML private TextField searchField;
     @FXML private Button searchButton;
     @FXML private ListView<PatientDTO> patientListView;
+
+    @FXML private Label doctorLabel;
+    @FXML private Label doctorNameLabel;
 
     // 환자 정보 라벨들
     @FXML private Label patientNameLabel;
@@ -66,6 +66,28 @@ public class TreatmentManagementController {
     private String currentPatientUid;
     // 예시로 고정된 의사 UID, 실제 로그인 정보 사용 권장
     private final String currentDoctorUid = "1";
+
+//    @FXML
+//    public void loadDoctorDetail(UserDTO doctor){
+//        if (doctor == null || doctor.getName() == null) {
+//            doctorNameLabel.setText("의사 정보 없음");
+//            doctorLabel.setVisible(false);
+//            doctorNameLabel.setVisible(false); // 라벨 자체를 아예 숨김
+//
+//            return;
+//        }
+//        // 의사만 보이게
+//        if (doctor.getRole().equals("의사")) {
+//            doctorNameLabel.setText(doctor.getName());
+//            doctorLabel.setVisible(true);
+//            doctorNameLabel.setVisible(true); // 라벨 보이게
+//        } else {
+//            doctorLabel.setVisible(false);
+//            doctorNameLabel.setVisible(false); // 간호사 또는 기타면 라벨 숨김
+//        }
+//
+//    }
+
 
     @FXML
     public void initialize() {

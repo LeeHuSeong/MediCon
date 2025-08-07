@@ -8,6 +8,11 @@ import javafx.scene.layout.BorderPane;
 public class MedicMainController {
 
     @FXML private BorderPane mainBorderPane;
+    @FXML private String medicUid;
+
+    public void setUid(String uid) {
+        this.medicUid = uid;
+    }
 
     public void setCenter(String fxmlPath) {
         try {
