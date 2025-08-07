@@ -1,5 +1,8 @@
 package com.medicon.medicon.controller.medic.form;
 
+import com.medicon.medicon.model.ChartDTO;
+import com.medicon.medicon.model.PatientDTO;
+import com.medicon.medicon.model.UserDTO;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
@@ -18,7 +21,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ResourceBundle;
 
-public class MedicalCertificateFormController implements Initializable {
+public class AttendenceCertificateFormController implements Initializable {
 
     // ▶ 기본 환자 정보
     @FXML private TextField nameField;
@@ -45,6 +48,41 @@ public class MedicalCertificateFormController implements Initializable {
     @FXML private TextField outpatientPeriodField;
     @FXML private TextField notesField;
     @FXML private DatePicker issueDatePicker;
+
+    // ▶ 환자 정보 자동 세팅
+    public void setPatientInfo(PatientDTO patient) {
+        if (patient == null) return;
+        nameField.setText(patient.getName());
+        rrnField.setText(patient.getRnn());
+        addressField.setText(patient.getAddress());
+        phoneNumField.setText(patient.getPhone());
+
+        // 성별 자동 선택 (성별값은 "남"/"여" 가정)
+        if ("남".equals(patient.getGender())) {
+            maleRadio.setSelected(true);
+        } else if ("여".equals(patient.getGender())) {
+            femaleRadio.setSelected(true);
+        }
+    }
+
+    // ▶ 의사 정보 자동 세팅
+    public void setDoctorInfo(UserDTO doctor) {
+        if (doctor == null) return;
+        doctorNameField.setText(doctor.getName());
+        // 필요시 licenseNumber, department 등도 여기에 setText
+        // 예: licenseNumberField.setText(doctor.getLicenseNumber());
+        //     departmentField.setText(doctor.getDepartment());
+    }
+
+    // 필요시 차트에서 진단, 증상, 비고 등도 자동 세팅 가능
+    public void setChartInfo(ChartDTO chart) {
+        if (chart == null) return;
+        diagnosisField.setText(chart.getDiagnosis());
+        notesField.setText(chart.getNote());
+        // ... 필요한 필드 추가
+    }
+
+
 
     // ▶ HTML 템플릿 불러오기
     private String loadHtmlTemplate() {

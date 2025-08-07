@@ -11,6 +11,7 @@ module com.medicon.medicon {
     requires com.fasterxml.jackson.databind;
     requires com.google.gson;
     requires java.desktop;
+    requires java.net.http;
 
     opens com.medicon.medicon.controller.medic to javafx.fxml;
     opens com.medicon.medicon.controller.patient to javafx.fxml;

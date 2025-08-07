@@ -1,5 +1,6 @@
 package com.medicon.medicon.controller.medic;
 
+import com.medicon.medicon.controller.medic.form.AttendenceCertificateFormController;
 import com.medicon.medicon.controller.medic.form.TreatmentHistoryFormController;
 import com.medicon.medicon.model.*;
 import com.medicon.medicon.service.ChartApiService;
@@ -48,12 +49,13 @@ public class TreatmentManagementController {
     @FXML private Label historyLabel;
     @FXML private Label allergyLabel;
     @FXML private Label medicationLabel;
-    @FXML private TextArea symytomElse;
+    @FXML private TextArea symptomElse;
 
     // 진단 입력 폼
     @FXML private TextField tfVisitPurpose;
     @FXML private TextField tfDiagnosisName;
     @FXML private TextArea taOpinion;
+    @FXML private TextArea taAttachedFiles;
     @FXML private Button btnSaveChart;
 
     // 서비스 인스턴스
@@ -62,31 +64,74 @@ public class TreatmentManagementController {
     private final MedicalInterviewApiService medicalInterviewApiService = new MedicalInterviewApiService();
     private final ChartApiService chartService = new ChartApiService();
 
+    private PatientDTO selectedPatient; //선택한 환자 DTO
+    private StaffUser staffUser;      // 로그인한 의사 DTO (로그인 시 저장해둘 것)
+    private ChartDTO selectedChart;         // 최근 차트 DTO(필요하다면)
+    
+    // 로그인 되어있는 유저 정보 불러옴
+    public void setStaffUser(StaffUser staffUser) {
+        this.staffUser = staffUser;
+        // 화면에 자동입력 등 필요 처리
+        doctorNameLabel.setText(staffUser.getName());
+    }
+
     // 선택된 환자 UID
     private String currentPatientUid;
-    // 예시로 고정된 의사 UID, 실제 로그인 정보 사용 권장
-    private final String currentDoctorUid = "1";
+    private String medicUid; // 메인 컨트롤러에서 setMedicUid로 받은 값
 
-//    @FXML
-//    public void loadDoctorDetail(UserDTO doctor){
-//        if (doctor == null || doctor.getName() == null) {
+//    private final UserApiService userApiService = new UserApiService();
+//
+//    public void loadDoctorDetailByUid() {
+//        if (medicUid == null) {
 //            doctorNameLabel.setText("의사 정보 없음");
 //            doctorLabel.setVisible(false);
-//            doctorNameLabel.setVisible(false); // 라벨 자체를 아예 숨김
-//
+//            doctorNameLabel.setVisible(false);
 //            return;
 //        }
-//        // 의사만 보이게
-//        if (doctor.getRole().equals("의사")) {
-//            doctorNameLabel.setText(doctor.getName());
-//            doctorLabel.setVisible(true);
-//            doctorNameLabel.setVisible(true); // 라벨 보이게
-//        } else {
-//            doctorLabel.setVisible(false);
-//            doctorNameLabel.setVisible(false); // 간호사 또는 기타면 라벨 숨김
-//        }
 //
+//        userApiService.getUserByUidAsync(medicUid).thenAccept(user -> {
+//            Platform.runLater(() -> {
+//                if (user == null || user.getName() == null) {
+//                    doctorNameLabel.setText("의사 정보 없음");
+//                    doctorLabel.setVisible(false);
+//                    doctorNameLabel.setVisible(false);
+//                } else if ("의사".equals(user.getRole())) {
+//                    doctorNameLabel.setText(user.getName());
+//                    doctorLabel.setVisible(true);
+//                    doctorNameLabel.setVisible(true);
+//                } else {
+//                    doctorLabel.setVisible(false);
+//                    doctorNameLabel.setVisible(false);
+//                }
+//            });
+//        });
 //    }
+    public void setMedicUid(String medicUid) {
+        this.medicUid = medicUid;
+//        loadDoctorDetailByUid(); // uid가 주어질 때 바로 조회
+    }
+
+
+    @FXML
+    public void loadDoctorDetail(StaffUser doctor){
+        if (doctor == null || doctor.getName() == null) {
+            doctorNameLabel.setText("의사 정보 없음");
+            doctorLabel.setVisible(false);
+            doctorNameLabel.setVisible(false); // 라벨 자체를 아예 숨김
+
+            return;
+        }
+        // 의사만 보이게
+        if (doctor.getRole().equals("의사")) {
+            doctorNameLabel.setText(doctor.getName());
+            doctorLabel.setVisible(true);
+            doctorNameLabel.setVisible(true); // 라벨 보이게
+        } else {
+            doctorLabel.setVisible(false);
+            doctorNameLabel.setVisible(false); // 간호사 또는 기타면 라벨 숨김
+        }
+
+    }
 
 
     @FXML
@@ -103,12 +148,21 @@ public class TreatmentManagementController {
                 loadPatientDetails(newP);
             }
         });
+        // <----- 추가! ----->
+        // 환자 리스트에서 클릭 시 항상 로드(같은 환자 연속 클릭 포함)
+        patientListView.setOnMouseClicked(event -> {
+            PatientDTO selected = patientListView.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                currentPatientUid = selected.getUid();
+                loadPatientDetails(selected);
+            }
+        });
 
         // 저장 버튼 핸들러 등록
         btnSaveChart.setOnAction(this::handleSaveChart);
     }
 
-    /** 변경사항 저장 */
+    /** 진료차트 저장 */
     @FXML
     private void handleSaveChart(ActionEvent event) {
         if (currentPatientUid == null) {
@@ -119,7 +173,7 @@ public class TreatmentManagementController {
         ChartDTO chart = new ChartDTO();
         chart.setChart_id(UUID.randomUUID().toString());
         chart.setPatient_uid(currentPatientUid);
-        chart.setDoctor_uid(currentDoctorUid);
+//        chart.setDoctor_uid(currentDoctorUid);
         chart.setSymptoms(tfVisitPurpose.getText());
         chart.setDiagnosis(tfDiagnosisName.getText());
         chart.setNote(taOpinion.getText());
@@ -166,7 +220,7 @@ public class TreatmentManagementController {
     /** 예약 목록에서 환자 정보 로드 */
     private void loadPatientsFromReservations(List<ReservationDTO> reservations) {
         ObservableList<PatientDTO> patientList = FXCollections.observableArrayList();
-        
+
         // 각 예약에 대해 환자 정보를 가져옴
         for (ReservationDTO reservation : reservations) {
             patientApiService.getPatientByUidAsync(reservation.getPatient_uid()).thenAccept(patient -> {
@@ -182,7 +236,7 @@ public class TreatmentManagementController {
                 return null;
             });
         }
-        
+
         Platform.runLater(() -> {
             patientListView.setItems(patientList);
             patientListView.setCellFactory(param -> new ListCell<PatientDTO>() {
@@ -224,16 +278,19 @@ public class TreatmentManagementController {
         patientAgeLabel.setText(String.valueOf(calculateAge(patient.getRnn())));
         patientPhoneLabel.setText(patient.getPhone());
 
+        this.selectedPatient = patient;
+
+        // 진단 입력 폼 초기화 및 활성화
+        clearDiagnosisInput();
+
         // 해당 환자의 예약 정보를 가져와서 최근 문진 로드
         reservationApiService.getReservationsByPatientId(patient.getUid()).thenAccept(reservations -> {
             if (reservations != null && !reservations.isEmpty()) {
                 // 예약을 날짜순으로 정렬 (최신순)
                 reservations.sort((r1, r2) -> r2.getDate().compareTo(r1.getDate()));
                 ReservationDTO recent = reservations.get(0);
-                
                 // 최근 문진 정보 로드 - 환자관리와 동일한 방식 사용
-                loadRecentMedicalInterview(patient.getUid(), patient.getUid(), recent.getReservation_id());
-            } else {
+                loadRecentMedicalInterview(patient.getUid(), patient.getUid(), recent.getReservation_id(), recent.getDate());            } else {
                 clearMedicalInterviewDisplay();
             }
         }).exceptionally(e -> {
@@ -243,18 +300,20 @@ public class TreatmentManagementController {
         });
     }
 
-    private void loadRecentMedicalInterview(String uid, String patientId, String reservationId) {
+    private void loadRecentMedicalInterview(String uid, String patientId, String reservationId, String reservationDate) {
         medicalInterviewApiService.getInterviewByReservationAsync(uid, patientId, reservationId)
                 .thenAccept(interviews -> Platform.runLater(() -> {
                     if (interviews != null && !interviews.isEmpty()) {
+
                         MedicalInterviewDTO mi = interviews.get(0);
+
                         symptomLabel.setText(mi.getSymptoms() != null ? mi.getSymptoms() : "");
                         symptomDurationLabel.setText(mi.getSymptom_duration() != null ? mi.getSymptom_duration() : "");
                         historyLabel.setText(mi.getPast_medical_history() != null ? mi.getPast_medical_history() : "");
                         allergyLabel.setText(mi.getAllergy() != null ? mi.getAllergy() : "");
                         medicationLabel.setText(mi.getCurrent_medication() != null ? mi.getCurrent_medication() : "");
-                        symytomElse.setText(""); // other_symptoms 필드가 없으므로 빈 문자열로 설정
-//                        interviewDateLabel.setText(mi.getVisit_date());
+                        symptomElse.setText(""); // other_symptoms 필드가 없으므로 빈 문자열로 설정
+                        interviewDateLabel.setText(reservationDate);
                         System.out.println("문진 정보 로드 완료: " + mi.getSymptoms());
                     } else {
                         clearMedicalInterviewDisplay();
@@ -274,7 +333,7 @@ public class TreatmentManagementController {
         historyLabel.setText("");
         allergyLabel.setText("");
         medicationLabel.setText("");
-        symytomElse.clear();
+        symptomElse.clear();
     }
 
     private int calculateAge(String rnn) {
@@ -294,6 +353,53 @@ public class TreatmentManagementController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+    //진단 입력 폼 초기화 함수
+    private void clearDiagnosisInput() {
+        tfVisitPurpose.clear();
+        tfDiagnosisName.clear();
+        taOpinion.clear();
+        taAttachedFiles.clear(); // 만약 첨부파일도 매번 초기화 원하면
+        tfVisitPurpose.setDisable(false);
+        tfDiagnosisName.setDisable(false);
+        taOpinion.setDisable(false);
+        taAttachedFiles.setDisable(false);
+        btnSaveChart.setDisable(false);
+        // 만약 파일첨부 버튼 등도 있다면 setDisable(false) 추가
+    }
+
+
+    public void showChartDetail(String chartId) {
+        // 차트 서비스 통해서 차트 상세정보 비동기 조회 (ChartDTO 기준)
+        chartService.getChartByChartIdAsync(chartId)
+                .thenAccept(chart -> Platform.runLater(() -> {
+                    if (chart == null) {
+                        // 알림 등 처리
+                        return;
+                    }
+                    // 1. 데이터 세팅
+                    tfVisitPurpose.setText(chart.getSymptoms());
+                    tfDiagnosisName.setText(chart.getDiagnosis());
+                    taOpinion.setText(chart.getNote());
+//                    taAttachedFiles.setText(chart.getAttachedFiles()); // 필요시
+
+                    // 2. 비활성화 (읽기전용)
+                    tfVisitPurpose.setDisable(true);
+                    tfDiagnosisName.setDisable(true);
+                    taOpinion.setDisable(true);
+                    taAttachedFiles.setDisable(true); // 필요시
+                    btnSaveChart.setDisable(true);
+
+//                    // 파일첨부 버튼도 비활성화
+//                    fileAttachButton.setDisable(true); // 필요시
+                }))
+                .exceptionally(ex -> {
+                    Platform.runLater(() -> {
+                        // 예외 알림 등
+                    });
+                    return null;
+                });
+    }
+
 
     /**
      * 과거문진기록 버튼 클릭 처리
@@ -316,6 +422,9 @@ public class TreatmentManagementController {
             // 3) 컨트롤러에 UID 전달
             TreatmentHistoryFormController controller = loader.getController();
             controller.setPatientUid(currentPatientUid);
+            controller.setChartSelectionListener(chartId -> {
+                showChartDetail(chartId);
+            });
 
             // 4) 새로운 모달 창 띄우기
             Stage stage = new Stage();
@@ -335,10 +444,21 @@ public class TreatmentManagementController {
      * 진료확인서 버튼 클릭 처리
      */
     @FXML
-    private void handleMedicalCertificate(ActionEvent event) {
+    private void handleAttendenceCertificate(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/form/AttendenceCertificateForm.fxml"));
             Parent root = loader.load();
+
+            AttendenceCertificateFormController controller = loader.getController();
+
+            if (selectedPatient != null)
+                controller.setPatientInfo(selectedPatient);
+
+//            if (staffUser != null)
+//                controller.setDoctorInfo(staffUser);
+
+            if (selectedChart != null)
+                controller.setChartInfo(selectedChart);
 
             Stage stage = new Stage();
             stage.setTitle("진료확인서");
