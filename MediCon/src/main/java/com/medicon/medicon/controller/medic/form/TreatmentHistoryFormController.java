@@ -1,5 +1,6 @@
 package com.medicon.medicon.controller.medic.form;
 
+import com.medicon.medicon.controller.medic.TreatmentManagementController;
 import com.medicon.medicon.model.ChartDTO;
 import com.medicon.medicon.service.ChartApiService;
 import javafx.application.Platform;
@@ -21,20 +22,25 @@ public class TreatmentHistoryFormController implements Initializable {
     private final ChartApiService chartService = new ChartApiService();
     private String patientUid;
 
+    private TreatmentManagementController treatmentManagementController;
+
+    public void setTreatmentManagementController(TreatmentManagementController controller) {
+        this.treatmentManagementController = controller;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // 리스트 클릭 시 상세 보기 (예시)
         historyListView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 ChartDTO selected = historyListView.getSelectionModel().getSelectedItem();
-                if (selected != null) {
-                    // TODO: 상세보기 로직
-                    System.out.println("선택된 차트: " + selected.getChart_id());
+                if (selected != null && treatmentManagementController != null) {
+                    treatmentManagementController.showChartDetail(selected.getChart_id());
+                    Stage stage = (Stage) historyListView.getScene().getWindow();
+                    stage.close();
                 }
             }
         });
 
-        // 셀 표시 포맷 설정 (날짜+진단명 등)
         historyListView.setCellFactory(lv -> new ListCell<>() {
             @Override
             protected void updateItem(ChartDTO item, boolean empty) {
@@ -50,17 +56,11 @@ public class TreatmentHistoryFormController implements Initializable {
         });
     }
 
-    /**
-     * 외부에서 환자 UID를 전달받는 세터
-     */
     public void setPatientUid(String uid) {
         this.patientUid = uid;
         loadHistory();
     }
 
-    /**
-     * patientUid 기준으로 차트 목록을 불러와 ListView에 세팅
-     */
     private void loadHistory() {
         if (patientUid == null) return;
 
@@ -74,29 +74,12 @@ public class TreatmentHistoryFormController implements Initializable {
                 }))
                 .exceptionally(ex -> {
                     Platform.runLater(() -> {
-                        // TODO: 알림창 띄우기 등 에러 처리
                         System.err.println("이력 조회 실패: " + ex.getMessage());
                     });
                     return null;
                 });
     }
-//    @FXML
-//    private void handleHistoryClick() {
-//        String selected = historyListView.getSelectionModel().getSelectedItem();
-//        if (selected != null) {
-//            String chartId = extractChartId(selected); // 또는 진짜 DTO 객체로 관리한다면 DTO에서 getChartId()
-//
-//            // TreatmentViewController 인스턴스에 chartId 전달
-//            // 이 컨트롤러를 어떻게 얻느냐에 따라 아래 코드가 달라짐
-//            treatmentViewController.showChartDetail(chartId);  // 예시
-//
-//            // 혹은 팝업 닫기
-//            Stage stage = (Stage) historyListView.getScene().getWindow();
-//            stage.close();
-//        }
-//    }
 
-    /** 닫기 버튼 핸들러 */
     @FXML
     private void handleClose() {
         Stage stage = (Stage) historyListView.getScene().getWindow();

@@ -7,7 +7,7 @@
 <AnchorPane minHeight="800" minWidth="600.0" style="-fx-background-color: white;"
             stylesheets="@../../../../style/ComponentStyle.css" xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.medicon.medicon.controller.medic.form.MedicalCertificateFormController">
+            fx:controller="com.medicon.medicon.controller.medic.form.AttendenceCertificateFormController">
 
     <VBox prefHeight="800.0" prefWidth="600.0" spacing="10">
         <Label maxWidth="Infinity" styleClass="section-title" text="진료확인서" />
@@ -42,11 +42,11 @@
 
             <!-- row 6: 병원명 -->
             <Label text="병원명" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="6" GridPane.halignment="RIGHT"/>
-            <TextField fx:id="hospitalNameField" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+            <TextField fx:id="hospitalNameField" text="메디콘 병원" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
 
             <!-- row 7: 병원 연락처 -->
             <Label text="병원 연락처" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="7" GridPane.halignment="RIGHT"/>
-            <TextField fx:id="hospitalPhoneNumField" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+            <TextField fx:id="hospitalPhoneNumField" text="010-4862-5842" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
 
             <!-- row 8: 병명 -->
             <Label text="병명" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.halignment="RIGHT"/>

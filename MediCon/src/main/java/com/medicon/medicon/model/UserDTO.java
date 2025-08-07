@@ -1,47 +1,54 @@
 package com.medicon.medicon.model;
 
-public abstract class UserDTO {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-    protected String uid;
-    protected String name;
-    protected String phone;
-    protected String email;
-    protected String role;        // "의사", "간호사", "환자"
-    protected int authority;      // 0=환자, 1=간호사, 2=의사
-    protected long createAt;
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class UserDTO {
+    private String uid;
+    private String name;
+    private String email;
+    private String role;
 
-    public UserDTO() {}
-
-    public UserDTO(String uid, String name, String phone, String email, String role, int authority, long createAt) {
-        this.uid = uid;
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.role = role;
-        this.authority = authority;
-        this.createAt = createAt;
+    public UserDTO() {
     }
 
-    // Getters & Setters
+    public UserDTO(String uid, String name, String email, String role) {
+        this.uid = uid;
+        this.name = name;
+        this.email = email;
+        this.role = role;
+    }
 
-    public String getUid() { return uid; }
-    public void setUid(String uid) { this.uid = uid; }
+    // Getters and Setters
+    public String getUid() {
+        return uid;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
+    public String getName() {
+        return name;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public String getEmail() {
+        return email;
+    }
 
-    public int getAuthority() { return authority; }
-    public void setAuthority(int authority) { this.authority = authority; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public long getCreateAt() { return createAt; }
-    public void setCreateAt(long createAt) { this.createAt = createAt; }
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

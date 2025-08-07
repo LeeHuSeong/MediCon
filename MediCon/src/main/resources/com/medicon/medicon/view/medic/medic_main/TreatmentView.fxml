@@ -103,7 +103,7 @@
                             <TextArea fx:id="taOpinion" prefHeight="124.0" prefWidth="666.0" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
 
                             <Label styleClass="form-label" text="첨부된 파일" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
-                            <TextArea GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="5" />
+                            <TextArea fx:id="taAttachedFiles" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="5" />
                             <VBox.margin>
                                 <Insets left="20.0" right="20" />
                             </VBox.margin>
@@ -117,7 +117,7 @@
         </HBox>
         <HBox maxHeight="150" spacing="40" VBox.vgrow="NEVER">
             <HBox spacing="10">
-                <Button styleClass="button-blue" text="진료확인서" onAction="#handleMedicalCertificate"/>
+                <Button styleClass="button-blue" text="진료확인서" onAction="#handleAttendenceCertificate"/>
                 <Button styleClass="button-blue" text="진단서" onAction="#handleDiagnosisCertificate" />
                 <Button styleClass="button-blue" text="처방전" onAction="#handlePerscription"/>
                 <Button styleClass="button-blue" text="진료소견서" onAction="#handleOpinionCertificate" />
@@ -127,7 +127,7 @@
             <Region HBox.hgrow="ALWAYS" />
             <HBox spacing="10">
                 <Button styleClass="button-lightblue" text="임시저장" />
-                <Button fx:id="btnSaveChart" styleClass="button-blue" text="변경사항저장" onAction="#handleSaveChart"/>
+                <Button fx:id="btnSaveChart" styleClass="button-blue" text="진료차트저장" onAction="#handleSaveChart"/>
             </HBox>
         </HBox>
     </VBox>
