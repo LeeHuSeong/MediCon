@@ -10,6 +10,9 @@ public class PatientMainController {
 
     @FXML
     private BorderPane mainBorderPane;
+    @FXML
+    private String patientUid;
+
 
     public void setCenter(String fxmlPath) {
         try {
@@ -34,5 +37,9 @@ public class PatientMainController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setUid(String uid) {
+        this.patientUid = uid;
     }
 }
