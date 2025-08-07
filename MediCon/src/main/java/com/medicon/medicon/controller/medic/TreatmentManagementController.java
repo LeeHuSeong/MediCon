@@ -1,7 +1,6 @@
 package com.medicon.medicon.controller.medic;
 
-import com.medicon.medicon.controller.medic.form.AttendenceCertificateFormController;
-import com.medicon.medicon.controller.medic.form.TreatmentHistoryFormController;
+import com.medicon.medicon.controller.medic.form.*;
 import com.medicon.medicon.model.*;
 import com.medicon.medicon.service.ChartApiService;
 import com.medicon.medicon.service.MedicalInterviewApiService;
@@ -18,7 +17,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,6 +25,12 @@ import java.util.List;
 import java.util.UUID;
 
 public class TreatmentManagementController {
+
+    @FXML private Button btnAttendence;
+    @FXML private Button btnDiagnosis;
+    @FXML private Button btnPerscription;
+    @FXML private Button btnOpinion;
+    @FXML private Button btnReferralLetter;
 
     @FXML private Button registerPatientButton;
     @FXML private TextField searchField;
@@ -106,6 +110,7 @@ public class TreatmentManagementController {
 //            });
 //        });
 //    }
+
     public void setMedicUid(String medicUid) {
         this.medicUid = medicUid;
 //        loadDoctorDetailByUid(); // uid가 주어질 때 바로 조회
@@ -140,6 +145,12 @@ public class TreatmentManagementController {
         registerPatientButton.setOnAction(this::handleTodayReservations);
         // 환자 검색
         searchButton.setOnAction(this::handleSearch);
+
+        btnAttendence.setDisable(true);
+        btnDiagnosis.setDisable(true);
+        btnPerscription.setDisable(true);
+        btnOpinion.setDisable(true);
+        btnReferralLetter.setDisable(true);
 
         // 환자 선택 시 상세 정보 및 문진 불러오기
         patientListView.getSelectionModel().selectedItemProperty().addListener((obs, oldP, newP) -> {
@@ -376,6 +387,7 @@ public class TreatmentManagementController {
                         // 알림 등 처리
                         return;
                     }
+                    this.selectedChart = chart;
                     // 1. 데이터 세팅
                     tfVisitPurpose.setText(chart.getSymptoms());
                     tfDiagnosisName.setText(chart.getDiagnosis());
@@ -389,6 +401,13 @@ public class TreatmentManagementController {
                     taAttachedFiles.setDisable(true); // 필요시
                     btnSaveChart.setDisable(true);
 
+                    // 버튼 활성화
+                    btnAttendence.setDisable(false);
+                    btnDiagnosis.setDisable(false);
+                    btnPerscription.setDisable(false);
+                    btnOpinion.setDisable(false);
+                    btnReferralLetter.setDisable(false);
+
 //                    // 파일첨부 버튼도 비활성화
 //                    fileAttachButton.setDisable(true); // 필요시
                 }))
@@ -399,7 +418,6 @@ public class TreatmentManagementController {
                     return null;
                 });
     }
-
 
     /**
      * 과거문진기록 버튼 클릭 처리
@@ -454,8 +472,8 @@ public class TreatmentManagementController {
             if (selectedPatient != null)
                 controller.setPatientInfo(selectedPatient);
 
-//            if (staffUser != null)
-//                controller.setDoctorInfo(staffUser);
+            if (staffUser != null)
+                controller.setDoctorInfo(staffUser);
 
             if (selectedChart != null)
                 controller.setChartInfo(selectedChart);
@@ -478,6 +496,17 @@ public class TreatmentManagementController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/form/DiagnosisCertificateForm.fxml"));
             Parent root = loader.load();
 
+            DiagnosisCertificateFormController controller = loader.getController();
+
+            if (selectedPatient != null)
+                controller.setPatientInfo(selectedPatient);
+
+            if (staffUser != null)
+                controller.setDoctorInfo(staffUser);
+
+            if (selectedChart != null)
+                controller.setChartInfo(selectedChart);
+
             Stage stage = new Stage();
             stage.setTitle("진단서");
             stage.setScene(new Scene(root));
@@ -495,6 +524,17 @@ public class TreatmentManagementController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/form/OpinionCertificateForm.fxml"));
             Parent root = loader.load();
+
+            OpinionCertificateFormController controller = loader.getController();
+
+            if (selectedPatient != null)
+                controller.setPatientInfo(selectedPatient);
+
+            if (staffUser != null)
+                controller.setDoctorInfo(staffUser);
+
+            if (selectedChart != null)
+                controller.setChartInfo(selectedChart);
 
             Stage stage = new Stage();
             stage.setTitle("진료소견서");
@@ -514,6 +554,17 @@ public class TreatmentManagementController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/form/ReferralLetterForm.fxml"));
             Parent root = loader.load();
 
+            ReferralFormController controller = loader.getController();
+
+            if (selectedPatient != null)
+                controller.setPatientInfo(selectedPatient);
+
+            if (staffUser != null)
+                controller.setDoctorInfo(staffUser);
+
+            if (selectedChart != null)
+                controller.setChartInfo(selectedChart);
+
             Stage stage = new Stage();
             stage.setTitle("진료의뢰서");
             stage.setScene(new Scene(root));
@@ -531,6 +582,17 @@ public class TreatmentManagementController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/medic/medic_main/form/PrescriptionForm.fxml"));
             Parent root = loader.load();
+
+            PrescriptionFormController controller = loader.getController();
+
+            if (selectedPatient != null)
+                controller.setPatientInfo(selectedPatient);
+
+            if (staffUser != null)
+                controller.setDoctorInfo(staffUser);
+
+            if (selectedChart != null)
+                controller.setChartInfo(selectedChart);
 
             Stage stage = new Stage();
             stage.setTitle("처방전");
