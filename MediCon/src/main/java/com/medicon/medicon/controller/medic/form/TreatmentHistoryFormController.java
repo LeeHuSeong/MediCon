@@ -80,6 +80,21 @@ public class TreatmentHistoryFormController implements Initializable {
                     return null;
                 });
     }
+//    @FXML
+//    private void handleHistoryClick() {
+//        String selected = historyListView.getSelectionModel().getSelectedItem();
+//        if (selected != null) {
+//            String chartId = extractChartId(selected); // 또는 진짜 DTO 객체로 관리한다면 DTO에서 getChartId()
+//
+//            // TreatmentViewController 인스턴스에 chartId 전달
+//            // 이 컨트롤러를 어떻게 얻느냐에 따라 아래 코드가 달라짐
+//            treatmentViewController.showChartDetail(chartId);  // 예시
+//
+//            // 혹은 팝업 닫기
+//            Stage stage = (Stage) historyListView.getScene().getWindow();
+//            stage.close();
+//        }
+//    }
 
     /** 닫기 버튼 핸들러 */
     @FXML
