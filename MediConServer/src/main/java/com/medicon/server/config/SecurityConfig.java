@@ -33,6 +33,7 @@ public class SecurityConfig {
 //                        .requestMatchers("/api/reservation/**").permitAll()
 //                        .requestMatchers("/api/interview/**").permitAll()
 //                        .requestMatchers("/api/patient/**").permitAll()
+                        //.requestMatchers("/api/validate/**)/permitAll()
 //                        .anyRequest().authenticated()
                         .anyRequest().permitAll() // 모든 요청 허용 (테스트용)
                 )

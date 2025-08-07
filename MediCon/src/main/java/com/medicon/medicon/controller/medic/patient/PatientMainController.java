@@ -1,5 +1,6 @@
 package com.medicon.medicon.controller.medic.patient;
 
+import com.medicon.medicon.controller.patient.MedicalRecordController;
 import com.medicon.medicon.controller.patient.PerInfoController;
 import com.medicon.medicon.controller.patient.PatientTopBarController;
 import javafx.fxml.FXML;
@@ -22,6 +23,8 @@ public class PatientMainController {
             Object controller = loader.getController();
             if (controller instanceof PerInfoController) {
                 ((PerInfoController) controller).setUid(this.patientUid);
+            } else if (controller instanceof MedicalRecordController) {
+                ((MedicalRecordController) controller).setUid(this.patientUid);
             }
 
             mainBorderPane.setCenter(node);
