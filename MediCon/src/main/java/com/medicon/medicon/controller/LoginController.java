@@ -1,5 +1,7 @@
 package com.medicon.medicon.controller;
 
+import com.medicon.medicon.controller.medic.MedicMainController;
+import com.medicon.medicon.controller.medic.patient.PatientMainController;
 import com.medicon.medicon.model.LoginResult;
 import com.medicon.medicon.service.AuthService;
 import javafx.application.Platform;
@@ -104,6 +106,15 @@ public class LoginController {
                     try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
                         Parent root = loader.load();
+
+                        // *** 추가: 컨트롤러에 로그인 정보 전달 ***
+                        Object controller = loader.getController();
+                        if (controller instanceof MedicMainController) {
+                            ((MedicMainController) controller).setUid(result.getUid());
+                        } else if (controller instanceof PatientMainController) {
+                            ((PatientMainController) controller).setUid(result.getUid());
+                        }
+
                         Stage stage = (Stage) loginButton.getScene().getWindow();
 
                         stage.setScene(new Scene(root));

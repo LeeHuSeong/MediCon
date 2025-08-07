@@ -45,7 +45,7 @@ public class QuestionnaireManagementController implements Initializable {
     @FXML private Label historyLabel;
     @FXML private Label allergyLabel;
     @FXML private Label medicationLabel;
-    @FXML private TextArea symytomElse;
+    @FXML private TextArea symptomElse;
     @FXML private Button addQuestionnaireButton;
     @FXML private Button addReservationButton;
     @FXML private ListView<String> historyQuestionnaireListView;
@@ -163,6 +163,8 @@ public class QuestionnaireManagementController implements Initializable {
                                 historyLabel.setText(interview.getPast_medical_history() != null ? interview.getPast_medical_history() : "-");
                                 allergyLabel.setText(interview.getAllergy() != null ? interview.getAllergy() : "-");
                                 medicationLabel.setText(interview.getCurrent_medication() != null ? interview.getCurrent_medication() : "-");
+//                                symptomElse.setText(interview.getSymptom_else() != null ? interview.getSymptom_else() : "-");
+
                             } else {
                                 clearInterviewInfo();
                             }
@@ -222,7 +224,7 @@ public class QuestionnaireManagementController implements Initializable {
         historyLabel.setText("-");
         allergyLabel.setText("-");
         medicationLabel.setText("-");
-        symytomElse.clear();
+        symptomElse.clear();
         historyQuestionnaireListView.getItems().clear();
     }
 

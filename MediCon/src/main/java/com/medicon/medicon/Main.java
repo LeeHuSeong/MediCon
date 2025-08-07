@@ -16,7 +16,6 @@ public class Main extends Application {
 
 
         //Main_view
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
                 "/com/medicon/medicon/view/medic/medic_main/MedicMain.fxml"
         ));
