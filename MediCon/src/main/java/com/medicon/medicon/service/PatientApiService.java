@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.medicon.medicon.config.AppConfig;
 import com.medicon.medicon.model.PatientDTO;
 
+import com.medicon.medicon.model.ReservationDTO;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -18,7 +20,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class PatientApiService {
 
-    private static final String BASE_URL = AppConfig.SERVER_BASE_URL + "/api/patient";
+    private static final String PATIENT_BASE_URL = AppConfig.SERVER_BASE_URL + "/api/patient";
+    private static final String RESERVATION_BASE_URL = AppConfig.SERVER_BASE_URL + "/api/reservation";
     private final ObjectMapper objectMapper;
 
     public PatientApiService() {
@@ -29,7 +32,7 @@ public class PatientApiService {
     public CompletableFuture<List<PatientDTO>> getAllPatientsAsync() {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                URL url = new URL(BASE_URL + "/all");
+                URL url = new URL(PATIENT_BASE_URL + "/all");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Content-Type", "application/json");
@@ -64,7 +67,7 @@ public class PatientApiService {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 String encodedName = URLEncoder.encode(name, StandardCharsets.UTF_8);
-                URL url = new URL(BASE_URL + "/by-name/" + encodedName);
+                URL url = new URL(PATIENT_BASE_URL + "/by-name/" + encodedName);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Content-Type", "application/json");
@@ -99,7 +102,7 @@ public class PatientApiService {
     public CompletableFuture<PatientDTO> getPatientByUidAsync(String uid) {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                URL url = new URL(BASE_URL + "/" + uid);
+                URL url = new URL(PATIENT_BASE_URL + "/" + uid);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Content-Type", "application/json");
@@ -134,7 +137,7 @@ public class PatientApiService {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 String encodedPatientId = URLEncoder.encode(patientId, StandardCharsets.UTF_8);
-                URL url = new URL(BASE_URL + "/by-patient-id/" + encodedPatientId);
+                URL url = new URL(PATIENT_BASE_URL + "/by-patient-id/" + encodedPatientId);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Content-Type", "application/json");
@@ -185,7 +188,8 @@ public class PatientApiService {
 //                if (responseCode == 200) {
 //                    System.out.println(" 환자 등록 성공: " + patient.getName());
 //                    return true;
-//                } else {
+//                }
+// else {
 //                    System.err.println(" 환자 등록 실패: " + responseCode);
 //                    return false;
 //                }
@@ -201,7 +205,7 @@ public class PatientApiService {
     public CompletableFuture<Boolean> updatePatientAsync(PatientDTO patient) {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                URL url = new URL(BASE_URL + "/update");
+                URL url = new URL(PATIENT_BASE_URL + "/update");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("PUT");
                 conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8"); //  charset 추가
@@ -239,6 +243,62 @@ public class PatientApiService {
         });
     }
 
+    public CompletableFuture<List<ReservationDTO>> getPatientReservationsAsync(String uid) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                URL url = new URL(RESERVATION_BASE_URL + "/by-patient?patientId=" + uid);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Content-Type", "application/json");
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode == 200) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
+
+                    return objectMapper.readValue(response.toString(), new TypeReference<List<ReservationDTO>>() {});
+                } else {
+                    System.err.println("예약 조회 실패: " + responseCode);
+                    return new ArrayList<>();
+                }
+            } catch (Exception e) {
+                System.err.println("네트워크 오류: " + e.getMessage());
+                e.printStackTrace();
+                return new ArrayList<>();
+            }
+        });
+    }
+
+    public CompletableFuture<Boolean> createReservationAsync(ReservationDTO reservation) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                URL url = new URL(RESERVATION_BASE_URL + "/save");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json; utf-8");
+                conn.setDoOutput(true);
+
+                String jsonInputString = objectMapper.writeValueAsString(reservation);
+
+                try(OutputStream os = conn.getOutputStream()) {
+                    byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                    os.write(input, 0, input.length);
+                }
+
+                int responseCode = conn.getResponseCode();
+                return responseCode == 200;
+            } catch (Exception e) {
+                System.err.println("예약 생성 API 호출 실패: " + e.getMessage());
+                return false;
+            }
+        });
+    }
+
 //    // 환자 삭제 - DELETE /api/patient/delete/{uid}
 //    public CompletableFuture<Boolean> deletePatientAsync(String uid) {
 //        return CompletableFuture.supplyAsync(() -> {
@@ -252,7 +312,8 @@ public class PatientApiService {
 //                if (responseCode == 200) {
 //                    System.out.println("환자 삭제 성공: UID=" + uid);
 //                    return true;
-//                } else {
+//                }
+// else {
 //                    System.err.println("환자 삭제 실패: " + responseCode);
 //                    return false;
 //                }

@@ -16,7 +16,12 @@ public class Main extends Application {
 
 
         //Main_view
-      
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource(
+//                "/com/medicon/medicon/view/medic/medic_main/MedicMain.fxml"
+//        ));
+
+        //Patient_view
+
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource(
 //                "/com/medicon/medicon/view/medic/medic_main/MedicMain.fxml"
 //        ));
@@ -27,9 +32,9 @@ public class Main extends Application {
         ));
 
         //login_view
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource(
-//                "/com/medicon/medicon/view/login.fxml"
-//        ));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                "/com/medicon/medicon/view/login.fxml"
+        ));
         Scene scene = new Scene(loader.load());
         stage.setTitle("MediCon 로그인");
         stage.setScene(scene);
