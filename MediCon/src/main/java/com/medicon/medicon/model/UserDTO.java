@@ -1,6 +1,6 @@
 package com.medicon.medicon.model;
 
-public abstract class UserDTO {
+public class UserDTO {
 
     protected String uid;
     protected String name;
