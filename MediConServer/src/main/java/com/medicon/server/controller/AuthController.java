@@ -1,5 +1,7 @@
 package com.medicon.server.controller;
 
+import com.medicon.server.util.JwtUtil;
+
 import com.medicon.server.dto.auth.ChangePasswordRequest;
 import com.medicon.server.dto.auth.LoginRequest;
 import com.medicon.server.dto.auth.LoginResponse;
@@ -10,6 +12,7 @@ import com.medicon.server.dto.auth.signup.SignupRequest;
 import com.medicon.server.dto.auth.signup.SignupResponse;
 import com.medicon.server.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +22,8 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     //일반 회원가입( 사용자별 DB생성하지 않음)
     @PostMapping("/signup")
@@ -56,5 +61,22 @@ public class AuthController {
     @PostMapping("/signup/patient")
     public ResponseEntity<SignupResponse> signupPatient(@RequestBody PatientSignupRequest request) {
         return ResponseEntity.ok(authService.signupPatient(request));
+    }
+
+    //자동 로그인
+    @GetMapping("/validate")
+    public ResponseEntity<Void> validateToken(@RequestHeader("Authorization") String bearerToken) {
+        try {
+            String token = bearerToken.replace("Bearer ", "");
+            boolean isValid = jwtUtil.isValidToken(token);
+
+            if (isValid) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 }
