@@ -11,7 +11,7 @@ public class Main extends Application {
 
         //Test
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource(
-//                "/com/medicon/medicon/view/medic/medic_main/DiagnosisCertificateForm.fxml"
+//                "/com/medicon/medicon/view/medic/medic_main/form/PrescriptionForm.fxml"
 //        ));
 
 

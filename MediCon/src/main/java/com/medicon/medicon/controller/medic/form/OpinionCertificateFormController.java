@@ -1,5 +1,8 @@
 package com.medicon.medicon.controller.medic.form;
 
+import com.medicon.medicon.model.ChartDTO;
+import com.medicon.medicon.model.PatientDTO;
+import com.medicon.medicon.model.StaffUser;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -42,6 +45,42 @@ public class OpinionCertificateFormController implements Initializable {
     @FXML private TextArea treatmentPlanField;
     @FXML private TextField notesField;
     @FXML private DatePicker issueDatePicker;
+
+    // ▶ 환자 정보 자동 세팅
+    public void setPatientInfo(PatientDTO patient) {
+        if (patient == null) return;
+        nameField.setText(patient.getName());
+        rrnField.setText(patient.getRnn());
+        addressField.setText(patient.getAddress());
+        phoneNumField.setText(patient.getPhone());
+
+        // 성별 자동 선택 (성별값은 "남"/"여" 가정)
+        if ("남".equals(patient.getGender())) {
+            maleRadio.setSelected(true);
+        } else if ("여".equals(patient.getGender())) {
+            femaleRadio.setSelected(true);
+        }
+    }
+
+    // ▶ 의사 정보 자동 세팅
+    public void setDoctorInfo(StaffUser doctor) {
+        if (doctor == null) return;
+        doctorNameField.setText(doctor.getName());
+        licenseNumberField.setText(doctor.getUid());
+        departmentField.setText(doctor.getDepartment());
+    }
+
+    // 필요시 차트에서 진단, 증상, 비고 등도 자동 세팅 가능
+    public void setChartInfo(ChartDTO chart) {
+        if (chart == null) {
+            System.out.println("차트 정보가 null입니다.");
+            return;
+        }
+        System.out.println("받아온 chart_id: " + chart.getChart_id());
+        chartNumberField.setText(chart.getChart_id());
+//        diagnosisField.setText(chart.getDiagnosis());
+        doctorOpinionField.setText(chart.getNote());
+    }
 
     // ▶ HTML 템플릿 불러오기
     private String loadHtmlTemplate() {

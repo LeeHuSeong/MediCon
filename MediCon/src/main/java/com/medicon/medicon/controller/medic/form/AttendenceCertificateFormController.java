@@ -2,7 +2,7 @@ package com.medicon.medicon.controller.medic.form;
 
 import com.medicon.medicon.model.ChartDTO;
 import com.medicon.medicon.model.PatientDTO;
-import com.medicon.medicon.model.UserDTO;
+import com.medicon.medicon.model.StaffUser;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 
 public class AttendenceCertificateFormController implements Initializable {
 
+    @FXML private TextField chartNumberField;
     // ▶ 기본 환자 정보
     @FXML private TextField nameField;
     @FXML private TextField rrnField;
@@ -66,23 +67,23 @@ public class AttendenceCertificateFormController implements Initializable {
     }
 
     // ▶ 의사 정보 자동 세팅
-    public void setDoctorInfo(UserDTO doctor) {
+    public void setDoctorInfo(StaffUser doctor) {
         if (doctor == null) return;
         doctorNameField.setText(doctor.getName());
-        // 필요시 licenseNumber, department 등도 여기에 setText
-        // 예: licenseNumberField.setText(doctor.getLicenseNumber());
-        //     departmentField.setText(doctor.getDepartment());
+        licenseNumberField.setText(doctor.getUid());
+        departmentField.setText(doctor.getDepartment());
     }
 
     // 필요시 차트에서 진단, 증상, 비고 등도 자동 세팅 가능
     public void setChartInfo(ChartDTO chart) {
-        if (chart == null) return;
+        if (chart == null) {
+            System.out.println("차트 정보가 null입니다.");
+            return;
+        }
+        System.out.println("받아온 chart_id: " + chart.getChart_id());
+        chartNumberField.setText(chart.getChart_id());
         diagnosisField.setText(chart.getDiagnosis());
-        notesField.setText(chart.getNote());
-        // ... 필요한 필드 추가
     }
-
-
 
     // ▶ HTML 템플릿 불러오기
     private String loadHtmlTemplate() {
@@ -102,6 +103,7 @@ public class AttendenceCertificateFormController implements Initializable {
     private String fillTemplate(String template) {
         String gender = ((RadioButton) genderGroup.getSelectedToggle()).getText();
         return template
+                .replace("${chartNumber}", chartNumberField.getText())
                 .replace("${name}", nameField.getText())
                 .replace("${rrn}", rrnField.getText())
                 .replace("${gender}", gender)
