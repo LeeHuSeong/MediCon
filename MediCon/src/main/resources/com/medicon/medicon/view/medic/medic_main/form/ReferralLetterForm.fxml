@@ -44,9 +44,9 @@
 
             <!-- row 5: 원발병원 정보 -->
             <Label text="병원명(발신)" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.halignment="RIGHT"/>
-            <TextField fx:id="hospitalNameField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+            <TextField fx:id="hospitalNameField" text="메디콘 병원" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
             <Label text="병원 연락처" styleClass="form-labelBig" GridPane.columnIndex="2" GridPane.rowIndex="5" GridPane.halignment="RIGHT"/>
-            <TextField fx:id="hospitalPhoneNumField" GridPane.columnIndex="3" GridPane.rowIndex="5"/>
+            <TextField fx:id="hospitalPhoneNumField" text="010-4862-5842" GridPane.columnIndex="3" GridPane.rowIndex="5"/>
 
             <!-- row 6: 의뢰자 정보 -->
             <Label text="소속 과/부서" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="6" GridPane.halignment="RIGHT"/>

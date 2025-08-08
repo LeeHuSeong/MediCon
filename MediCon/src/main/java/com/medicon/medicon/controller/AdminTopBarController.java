@@ -1,11 +1,16 @@
 package com.medicon.medicon.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -48,7 +53,22 @@ public class AdminTopBarController implements Initializable {
 
         logoutBtn.setOnAction(e -> {
             System.out.println("로그아웃 버튼 클릭");
-            // 로그아웃 처리 로직 추가 예정
+            // 현재 Stage 닫기
+            Stage currentStage = (Stage) logoutBtn.getScene().getWindow();
+            currentStage.close();
+
+            // 로그인 화면 로드
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/medicon/medicon/view/login.fxml"));
+                Parent root = loader.load();
+                Stage loginStage = new Stage();
+                loginStage.setScene(new Scene(root));
+                loginStage.setTitle("MediCon - 로그인");
+                loginStage.show();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                // 오류 처리
+            }
         });
 
         if (mainController != null) {
