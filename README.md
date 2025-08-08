@@ -18,6 +18,7 @@ This project not only provides essential administrative features but also outlin
 
 Below are the resources related to this project, including the Notion workspace used during development and a YouTube demo link.
 
+<br><br>
 Notion
 https://www.notion.so/MediCon-23e6cd017c5a800b98cdf24ac485f8ff
 
