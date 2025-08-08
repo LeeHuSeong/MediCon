@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>진료의뢰서</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="ReferralLetterStyle.css">
+</head>
+<body>
+
+<div class="actions">
+    <button onclick="window.print()">인쇄하기</button>
+    <button id="download">PDF 저장</button>
+</div>
+
+<div class="certificate-box" id="certificate">
+    <div class="title">진료의뢰서</div>
+
+    <!-- 발급 정보 -->
+    <div class="issue-date">
+        차트번호: ${chartNumber} &nbsp;&nbsp;
+        의뢰번호: ${referralNumber} &nbsp;&nbsp;
+        의뢰일자: ${referralDate}
+    </div>
+
+    <table>
+        <!-- 환자 정보 -->
+        <tr>
+            <th rowspan="3">환자 정보</th>
+            <th>성명</th>
+            <td colspan="2">${name}</td>
+            <th>주민번호</th>
+            <td colspan="2">${rrn}</td>
+        </tr>
+        <tr>
+            <th>성별</th>
+            <td colspan="2">${gender}</td>
+            <th>연락처</th>
+            <td colspan="2">${phoneNum}</td>
+        </tr>
+        <tr>
+            <th>주소</th>
+            <td colspan="5">${address}</td>
+        </tr>
+
+        <!-- 발신 병원 정보 -->
+        <tr>
+            <th rowspan="2">발신 병원</th>
+            <th>병원명</th>
+            <td colspan="2">${hospitalName}</td>
+            <th>연락처</th>
+            <td colspan="2">${hospitalPhoneNum}</td>
+        </tr>
+        <tr>
+            <th>소속 과/부서</th>
+            <td colspan="5">${department}</td>
+        </tr>
+
+        <!-- 의뢰자 정보 -->
+        <tr>
+            <th rowspan="2">의뢰자</th>
+            <th>이름</th>
+            <td colspan="2">${referrerName}</td>
+            <th>직위</th>
+            <td colspan="2">${referrerPosition}</td>
+        </tr>
+        <tr>
+            <th>면허번호</th>
+            <td colspan="5">${licenseNumber}</td>
+        </tr>
+
+        <!-- 수신자 정보 -->
+        <tr>
+            <th rowspan="2">수신자</th>
+            <th>기관명</th>
+            <td colspan="2">${receiverInstitution}</td>
+            <th>부서/의사</th>
+            <td colspan="2">${receiverDept}</td>
+        </tr>
+        <tr>
+            <th>연락처</th>
+            <td colspan="5">${receiverPhone}</td>
+        </tr>
+
+        <!-- 검사결과 요약 -->
+        <tr>
+            <th style="height:60px;" colspan="2">검사결과 요약</th>
+            <td class="align-top-left" colspan="5">${testResults}</td>
+        </tr>
+
+        <!-- 복용 중인 약물 -->
+        <tr>
+            <th style="height:60px;" colspan="2">복용 중인 약물</th>
+            <td class="align-top-left" colspan="5">${medications}</td>
+        </tr>
+
+        <!-- 의뢰 목적/사유 -->
+        <tr>
+            <th style="height:100px;" colspan="2">의뢰 목적/사유</th>
+            <td class="align-top-left" colspan="5">${purpose}</td>
+        </tr>
+
+        <!-- 첨부자료 -->
+        <tr>
+            <th>첨부자료</th>
+            <td colspan="6">${attachments}</td>
+        </tr>
+    </table>
+
+    <div class="footer">
+        상기 환자에 대해 위와 같이 의뢰함.
+    </div>
+    <div class="issue-date">발행일: ${issueDate}</div>
+
+    <div class="hospital-info">
+        발급 의사: ${referrerName} (서명 또는 인)<br/><br/>
+        병원장: ${directorName} (인)
+    </div>
+
+    <div class="bottom-center">◯◯종합병원</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script>
+    document.getElementById("download").addEventListener("click", () => {
+        const element = document.getElementById("certificate");
+        html2pdf().set({
+            margin: 0.5,
+            filename: '진료의뢰서.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        }).from(element).save();
+    });
+</script>
+</body>
+</html>

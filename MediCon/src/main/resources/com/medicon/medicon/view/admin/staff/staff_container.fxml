@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.medicon.medicon.controller.staff.StaffContainerController"
+            stylesheets="@../../../style/staff/side_tab.css"
+            prefWidth="1280" prefHeight="720">
+
+    <!-- 좌측 탭 메뉴 -->
+    <left>
+        <VBox spacing="20"
+              style="-fx-padding: 20;"
+              prefWidth="250">
+            <Button fx:id="staffRegisterButton" text="직원 등록" maxWidth="Infinity" prefHeight="60" style="-fx-font-size: 16px;"/>
+            <Button fx:id="staffManageButton" text="직원 관리" maxWidth="Infinity" prefHeight="60" style="-fx-font-size: 16px;"/>
+        </VBox>
+    </left>
+
+    <!-- 중앙 컨텐츠 영역 -->
+    <center>
+        <AnchorPane fx:id="staffContentArea"/>
+    </center>
+
+</BorderPane>

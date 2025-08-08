@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 진단서 -->
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane minHeight="800" minWidth="600.0" style="-fx-background-color: white;"
+            stylesheets="@../../../../style/ComponentStyle.css" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.medicon.medicon.controller.medic.form.DiagnosisCertificateFormController">
+
+    <VBox prefHeight="800.0" prefWidth="1000.0" spacing="10">
+        <Label maxWidth="Infinity" styleClass="section-title" text="진단서" />
+
+        <GridPane hgap="10" vgap="10" VBox.vgrow="ALWAYS">
+
+            <!-- row 0: 차트번호 -->
+            <Label text="차트번호" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="RIGHT"/>
+            <TextField fx:id="chartNumberField" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <!-- row 1 -->
+            <Label text="환자 성명" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.halignment="RIGHT"/>
+            <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+            <Label text="주민등록번호" styleClass="form-labelBig" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.halignment="RIGHT"/>
+            <TextField fx:id="rrnField" promptText="생년월일 6자리-번호 7자리" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+
+            <!-- row 2 -->
+            <Label text="성별" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.halignment="RIGHT"/>
+            <HBox spacing="20" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                <RadioButton fx:id="maleRadio" text="남자" toggleGroup="$genderGroup"  selected="true"/>
+                <RadioButton fx:id="femaleRadio" text="여자" toggleGroup="$genderGroup"/>
+            </HBox>
+
+            <Label text="휴대전화번호" styleClass="form-labelBig" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.halignment="RIGHT"/>
+            <TextField fx:id="phoneNumField" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+
+            <!-- row 3 -->
+            <Label text="주소" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.halignment="RIGHT"/>
+            <TextField fx:id="addressField" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="3"/>
+
+            <!-- row 4 -->
+            <Label text="병원명" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.halignment="RIGHT"/>
+            <TextField fx:id="hospitalNameField" text="메디콘 병원"  GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+            <Label text="병원 연락처" styleClass="form-labelBig" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.halignment="RIGHT"/>
+            <TextField fx:id="hospitalPhoneNumField" text="010-4862-5842" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
+
+            <!-- row 5 -->
+            <Label text="진료과" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.halignment="RIGHT"/>
+            <TextField fx:id="departmentField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+            <Label text="담당의사" styleClass="form-labelBig" GridPane.columnIndex="2" GridPane.rowIndex="5" GridPane.halignment="RIGHT"/>
+            <TextField fx:id="doctorNameField" GridPane.columnIndex="3" GridPane.rowIndex="5"/>
+
+            <!-- row 6 -->
+            <Label text="병명" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="6" GridPane.halignment="RIGHT"/>
+            <TextField fx:id="diagnosisField" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+            <Label text="면허번호" styleClass="form-labelBig" GridPane.columnIndex="2" GridPane.rowIndex="6" GridPane.halignment="RIGHT"/>
+            <TextField fx:id="licenseNumberField" GridPane.columnIndex="3" GridPane.rowIndex="6"/>
+
+            <!-- row 7 -->
+            <Label text="발병일" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="7" GridPane.halignment="RIGHT"/>
+            <TextField fx:id="startSickDayField" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+
+            <Label text="입원기간" styleClass="form-labelBig" GridPane.columnIndex="2" GridPane.rowIndex="7" GridPane.halignment="RIGHT"/>
+            <TextField fx:id="hospitalizationPeriodField" promptText="예: 2025.08.01 ~ 2025.08.03" GridPane.columnIndex="3" GridPane.rowIndex="7"/>
+
+            <!-- row 8 -->
+            <Label text="퇴원일" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.halignment="RIGHT"/>
+            <TextField fx:id="dischargeDateField" promptText="예: 2025.08.03" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+
+            <Label text="통원기간" styleClass="form-labelBig" GridPane.columnIndex="2" GridPane.rowIndex="8" GridPane.halignment="RIGHT"/>
+            <TextField fx:id="outpatientPeriodField" promptText="예: 2025.08.04 ~ 2025.08.10" GridPane.columnIndex="3" GridPane.rowIndex="8"/>
+
+            <!-- row 9 -->
+            <Label text="진료경과 및 소견" wrapText="true" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="9"
+                   GridPane.halignment="RIGHT" textAlignment="RIGHT"/>
+            <TextArea fx:id="doctorOpinionField"
+                      GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.columnSpan="3"
+                      prefRowCount="3" wrapText="true"/>
+
+            <!-- row 10 -->
+            <Label text="비고" wrapText="true" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="10"
+                   GridPane.halignment="RIGHT" textAlignment="RIGHT"/>
+            <TextField fx:id="notesField" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
+
+            <Label text="진단목적" wrapText="true" styleClass="form-labelBig" GridPane.columnIndex="2" GridPane.rowIndex="10"
+                   GridPane.halignment="RIGHT" textAlignment="RIGHT"/>
+            <TextField fx:id="propertiesField" GridPane.columnIndex="3" GridPane.rowIndex="10"/>
+
+            <!-- row 11 -->
+            <Label text="진단일" styleClass="form-labelBig" GridPane.columnIndex="0" GridPane.rowIndex="11" GridPane.halignment="RIGHT"/>
+            <DatePicker fx:id="diagnosisDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="11"/>
+
+            <Label text="발행일" styleClass="form-labelBig" GridPane.columnIndex="2" GridPane.rowIndex="11" GridPane.halignment="RIGHT"/>
+            <DatePicker fx:id="issueDatePicker" GridPane.columnIndex="3" GridPane.rowIndex="11"/>
+
+            <!-- column 설정 -->
+            <columnConstraints>
+                <ColumnConstraints percentWidth="13"/>
+                <ColumnConstraints percentWidth="35"/>
+                <ColumnConstraints percentWidth="20"/>
+                <ColumnConstraints percentWidth="35"/>
+            </columnConstraints>
+
+            <VBox.margin>
+                <Insets left="20.0" right="20.0"/>
+            </VBox.margin>
+
+        </GridPane>
+
+
+        <HBox alignment="BOTTOM_RIGHT" prefHeight="96.0" prefWidth="600.0" spacing="10">
+            <Button onAction="#handlePrintPreview" styleClass="button-lightblue" text="미리보기" />
+            <Button onAction="#handleSave" styleClass="button-blue" text="저장" />
+            <Button onAction="#handleClose" styleClass="button-gray" text="닫기" />
+            <padding>
+                <Insets bottom="10.0" right="10.0" />
+            </padding>
+        </HBox>
+    </VBox>
+</AnchorPane>

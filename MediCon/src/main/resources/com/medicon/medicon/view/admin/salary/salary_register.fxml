@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.medicon.medicon.controller.salary.SalaryRegisterController"
+            prefWidth="1200" prefHeight="700"
+            stylesheets="@../../../style/salary/ComponentStyle.css">
+
+    <!-- 좌상단 정렬 -->
+    <VBox alignment="TOP_LEFT" spacing="30" AnchorPane.topAnchor="40" AnchorPane.leftAnchor="40">
+
+        <!-- 카드 박스 (내부 제목 포함) -->
+        <VBox spacing="25" styleClass="card-box" maxWidth="600" alignment="TOP_CENTER">
+            <padding>
+                <Insets top="35" right="35" bottom="35" left="35"/>
+            </padding>
+
+            <!-- 제목 (카드 내부 중앙) -->
+            <Label text="단일 급여 지급" styleClass="page-title"/>
+
+            <!-- 직원 검색 -->
+            <HBox spacing="20" alignment="CENTER_LEFT">
+                <Label text="직원 검색:" styleClass="form-label-large"/>
+                <ComboBox fx:id="uidComboBox" prefWidth="300"/>
+            </HBox>
+
+            <!-- 직급 -->
+            <HBox spacing="20" alignment="CENTER_LEFT">
+                <Label text="직급:" styleClass="form-label-large"/>
+                <Label fx:id="rankLabel" text="-" styleClass="value-label-large"/>
+            </HBox>
+
+            <!-- 지급 연월 -->
+            <HBox spacing="20" alignment="CENTER_LEFT">
+                <Label text="지급 연월:" styleClass="form-label-large"/>
+                <ComboBox fx:id="payMonthComboBox" prefWidth="300"/>
+            </HBox>
+
+            <!-- 기본급 -->
+            <HBox spacing="20" alignment="CENTER_LEFT">
+                <Label text="기본급:" styleClass="form-label-large"/>
+                <TextField fx:id="basePayField" promptText="예: 3000000" prefWidth="300"/>
+            </HBox>
+
+            <!-- 보너스 -->
+            <HBox spacing="20" alignment="CENTER_LEFT">
+                <Label text="보너스:" styleClass="form-label-large"/>
+                <TextField fx:id="bonusField" promptText="예: 500000" prefWidth="300"/>
+            </HBox>
+
+            <!-- 저장 버튼 -->
+            <HBox alignment="CENTER_RIGHT">
+                <Button fx:id="saveButton" text="저장" onAction="#handleRegisterSalary" styleClass="primary-button"/>
+            </HBox>
+        </VBox>
+    </VBox>
+</AnchorPane>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane minHeight="600" minWidth="800.0" style="-fx-background-color: white;"
+            stylesheets="@../../../../style/ComponentStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.medicon.medicon.controller.medic.form.AddPatientFormController">
+
+    <VBox prefHeight="600.0" prefWidth="800.0" spacing="10">
+        <Label maxWidth="Infinity" styleClass="section-title" text="신규 환자 등록" />
+        <GridPane hgap="10" maxWidth="Infinity" vgap="10" VBox.vgrow="ALWAYS">
+            <Label styleClass="form-labelBig" text="이메일" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
+            <TextField fx:id="addEmailField" promptText="exam1234@exam.com" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
+
+            <Label styleClass="form-labelBig" text="비밀번호" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+            <PasswordField fx:id="addPasswordField" styleClass="form-labelBig" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+            <Label styleClass="form-labelBig" text="이름" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+            <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
+
+            <Label styleClass="form-labelBig" text="성별" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+            <HBox GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                <RadioButton fx:id="addRadio1" text="남자  " />
+                <RadioButton fx:id="addRadio2" text="여자  " />
+            </HBox>
+
+            <Label styleClass="form-labelBig" text="주민등록번호" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+            <TextField fx:id="birthField" styleClass="form-labelBig" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+            <Label styleClass="form-labelBig" text="휴대전화" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
+            <TextField fx:id="addmedication" styleClass="form-labelBig" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+            <Label styleClass="form-labelBig" text="주소" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
+            <TextField fx:id="addAddress" styleClass="form-labelBig" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+            <Label styleClass="form-labelBig" text="상세주소" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
+            <TextField fx:id="addAddressDetail" prefWidth="500.0" styleClass="form-labelBig" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+
+            <VBox.margin>
+                <Insets left="20.0" right="20" />
+            </VBox.margin>
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints maxHeight="254.66668701171875" minHeight="44.66667175292969" prefHeight="91.33334350585938" />
+                <RowConstraints maxHeight="308.6666615804036" minHeight="93.00003051757807" prefHeight="131.99996948242188" />
+                <RowConstraints maxHeight="213.33336385091144" minHeight="34.00002034505212" prefHeight="51.33331298828119" />
+                <RowConstraints maxHeight="232.66668701171875" minHeight="86.66668701171875" prefHeight="232.66668701171875" />
+            </rowConstraints>
+        </GridPane>
+        <HBox alignment="BOTTOM_RIGHT" prefHeight="96.0" prefWidth="1200.0" spacing="10">
+            <Button onAction="#handleSave" styleClass="button-blue" text="저장" />
+            <Button onAction="#handleClose" styleClass="button-gray" text="닫기" />
+            <padding>
+                <Insets bottom="10.0" right="10.0" />
+            </padding>
+        </HBox>
+    </VBox>
+</AnchorPane>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.medicon.medicon.controller.LoginController"
+            stylesheets="@../style/login.css"
+            prefWidth="1920" prefHeight="1080">
+
+    <center>
+        <StackPane style="-fx-background-color: linear-gradient(to bottom, #9DD0FF, #ffffff);">
+
+            <!-- 카드 전체를 감싸는 Pane (중앙 정렬용) -->
+            <StackPane alignment="CENTER">
+                <!-- 로그인 카드 -->
+                <VBox fx:id="loginCard"
+                      spacing="25"
+                      alignment="CENTER"
+                      prefWidth="400"
+                      maxWidth="400"
+                      maxHeight="520"
+                      styleClass="login-card">
+
+                    <!-- 설정 버튼 (오른쪽 상단) -->
+                    <StackPane alignment="TOP_RIGHT">
+                        <Button fx:id="settingButton"
+                                prefWidth="28" prefHeight="28"
+                                style="-fx-background-color: transparent;">
+                            <graphic>
+                                <ImageView fx:id="settingIcon" fitWidth="35" fitHeight="35"/>
+                            </graphic>
+                        </Button>
+                    </StackPane>
+
+                    <ImageView fx:id="logoImageView" fitWidth="150" fitHeight="150">
+
+                    <VBox.margin>
+                        <Insets bottom="30.0"/>
+                    </VBox.margin>
+                    </ImageView>
+
+                    <TextField fx:id="idField" promptText="아이디" styleClass="input-field"/>
+                    <PasswordField fx:id="pwField" promptText="비밀번호" styleClass="input-field"/>
+
+                    <Button fx:id="loginButton"
+                            text="로그인"
+                            styleClass="login-button"
+                            maxWidth="Infinity"
+                            onAction="#onLoginButtonClick"/>
+                </VBox>
+            </StackPane>
+
+        </StackPane>
+    </center>
+</BorderPane>

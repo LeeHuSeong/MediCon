@@ -1,0 +1,44 @@
+/* 로그인 카드 스타일 */
+.login-card {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-padding: 40;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 4);
+}
+
+/* 타이틀 스타일 */
+.login-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #206EB4;
+    -fx-font-family: 'Noto Sans KR', '맑은 고딕', sans-serif;
+}
+
+/* 입력 필드 공통 */
+.input-field {
+    -fx-pref-width: 300;
+    -fx-pref-height: 40;
+    -fx-background-radius: 10;
+    -fx-font-size: 14px;
+    -fx-font-family: 'Noto Sans KR', '맑은 고딕', sans-serif;
+}
+
+/* 로그인 버튼 */
+.login-button {
+    -fx-background-color: #206EB4;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-pref-height: 45;
+    -fx-cursor: hand;
+    -fx-font-family: 'Noto Sans KR Black', '맑은 고딕', sans-serif;
+}
+
+.login-button:hover {
+    -fx-background-color: #5F9FDA;
+}
+
+.login-button:pressed {
+    -fx-background-color: #174980;
+}

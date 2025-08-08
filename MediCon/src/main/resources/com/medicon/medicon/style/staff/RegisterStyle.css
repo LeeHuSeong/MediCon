@@ -1,0 +1,66 @@
+.root {
+    -fx-background-color: #f9f9f9;
+}
+
+/* 전체 섹션 박스 */
+.section-box {
+    -fx-background-color: #ffffff;
+    -fx-padding: 20;
+    -fx-border-color: #d0e4f7;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);
+}
+
+/* 섹션 제목 */
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #206EB4;
+}
+
+/* 입력 필드 */
+.input-field {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 40px;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #d0d0d0;
+}
+
+/* 역할 버튼 */
+.role-button {
+    -fx-background-color: #E6F1FD;
+    -fx-text-fill: #206EB4;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-background-radius: 20;
+    -fx-border-color: #A0C8F0;
+    -fx-border-width: 2;
+    -fx-cursor: hand;
+}
+.role-button:hover {
+    -fx-background-color: #C6E0F8;
+}
+
+/* 타일 선택 영역 */
+.tile-pane {
+    -fx-padding: 10;
+}
+
+/* 등록 버튼 */
+.submit-button {
+    -fx-background-color: #206EB4;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 40;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+.submit-button:hover {
+    -fx-background-color: #174980;
+}

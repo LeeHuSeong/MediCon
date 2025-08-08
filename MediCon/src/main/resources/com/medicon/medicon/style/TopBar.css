@@ -1,0 +1,47 @@
+/* TopBar.css */
+
+/* 전체 TopBar HBox 배경 */
+.top-bar {
+    -fx-background-color: #9DD0FF;
+    -fx-padding: 6 6 0 6;
+    -fx-spacing: 0;
+    -fx-alignment: center-left;
+    -fx-pref-height: 80px;
+    -fx-border-color: #d0d0d0;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* 공통 버튼 스타일 */
+.button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 30 30 0 0;
+    -fx-border-width: 4 4 0 4;
+    -fx-border-color: #206EB4;
+    -fx-border-radius: 30 30 0 0;
+    -fx-font-family:'Noto Sans KR Black', '맑은 고딕', sans-serif;
+    -fx-font-weight: 900;
+    -fx-font-size: 30px;
+    -fx-text-fill: white; /* 흰색 */
+    -fx-pref-width: 200px;
+    -fx-pref-height: 80px;
+    -fx-effect: null;
+    -fx-cursor: hand;
+    -fx-opacity: 0.7;
+}
+
+/* 활성화(선택) 버튼: .selected 클래스 추가 */
+.button.selected {
+    -fx-background-color: #206EB4;
+    -fx-border-color: #206EB4;
+    -fx-opacity: 1;
+}
+
+/* 클릭(Pressed) 효과: 약간 진해지고, 그림자 강조 */
+.button:pressed {
+    -fx-background-color: #174980;
+}
+
+/* 버튼 hover 효과 */
+.button:hover {
+    -fx-background-color: #5F9FDA;
+}

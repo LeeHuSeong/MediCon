@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:id="adminBorderPane"
+            fx:controller="com.medicon.medicon.controller.AdminMainController"
+            prefWidth="1920" prefHeight="1080"
+            stylesheets="@../../style/staff/admin.css">
+
+    <!-- 상단 TopBar -->
+    <top>
+        <fx:include source="AdminTopBar.fxml"/>
+    </top>
+
+    <!-- 중앙 AnchorPane: 콘텐츠 영역 -->
+    <center>
+        <AnchorPane fx:id="adminContentArea"/>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 처방전 입력 폼 -->
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane minHeight="800.0" minWidth="600.0" style="-fx-background-color: white;"
+            stylesheets="@../../../../style/ComponentStyle.css" xmlns="http://javafx.com/javafx/24.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.medicon.medicon.controller.medic.form.PrescriptionFormController">
+
+    <VBox prefHeight="800.0" prefWidth="1000.0" spacing="10">
+        <Label text="처방전" styleClass="section-title" maxWidth="Infinity" />
+
+        <GridPane hgap="10" vgap="10" VBox.vgrow="ALWAYS">
+            <!-- row 0: 차트번호, 처방전 번호 -->
+            <Label text="차트번호" styleClass="form-labelBig" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.halignment="RIGHT" />
+            <TextField fx:id="chartNumberField" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+            <Label text="처방전 번호" styleClass="form-labelBig" GridPane.rowIndex="0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+            <TextField fx:id="prescriptionNumberField" GridPane.rowIndex="0" GridPane.columnIndex="3" />
+
+            <!-- row 1: 발행일자, 유효기간 -->
+            <Label text="발행일자" styleClass="form-labelBig" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.halignment="RIGHT" />
+            <DatePicker fx:id="prescriptionDatePicker" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+            <Label text="유효기간" styleClass="form-labelBig" GridPane.rowIndex="1" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+            <DatePicker fx:id="validUntilDatePicker" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+
+            <!-- row 2-4: 환자 정보 -->
+            <Label text="환자 성명" styleClass="form-labelBig" GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.halignment="RIGHT" />
+            <TextField fx:id="nameField" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+            <Label text="주민등록번호" styleClass="form-labelBig" GridPane.rowIndex="2" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+            <TextField fx:id="rrnField" promptText="######-#######" GridPane.rowIndex="2" GridPane.columnIndex="3" />
+
+            <Label text="성별" styleClass="form-labelBig" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.halignment="RIGHT" />
+            <HBox spacing="20" GridPane.rowIndex="3" GridPane.columnIndex="1">
+                <RadioButton fx:id="maleRadio" text="남자" toggleGroup="$genderGroup" selected="true" />
+                <RadioButton fx:id="femaleRadio" text="여자" toggleGroup="$genderGroup" />
+            </HBox>
+            <Label text="연락처" styleClass="form-labelBig" GridPane.rowIndex="3" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+            <TextField fx:id="phoneNumField" GridPane.rowIndex="3" GridPane.columnIndex="3" />
+
+            <Label text="주소" styleClass="form-labelBig" GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.halignment="RIGHT" />
+            <TextField fx:id="addressField" GridPane.rowIndex="4" GridPane.columnIndex="1" GridPane.columnSpan="3" />
+
+            <!-- row 5: 병원 정보 -->
+            <Label text="병원명" styleClass="form-labelBig" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.halignment="RIGHT" />
+            <TextField fx:id="hospitalNameField" text="메디콘 병원" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+            <Label text="병원 연락처" styleClass="form-labelBig" GridPane.rowIndex="5" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+            <TextField fx:id="hospitalPhoneNumField" text="010-4862-5842" GridPane.rowIndex="5" GridPane.columnIndex="3" />
+
+            <!-- row 6: 의사 정보 -->
+            <Label text="의사명" styleClass="form-labelBig" GridPane.rowIndex="6" GridPane.columnIndex="0" GridPane.halignment="RIGHT" />
+            <TextField fx:id="doctorNameField" GridPane.rowIndex="6" GridPane.columnIndex="1" />
+            <Label text="면허번호" styleClass="form-labelBig" GridPane.rowIndex="6" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+            <TextField fx:id="licenseNumberField" GridPane.rowIndex="6" GridPane.columnIndex="3" />
+
+            <!-- row 7: 처방 내역 테이블 -->
+            <Label text="처방 내역" styleClass="form-labelBig" GridPane.rowIndex="7" GridPane.columnIndex="0" GridPane.halignment="RIGHT" />
+            <VBox GridPane.rowIndex="7" GridPane.columnIndex="1" GridPane.columnSpan="3" spacing="5">
+                <TableView fx:id="medicationTable" prefHeight="200.0" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colDrugName" text="약품명" prefWidth="150"/>
+                        <TableColumn fx:id="colDosage" text="용법·용량" prefWidth="150"/>
+                        <TableColumn fx:id="colRoute" text="투여 경로" prefWidth="100"/>
+                        <TableColumn fx:id="colDuration" text="투여 기간" prefWidth="100"/>
+                        <TableColumn fx:id="colInstructions" text="복약 지도" prefWidth="330"/>
+                    </columns>
+                </TableView>
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="행 추가" onAction="#handleAddRow" styleClass="button-gray"/>
+                    <Button text="행 삭제" onAction="#handleRemoveRow" styleClass="button-gray"/>
+                </HBox>
+            </VBox>
+
+            <!-- row 8: 복용방법 -->
+            <Label text="복용방법" styleClass="form-labelBig" GridPane.rowIndex="8"
+                   GridPane.columnIndex="0" GridPane.halignment="RIGHT"/>
+            <TextArea fx:id="generalInstructionsField" prefRowCount="3" wrapText="true"
+                      GridPane.rowIndex="8" GridPane.columnIndex="1" GridPane.columnSpan="3" />
+
+            <!-- column constraints -->
+            <columnConstraints>
+                <ColumnConstraints percentWidth="15"/>
+                <ColumnConstraints percentWidth="35"/>
+                <ColumnConstraints percentWidth="20"/>
+                <ColumnConstraints percentWidth="32"/>
+            </columnConstraints>
+            <VBox.margin>
+                <Insets left="20.0" right="20.0"/>
+            </VBox.margin>
+        </GridPane>
+
+        <HBox alignment="BOTTOM_RIGHT" prefHeight="96.0" prefWidth="600.0" spacing="10">
+            <Button onAction="#handlePrintPreview" styleClass="button-lightblue" text="미리보기" />
+            <Button onAction="#handleSave" styleClass="button-blue" text="저장" />
+            <Button onAction="#handleClose" styleClass="button-gray" text="닫기" />
+            <padding>
+                <Insets bottom="10.0" right="10.0" />
+            </padding>
+        </HBox>
+    </VBox>
+</AnchorPane>

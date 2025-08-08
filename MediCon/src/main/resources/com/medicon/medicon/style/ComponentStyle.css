@@ -1,0 +1,180 @@
+.background{
+    -fx-background-color: #ffffff;
+}
+
+/*파란색 버튼*/
+.button-blue {
+    -fx-background-color: #206EB4;
+    -fx-text-fill: white;
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 8 20 8 20;
+}
+.button-blue:hover {
+    -fx-background-color: #1A5DA3;
+}
+.button-blue:pressed {
+    -fx-background-color: #154C87;
+}
+.button-blue-small {
+    -fx-background-color: #206EB4;
+    -fx-text-fill: white;
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 8 20 8 20;
+}
+.button-blue-small:hover {
+    -fx-background-color: #1A5DA3;
+}
+.button-blue-small:pressed {
+    -fx-background-color: #154C87;
+}
+
+/*하늘색 버튼*/
+.button-lightblue {
+    -fx-background-color: #A6D6FF;
+    -fx-text-fill: white;
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 8 20 8 20;
+}
+.button-lightblue:hover{
+    -fx-background-color: #82C2FF;
+}
+.button-lightblue:pressed{
+    -fx-background-color: #5EAFFF;
+}
+
+/*회색 버튼*/
+.button-gray{
+    -fx-background-color: #a9a9a9;
+    -fx-text-fill: white;
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 8 20 8 20;
+}
+.button-gray:hover{
+    -fx-background-color: #8F8F8F;
+}
+.button-gray:pressed {
+    -fx-background-color: #757575;
+}
+
+.time-button {
+    -fx-pref-width: 70px;
+    -fx-pref-height: 35px;
+    -fx-background-color: #EAF4FF;
+    -fx-border-color: #A6C9E2;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-font-size: 13px;
+    -fx-text-fill: #2A2A2A;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
+}
+
+.time-button:hover {
+    -fx-background-color: #D0E8FF;
+}
+
+.time-button:selected {
+    -fx-background-color: #3399FF;
+    -fx-text-fill: white;
+}
+
+.time-button-selected {
+    -fx-background-color: #3399FF;
+    -fx-text-fill: white;
+    -fx-border-color: #1A75FF;
+    -fx-border-width: 2px;
+}
+.list-view .list-cell {
+    -fx-pref-height: 50px;   /* 셀 하나당 높이 */
+    -fx-padding: 10px;       /* 내부 여백 */
+    -fx-font-size: 20px;
+}
+
+
+/* 섹션 타이틀 공통 스타일 */
+.section-title {
+    -fx-background-color: #A6D6FF;
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+    -fx-font-size: 30px;
+    -fx-padding: 4 8 4 8;
+    -fx-alignment: center;
+}
+/* 라벨 공통 스타일 */
+.form-label {
+    -fx-font-size: 20px;
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+    -fx-alignment: center-right;
+    -fx-label-padding: 0 8 0 0; /* 오른쪽 간격 */
+}
+
+/* 라벨 공통 스타일 더 큰 버전*/
+.form-labelBig {
+    -fx-font-size: 25px;
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+    -fx-alignment: center-right;
+    -fx-label-padding: 0 8 0 0; /* 오른쪽 간격 */
+}
+.table-label{
+    -fx-font-size: 20px;
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #a9a9a9;
+    -fx-border-width: 0.2;
+}
+.time-section-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-padding: 10 0 5 0;
+}
+
+.check-box {
+    -fx-font-size: 15px;
+}
+.check-box .box{
+    -fx-background-color: #ffffff, #A6D6FF;
+}
+
+.text-field {
+    -fx-font-size: 20px;
+    -fx-text-fill: #000000;
+    -fx-font-weight: normal;
+    -fx-alignment: center-left;
+    -fx-label-padding: 0 0 0 8; /* 왼쪽 간격 */
+}
+.text-area{
+    -fx-font-size: 20px;
+    -fx-text-fill: #000000;
+    -fx-font-weight: normal;
+    -fx-alignment: center-left;
+    -fx-label-padding: 0 0 0 8; /* 왼쪽 간격 */
+}
+
+
+.radio-button{
+    -fx-font-size: 15px;
+}
+.radio-button .radio{
+    /*-fx-shape: "M0,5 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0";*/
+    -fx-background-color: #ffffff, #A6D6FF;
+}
+
+.section-title-bar {
+    -fx-background-color: #A6D6FF;
+}
